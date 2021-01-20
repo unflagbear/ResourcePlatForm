@@ -1,0 +1,13 @@
+[data-theme='compact'] .site-collapse-custom-collapse .site-collapse-custom-panel,
+.site-collapse-custom-collapse .site-collapse-custom-panel {
+  background: #f7f7f7;
+  border-radius: 5px;
+  border: 1px;
+  color: black;
+  overflow: hidden;
+  width: auto;
+}
+  [data-theme="dark"] .site-collapse-custom-collapse .site-collapse-custom-panel {
+    background: rgba(255,255,255,0.04);
+    border: 0px;
+  }
