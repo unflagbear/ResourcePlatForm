@@ -15,13 +15,12 @@ const UserModel = {
     },
 
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      const response = yield call(queryCurrent, localStorage.getItem('token'));
       yield put({
         type: 'saveCurrentUser',
         payload: response.data,
       });
     },
-    
   },
   reducers: {
     saveCurrentUser(state, action) {

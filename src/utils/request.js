@@ -6,12 +6,6 @@ import { extend } from 'umi-request';
 import { notification } from 'antd';
 
 
-const userToken = ()=> {
-  const token =localStorage.getItem('token')
-  console.log(token)
-  return token?{'access_token':token}:{}; 
-}
- 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -60,6 +54,33 @@ const request = extend({
   errorHandler,
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
-  headers: userToken()
+});
+
+request.interceptors.request.use(async (url, options) => {
+  if (
+    options.method === 'post' ||
+    options.method === 'put' ||
+    options.method === 'delete' ||
+    options.method === 'get'
+  ) {
+    const headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      access_token: localStorage.getItem('token'),
+    };
+    return {
+      url,
+      options: { ...options, headers },
+    };
+  }
+});
+
+// response拦截器, 处理response
+request.interceptors.response.use((response) => {
+  const token = response.headers.get('access_token');
+  if (token) {
+    localStorage.setItem('token', token);
+  }
+  return response;
 });
 export default request;

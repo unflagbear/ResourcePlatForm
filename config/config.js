@@ -4,6 +4,7 @@ import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 
 const { REACT_APP_ENV } = process.env;
+const hide = false;
 export default defineConfig({
   hash: true,
   antd: {},
@@ -31,9 +32,9 @@ export default defineConfig({
     // {path: '/',
     //   component: '../layouts/BlankLayout',
     //   routes: [
-        
-    //     { 
-    //       path: '/', 
+
+    //     {
+    //       path: '/',
     //       component: '../layouts/Layout',
     //       routes: [
     //         {
@@ -78,10 +79,16 @@ export default defineConfig({
               component: './user/register-result',
             },
             {
-              name: 'register',
+              name: '注册',
               icon: 'smile',
               path: '/user/register',
               component: './user/register',
+            },
+            {
+              name: '平台注册',
+              icon: 'smile',
+              path: '/user/platform_register',
+              component: './user/platform-register',
             },
             {
               component: '404',
@@ -108,7 +115,7 @@ export default defineConfig({
               path: '/form',
               icon: 'form',
               name: '资源商城',
-              hideChildrenInMenu: true,
+              hideChildrenInMenu: hide,
               routes: [
                 {
                   path: '/',
@@ -153,7 +160,7 @@ export default defineConfig({
                   path: '/list/search',
                   name: 'search-list',
                   component: './list/search',
-                  hideInMenu:true,
+                  hideInMenu: hide,
                   routes: [
                     {
                       path: '/list/search',
@@ -164,7 +171,7 @@ export default defineConfig({
                       icon: 'smile',
                       path: '/list/search/articles',
                       component: './list/search/articles',
-                      hideInMenu:true,
+                      hideInMenu: hide,
                     },
                     {
                       name: 'projects',
@@ -177,7 +184,7 @@ export default defineConfig({
                       icon: 'smile',
                       path: '/list/search/applications',
                       component: './list/search/applications',
-                      hideInMenu:true,
+                      hideInMenu: hide,
                     },
                   ],
                 },
@@ -190,30 +197,27 @@ export default defineConfig({
                   icon: 'smile',
                   path: '/list/table-list',
                   component: './list/table-list',
-                  hideInMenu:true,
-
+                  hideInMenu: hide,
                 },
                 {
                   name: 'basic-list',
                   icon: 'smile',
                   path: '/list/basic-list',
                   component: './list/basic-list',
-                  hideInMenu:true,
-
+                  hideInMenu: hide,
                 },
                 {
                   name: 'card-list',
                   icon: 'smile',
                   path: '/list/card-list',
                   component: './list/card-list',
-                  hideInMenu:true,
-
+                  hideInMenu: hide,
                 },
               ],
             },
             {
               path: '/profile',
-              name: '政策法规',
+              name: '订单',
               icon: 'profile',
               routes: [
                 {
@@ -224,11 +228,11 @@ export default defineConfig({
                   name: 'basic',
                   icon: 'smile',
                   path: '/profile/basic',
-                  hideInMenu:true,
+                  hideInMenu: hide,
                   component: './profile/basic',
                 },
                 {
-                  name: 'advanced',
+                  name: '订单状态',
                   icon: 'smile',
                   path: '/profile/advanced',
                   component: './profile/advanced',
@@ -236,10 +240,45 @@ export default defineConfig({
               ],
             },
             {
+              path: '/details',
+              name: '详情页',
+              icon: 'CheckCircleOutlined',
+              component: './details',
+            },
+            {
+              path: '/comment',
+              name: '评价页面',
+              icon: 'CheckCircleOutlined',
+              component: './comment',
+            },
+            {
+              path: '/chatmodel',
+              name: '对话模型管理',
+              icon: 'CheckCircleOutlined',
+              routes: [
+                {
+                  path: '/',
+                  redirect: '/chatmodel/modelmanage',
+                },
+                {
+                  name: '问答数据管理',
+                  icon: 'smile',
+                  path: '/chatmodel/datamanage',
+                  component: './chatmodel/dialogdata',
+                },
+                {
+                  name: '模型管理',
+                  icon: 'smile',
+                  path: '/chatmodel/modelmanage',
+                  component: './chatmodel/modelmanage',
+                },
+              ],
+            },
+            {
               name: '新闻中心',
               icon: 'CheckCircleOutlined',
               path: '/result',
-              hideChildrenInMenu: true,
+              hideChildrenInMenu: hide,
               routes: [
                 {
                   path: '/',
@@ -292,7 +331,7 @@ export default defineConfig({
               name: 'account',
               icon: 'user',
               path: '/account',
-              hideInMenu:true,
+              hideInMenu: hide,
               routes: [
                 {
                   path: '/',

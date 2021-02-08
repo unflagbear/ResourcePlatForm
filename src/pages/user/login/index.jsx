@@ -35,35 +35,35 @@ const Login = (props) => {
   return (
     <div className={styles.main}>
       <LoginFrom activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
-      <div className={styles.header}>
+        <div className={styles.header}>
           <p>
-            <b  style={{color:'#353535',borderBottom: '2px solid #1890ff'}}>欢迎登录</b>
+            <b style={{ color: '#353535', borderBottom: '2px solid #1890ff' }}>欢迎登录</b>
           </p>
         </div>
-          {status === 'error' && loginType === 'account' && !submitting && (
-            <LoginMessage content="账户或密码错误（admin/ant.design）" />
-          )}
+        {status === 'error' && loginType === 'account' && !submitting && (
+          <LoginMessage content="账户或密码错误（admin/ant.design）" />
+        )}
 
-          <UserName
-            name="account"
-            placeholder="用户名: admin or user"
-            rules={[
-              {
-                required: true,
-                message: '请输入用户名!',
-              },
-            ]}
-          />
-          <Password
-            name="password"
-            placeholder="密码: ant.design"
-            rules={[
-              {
-                required: true,
-                message: '请输入密码！',
-              },
-            ]}
-          />
+        <UserName
+          name="account"
+          placeholder="用户名: admin or user"
+          rules={[
+            {
+              required: true,
+              message: '请输入用户名!',
+            },
+          ]}
+        />
+        <Password
+          name="password"
+          placeholder="密码: ant.design"
+          rules={[
+            {
+              required: true,
+              message: '请输入密码！',
+            },
+          ]}
+        />
         <div>
           <Checkbox checked={autoLogin} onChange={(e) => setAutoLogin(e.target.checked)}>
             自动登录
@@ -80,6 +80,15 @@ const Login = (props) => {
         <div className={styles.other}>
           <Link className={styles.register} to="/user/register">
             注册账户
+          </Link>
+        </div>
+        <div className={styles.other}>
+          <Link
+            className={styles.register}
+            style={{ marginLeft: '20px' }}
+            to="/user/platform_register"
+          >
+            注册平台用户
           </Link>
         </div>
       </LoginFrom>

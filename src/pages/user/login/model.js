@@ -39,8 +39,6 @@ const Model = {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
-        localStorage.setItem('token',response.data.access_token)
-
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
 

@@ -1,8 +1,4 @@
 import {
-  UserOutlined, 
-  SolutionOutlined, 
-  LoadingOutlined, 
-  SmileOutlined,
   DownOutlined,
   EllipsisOutlined,
   InfoCircleOutlined,
@@ -18,7 +14,7 @@ import {
   Menu,
   Popover,
   Steps,
-  Table,
+  message,
   Tooltip,
   Empty,
 } from 'antd';
@@ -65,8 +61,8 @@ const action = (
       return (
         <Fragment>
           <ButtonGroup>
-            <Button>操作一</Button>
-            <Button>操作二</Button>
+            <Button>通过请求</Button>
+            <Button>拒绝请求</Button>
             <Dropdown overlay={menu} placement="bottomRight">
               <Button>
                 <EllipsisOutlined />
@@ -92,7 +88,7 @@ const description = (
         <Descriptions.Item label="创建人">曲丽丽</Descriptions.Item>
         <Descriptions.Item label="订购产品">XX 服务</Descriptions.Item>
         <Descriptions.Item label="创建时间">2017-07-07</Descriptions.Item>
-        <Descriptions.Item label="关联单据">
+        <Descriptions.Item label="详细流程记录">
           <a href="">12421</a>
         </Descriptions.Item>
         <Descriptions.Item label="生效日期">2017-07-07 ~ 2017-08-08</Descriptions.Item>
@@ -103,17 +99,13 @@ const description = (
 );
 const desc1 = (
   <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    <Fragment>
-      XXX公司
-    </Fragment>
+    <Fragment>XXX公司</Fragment>
     <div>2016-12-12 12:32</div>
   </div>
 );
 const desc2 = (
   <div className={styles.stepDescription}>
-    <Fragment>
-      XXX公司负责中
-    </Fragment>
+    <Fragment>XXX公司负责中</Fragment>
     <div>
       <a href="">催一下</a>
     </div>
@@ -168,59 +160,11 @@ const customDot = (dot, { status }) => {
   return dot;
 };
 
-const operationTabList = [
-  {
-    key: 'tab1',
-    tab: '操作日志一',
-  },
-  {
-    key: 'tab2',
-    tab: '操作日志二',
-  },
-  {
-    key: 'tab3',
-    tab: '操作日志三',
-  },
-];
-const columns = [
-  {
-    title: '操作类型',
-    dataIndex: 'type',
-    key: 'type',
-  },
-  {
-    title: '操作人',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '执行结果',
-    dataIndex: 'status',
-    key: 'status',
-    render: (text) => {
-      if (text === 'agree') {
-        return <Badge status="success" text="成功" />;
-      }
-
-      return <Badge status="error" text="驳回" />;
-    },
-  },
-  {
-    title: '操作时间',
-    dataIndex: 'updatedAt',
-    key: 'updatedAt',
-  },
-  {
-    title: '备注',
-    dataIndex: 'memo',
-    key: 'memo',
-  },
-];
 
 class Advanced extends Component {
   state = {
-    operationKey: 'tab1',
     tabActiveKey: 'detail',
+    current: 0,
   };
 
   componentDidMount() {
@@ -230,11 +174,6 @@ class Advanced extends Component {
     });
   }
 
-  onOperationTabChange = (key) => {
-    this.setState({
-      operationKey: key,
-    });
-  };
 
   onTabChange = (tabActiveKey) => {
     this.setState({
@@ -243,38 +182,51 @@ class Advanced extends Component {
   };
 
   render() {
-    const { operationKey, tabActiveKey } = this.state;
-    const { profileAndadvanced, loading } = this.props;
-    const { advancedOperation1, advancedOperation2, advancedOperation3 } = profileAndadvanced;
-    const contentList = {
-      tab1: (
-        <Table
-          pagination={false}
-          loading={loading}
-          dataSource={advancedOperation1}
-          columns={columns}
-        />
-      ),
-      tab2: (
-        <Table
-          pagination={false}
-          loading={loading}
-          dataSource={advancedOperation2}
-          columns={columns}
-        />
-      ),
-      tab3: (
-        <Table
-          pagination={false}
-          loading={loading}
-          dataSource={advancedOperation3}
-          columns={columns}
-        />
-      ),
+    const { current, tabActiveKey } = this.state;
+    const steps = [
+      {
+        title: '查找服务',
+        content: 'First-content',
+      },
+      {
+        title: '申请服务',
+        content: 'Second-content',
+      },
+      {
+        title: '线下沟通解决方案',
+        content: 'Last-content',
+      },
+      {
+        title: '签署协议',
+        content: 'Last-content',
+      },
+      {
+        title: '服务实施',
+        content: 'Last-content',
+      },
+      {
+        title: '服务验收',
+        content: 'Last-content',
+      },
+      {
+        title: '服务评价',
+        content: 'Last-content',
+      },
+    ];
+    const next = () => {
+      this.setState({
+        current: current + 1,
+      });
+    };
+
+    const prev = () => {
+      this.setState({
+        current: current - 1,
+      });
     };
     return (
       <PageContainer
-        title="单号：234231029431"
+        title="资源服务单号：234231029431"
         extra={action}
         className={styles.pageHeader}
         content={description}
@@ -302,19 +254,41 @@ class Advanced extends Component {
             >
               <RouteContext.Consumer>
                 {({ isMobile }) => (
-                  <Steps
-                    direction={isMobile ? 'vertical' : 'horizontal'}
-                    progressDot={customDot}
-                    current={1}
-                  >
-                    <Step title="查找服务" description={desc1}/>
-                    <Step title="申请服务" description={desc2} />
-                    <Step title="线下沟通解决方案" />
-                    <Step title="签署协议" />
-                    <Step title="服务实施" />
-                    <Step title="服务验收" />
-                    <Step title="服务评价" />
-                  </Steps>
+                  <>
+                    <Steps
+                      direction={isMobile ? 'vertical' : 'horizontal'}
+                      progressDot={customDot}
+                      current={current}
+                    >
+                      <Step title="查找服务" description={desc1} />
+                      <Step title="申请服务" description={desc2} />
+                      <Step title="线下沟通解决方案" />
+                      <Step title="签署协议" />
+                      <Step title="服务实施" />
+                      <Step title="服务验收" />
+                      <Step title="服务评价" />
+                    </Steps>
+                    <div className="steps-action">
+                      {current < steps.length - 1 && (
+                        <Button type="primary" onClick={() => next()}>
+                          下一状态
+                        </Button>
+                      )}
+                      {current === steps.length - 1 && (
+                        <Button
+                          type="primary"
+                          onClick={() => message.success('Processing complete!')}
+                        >
+                          完成
+                        </Button>
+                      )}
+                      {current > 0 && (
+                        <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                          上一状态
+                        </Button>
+                      )}
+                    </div>
+                  </>
                 )}
               </RouteContext.Consumer>
             </Card>
@@ -331,8 +305,6 @@ class Advanced extends Component {
                 }}
               >
                 <Descriptions.Item label="用户姓名">付小小</Descriptions.Item>
-                <Descriptions.Item label="会员卡号">32943898021309809423</Descriptions.Item>
-                <Descriptions.Item label="身份证">3321944288191034921</Descriptions.Item>
                 <Descriptions.Item label="联系方式">18112345678</Descriptions.Item>
                 <Descriptions.Item label="联系地址">
                   曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口
@@ -342,15 +314,13 @@ class Advanced extends Component {
                 style={{
                   marginBottom: 24,
                 }}
-                title="信息组"
+                title="沟通交流记录"
               >
-                <Descriptions.Item label="某某数据">725</Descriptions.Item>
-                <Descriptions.Item label="该数据更新时间">2017-08-08</Descriptions.Item>
                 <Descriptions.Item
                   label={
                     <span>
-                      某某数据
-                      <Tooltip title="数据说明">
+                      沟通数据条数
+                      <Tooltip title="包括服务方与用户方共同数据统计沟通数据条数">
                         <InfoCircleOutlined
                           style={{
                             color: 'rgba(0, 0, 0, 0.43)',
@@ -370,18 +340,18 @@ class Advanced extends Component {
                   marginBottom: 16,
                 }}
               >
-                信息组
+                其他附件
               </h4>
-              <Card type="inner" title="多层级信息组">
+              <Card type="inner" title="上传文件内容">
                 <Descriptions
                   style={{
                     marginBottom: 16,
                   }}
-                  title="组名称"
+                  title="文件名"
                 >
-                  <Descriptions.Item label="负责人">林东东</Descriptions.Item>
+                  <Descriptions.Item label="上传人">林东东</Descriptions.Item>
                   <Descriptions.Item label="角色码">1234567</Descriptions.Item>
-                  <Descriptions.Item label="所属部门">XX公司 - YY部</Descriptions.Item>
+                  <Descriptions.Item label="所属公司">XX公司 - YY部</Descriptions.Item>
                   <Descriptions.Item label="过期时间">2017-08-08</Descriptions.Item>
                   <Descriptions.Item label="描述">
                     这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
@@ -396,12 +366,15 @@ class Advanced extends Component {
                   style={{
                     marginBottom: 16,
                   }}
-                  title="组名称"
+                  title="文件名"
                   column={1}
                 >
-                  <Descriptions.Item label="学名">
-                    Citrullus lanatus (Thunb.) Matsum. et
-                    Nakai一年生蔓生藤本；茎、枝粗壮，具明显的棱。卷须较粗..
+                  <Descriptions.Item label="上传人">林东东</Descriptions.Item>
+                  <Descriptions.Item label="角色码">1234567</Descriptions.Item>
+                  <Descriptions.Item label="所属公司">XX公司 - YY部</Descriptions.Item>
+                  <Descriptions.Item label="过期时间">2017-08-08</Descriptions.Item>
+                  <Descriptions.Item label="描述">
+                    这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
                   </Descriptions.Item>
                 </Descriptions>
                 <Divider
@@ -409,28 +382,16 @@ class Advanced extends Component {
                     margin: '16px 0',
                   }}
                 />
-                <Descriptions title="组名称">
-                  <Descriptions.Item label="负责人">付小小</Descriptions.Item>
-                  <Descriptions.Item label="角色码">1234568</Descriptions.Item>
-                </Descriptions>
               </Card>
             </Card>
             <Card
-              title="用户近半年来电记录"
+              title="沟通记录"
               style={{
                 marginBottom: 24,
               }}
               bordered={false}
             >
               <Empty />
-            </Card>
-            <Card
-              className={styles.tabsCard}
-              bordered={false}
-              tabList={operationTabList}
-              onTabChange={this.onOperationTabChange}
-            >
-              {contentList[operationKey]}
             </Card>
           </GridContent>
         </div>
