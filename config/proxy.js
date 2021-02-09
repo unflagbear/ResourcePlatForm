@@ -3,7 +3,7 @@
  * The agent cannot take effect in the production environment
  * so there is no configuration of the production environment
  * For details, please see
- * https://pro.ant.design/docs/deploy
+ * https://pro.ant.design/docs/deploy http://10.108.210.65:8452/nlu_api
  */
 export default {
   dev: {
@@ -12,6 +12,13 @@ export default {
       changeOrigin: true,
       pathRewrite: {
         '^/api': '/resource',
+      },
+    },
+    '/nlu_api': {
+      target: 'http://10.108.210.65:8452',
+      changeOrigin: true,
+      pathRewrite: {
+        '^': '',
       },
     },
   },

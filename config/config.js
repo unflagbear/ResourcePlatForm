@@ -261,7 +261,7 @@ export default defineConfig({
                   redirect: '/chatmodel/modelmanage',
                 },
                 {
-                  name: '问答数据管理',
+                  name: '自然语言理解数据管理',
                   icon: 'smile',
                   path: '/chatmodel/datamanage',
                   component: './chatmodel/dialogdata',

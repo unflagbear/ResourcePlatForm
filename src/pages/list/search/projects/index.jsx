@@ -1,8 +1,9 @@
-import { Card, Col, Form, List, Row, Select, Typography, Image, Tag } from 'antd';
+import { Card, Col, Form, List, Row, Select, Typography, Image, Tag, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { connect, history } from 'umi';
 import moment from 'moment';
 
+import ChatforAccessService from '@/components/ChatForAccessService';
 import SubSelection from './components/SubSelection';
 import StandardFormRow from './components/StandardFormRow';
 import styles from './style.less';
@@ -13,6 +14,7 @@ const { Paragraph } = Typography;
 
 
 const Projects = ({ dispatch, listAndsearchAndprojects: { list = [], total = 0 }, loading }) => {
+  const [chatLog, setChatLog] = useState(false);
   const goToDetail = (productID) => {
     history.push({
       pathname: '/details',
@@ -178,6 +180,35 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [], total = 0 }
         </Form>
       </Card>
       <div className={styles.cardList}>{cardList}</div>
+      <div
+        style={{
+          zIndex: '999999',
+          right: '38px',
+          bottom: '49px',
+          position: 'fixed',
+          display: 'block',
+        }}
+      >
+        
+          <div style={{display: chatLog ? 'block' : 'none',
+            position: 'absolute',
+            overflow: 'hidden',
+            left: '-333px',
+            bottom: '45px', height: '554px', width: '460px',
+            borderRadius:"20px",
+            boxShadow:"4px 4px 5px 3px #999",
+            }}>
+            <ChatforAccessService />
+          </div>
+       
+        <Button
+          style={{ left: 30 }}
+          type="primary"
+          onClick={() => (chatLog ? setChatLog(false) : setChatLog(true))}
+        >
+          询问智能客服
+        </Button>
+      </div>
     </div>
   );
 };
