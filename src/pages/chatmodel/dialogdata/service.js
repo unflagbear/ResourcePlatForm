@@ -1,7 +1,7 @@
 import request from 'umi-request';
 
 export async function queryRule(params) {
-  return request('/api/dialogData/list', {
+  return request('/nlu_api/display_data/', {
     params,
   });
 }

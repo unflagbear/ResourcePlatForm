@@ -362,6 +362,47 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
       <Divider />
     </Card>
   );
+
+  const Recomment = () => (
+    <Card
+      style={{ width: '100%' }}
+      hoverable
+      title={
+        <span>
+          <Divider
+            plain
+            style={{ borderLeft: '2px solid rgba(0,0,0,0.5)', fontSize: '20px' }}
+            type="vertical"
+          />
+          使用评价
+        </span>
+      }
+      style={{ marginTop: 32 }}
+    >
+      <Descriptions
+        title="资源总体评分"
+        style={{
+          marginBottom: 32,
+          width: '100%',
+        }}
+        bordered
+      >
+        <Descriptions.Item label="综合评分">
+          <Rate disabled allowHalf style={{ marginRight: '3px' }} defaultValue={4.5} />
+          4.5
+        </Descriptions.Item>
+        <Descriptions.Item label="专业评分">
+          <Rate disabled allowHalf style={{ marginRight: '3px' }} defaultValue={3.5} />
+          3.5
+        </Descriptions.Item>
+        <Descriptions.Item label="服务评分">
+          <Rate disabled allowHalf style={{ marginRight: '3px' }} defaultValue={3.5} />
+          3.5
+        </Descriptions.Item>
+      </Descriptions>
+
+    </Card>
+  );
   return (
     <>
       <Row justify="center">
@@ -397,15 +438,8 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
           <Comment />
         </Col>
       </Row>
-      {/* <Row justify="center">
-        <Col offset={0}>
-                    
-                </Col>
-        <Col>
-          <Comment />
-        </Col>
-      </Row> */}
-      <div
+      
+      {/* <div
         style={{
           zIndex: '999999',
           right: '38px',
@@ -437,7 +471,7 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
           <MessageOutlined style={{bottom:2}}/>
           在线客服
         </Button>
-      </div>
+      </div> */}
     </>
   );
 }

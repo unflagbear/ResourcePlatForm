@@ -100,26 +100,42 @@ const DialogData = () => {
     },
     {
       title: '语句内容',
-      dataIndex: 'content',
+      dataIndex: 'context',
       valueType: 'textarea',
     },
     {
       title: '相似语料组',
-      dataIndex: 'groupId',
+      dataIndex: 'intent',
       hideInForm: true,
       valueEnum: {
-        1: {
-          text: '专利询问',
+        'request_instrument': {
+          text: '询问设备',
           status: 'Processing',
         },
-        2: {
-          text: '资源询问',
+        'request_patent': {
+          text: '询问专利',
           status: 'Success',
         },
-        3: {
-          text: '具体仪器',
+        'request_expert': {
+          text: '询问专家',
           status: 'Error',
         },
+        'faq':{
+          text: '相关问答',
+          status: 'Default',
+        },
+        'affirm':{
+          text: '同意',
+          status: 'Finish',
+        },
+        'deny':{
+          text: '否认',
+          status: 'Warning',
+        },
+        'inform':{
+          text: '信息',
+          status: 'Processing',
+        }
       },
     },
     // {
@@ -210,7 +226,14 @@ const DialogData = () => {
           dataSource={data}
           request={(params, sorter, filter) => {
             queryRule({ ...params, sorter, filter }).then((res) => {
-              setData(res.data);
+              let resData=[]
+              let num = 0
+              res.map(({intent,examples})=>{
+                  examples.map((context)=>{
+                     resData.push({intent,context,id:num++})
+                  })
+              })
+              setData(resData);
             });
           }}
           columns={columns}
