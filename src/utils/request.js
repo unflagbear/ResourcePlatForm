@@ -3,8 +3,9 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
-import { notification } from 'antd';
-
+import { notification,Button } from 'antd';
+import React from 'react'
+import {  useHistory } from 'umi';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -29,7 +30,6 @@ const codeMessage = {
 
 const errorHandler = (error) => {
   const { response } = error;
-
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
@@ -76,8 +76,22 @@ request.interceptors.request.use(async (url, options) => {
 });
 
 // response拦截器, 处理response
-request.interceptors.response.use((response) => {
+request.interceptors.response.use(async (response) => {
+  const data = await response.clone().json();
   const token = response.headers.get('access_token');
+  const btn = (
+    <Button type="primary" size="small" onClick={() => {location.href = 'http://localhost:8000/user/login';}}>
+      前往登录
+    </Button>
+  );
+  // console.log(data)
+  if(data.code === 50014){
+    notification.info({
+      message: `您需要登录获得更多功能`,
+      description: `前往登录`,
+      btn
+    });
+  }
   if (token) {
     localStorage.setItem('token', token);
   }
