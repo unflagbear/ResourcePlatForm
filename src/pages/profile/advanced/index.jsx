@@ -17,14 +17,21 @@ import {
   message,
   Tooltip,
   Empty,
+  Rate,
+  Input,
+  Upload,
+  Spin
 } from 'antd';
 import { GridContent, PageContainer, RouteContext } from '@ant-design/pro-layout';
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { connect } from 'umi';
 import styles from './style.less';
+import './advanced.css';
+import { FrownOutlined, MehOutlined, SmileOutlined, UploadOutlined } from '@ant-design/icons';
 
 const { Step } = Steps;
+const { TextArea } = Input;
 const ButtonGroup = Button.Group;
 const menu = (
   <Menu>
@@ -42,6 +49,36 @@ const mobileMenu = (
     <Menu.Item key="">选项三</Menu.Item>
   </Menu>
 );
+const param = {
+  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  onChange({ file, fileList }) {
+    if (file.status !== 'uploading') {
+      console.log(file, fileList);
+    }
+  },
+  defaultFileList: [
+    {
+      uid: '1',
+      name: 'xxx.doc',
+      status: 'done',
+      response: 'Server Error 500', // custom error message to show
+      url: 'http://www.baidu.com/xxx.doc',
+    },
+    {
+      uid: '2',
+      name: 'yyy.doc',
+      status: 'done',
+      url: 'http://www.baidu.com/yyy.doc',
+    },
+    {
+      uid: '3',
+      name: 'zzz.png',
+      status: 'error',
+      response: 'Server Error 500', // custom error message to show
+      url: 'http://www.baidu.com/zzz.png',
+    },
+  ],
+};
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
@@ -159,8 +196,155 @@ const customDot = (dot, { status }) => {
 
   return dot;
 };
+const Apply=(props)=>{
+  return(
+    <div className='title-type'>
+      {props.title}
+      <div className='apply-type'>
+        <Spin /> &nbsp;服务提供商处理申请中，请耐心等候
+      </div>
+    </div>
+  )
+}
+const Communi=(props)=>{
+  const customIcons = {
+    1: <FrownOutlined />,
+    2: <FrownOutlined />,
+    3: <MehOutlined />,
+    4: <SmileOutlined />,
+    5: <SmileOutlined />,
+  };
+  return(
+    <div className='title-type'>
+      {props.title}
+      <div className='comment-type'>
+        <p style={{fontSize:'15px',paddingTop: '20px'}}>沟通体验:</p>
+        <Rate style={{marginTop: '5px',fontSize:'30px'}} defaultValue={3} character={({ index }) => customIcons[index + 1]} />
+        <p style={{fontSize:'15px',marginTop: '10px'}}>对本次沟通的感受和意见:</p>
+        <TextArea showCount maxLength={100} rows={8} placeholder={'请输入您的评价：'} style={{marginTop: '8px',width:'800px', marginLeft:'260px'}}/>
+        <Button type="primary" style={{float:'right',marginRight:'230px'}}>{'提交'}</Button>
+      </div>
+    </div>
+  )
+}
 
+const Protocal=(props)=>{
 
+  return(
+    <div className='title-type'>
+      {props.title}
+      <div className='protocal-type' style={{width: '500px',marginLeft: '400px',fontSize:'15px'}}>
+        请选择需要上传的文件或图片
+        <br />
+        <br />
+        <Upload {...param} >
+          <Button icon={<UploadOutlined />}>Upload</Button>
+        </Upload>
+        <br />
+        {/* <Button style={{float:'left',marginLeft:'15px'}}>{'终止服务'}</Button> */}
+        <Button type="primary" style={{float:'right',marginRight:'20px'}}>{'上传协议'}</Button>
+      </div>
+    </div>
+  )
+}
+
+const Download=()=>{
+  return(
+    <div>
+      <Button size={'middle'} style={{marginLeft: '150px'}}>
+          查看详细进度
+      </Button>
+      <Button type="primary" size={'middle'} style={{marginLeft: '20px'}}>
+          下载相关文件
+      </Button>
+    </div>
+  )
+}
+
+// const [buttonSize,setButtonSize]=useState('large');
+const Trace=(props)=>{
+  //const { size } = this.state;
+  return(
+    <div className='title-type'>
+      {props.title}
+    <div className='protocal-type' style={{width: '500px',marginLeft: '100px',fontSize:'15px'}}>
+      <Steps direction="vertical" current={2}>
+        <Step title="需求阶段" description="Finished." />
+        <Step title="设计阶段" description="Finished" />
+        <Step title="开发阶段" description={<span>In progress<Download /></span>}/>
+        <Step title="测试阶段" description="Waiting" />
+        <Step title="系统交付" description="Waiting" />
+      </Steps>
+      {/* <div style={{width: '500px',marginLeft: '150px',marginTop:'20px',fontSize:'15px'}}>
+        <Button type="primary" size={'middle'} >
+          完成
+        </Button>
+        <Button size={'middle'}>延期</Button>
+        <Button type="dashed" size={'middle'}>
+          上传文件
+        </Button>
+      </div> */}
+    </div>
+    </div>
+  )
+}
+
+const Check=(props)=>{
+  return(
+    <div className='title-type'>
+      {props.title}
+      <div className='protocal-type'>
+        <p style={{marginTop:'20px',marginLeft: '500px',fontSize:'15px'}}>
+          完成度: &nbsp;
+          <Rate allowHalf defaultValue={2.5} />
+        </p>
+        <br />
+        <p style={{marginLeft: '500px',fontSize:'15px'}}>
+          准时性: &nbsp;
+          <Rate allowHalf defaultValue={2.5} />
+        </p>
+        <Button type="primary" style={{float:'right',marginTop:'30px',marginRight:'120px'}}>提交</Button>
+      </div>
+    </div>
+  )
+}
+
+const Comment=(props)=>{
+  const customIcons1={
+    1: <FrownOutlined />,
+    2: <SmileOutlined />,
+  }
+  return(
+    <div className='title-type'>
+      {props.title}
+    <div className='protocal-type' >
+      <p style={{marginTop:'20px',marginLeft: '530px',fontSize:'15px'}}>
+        总体评价: &nbsp;
+        <Rate allowHalf defaultValue={2.5} />
+      </p>
+      <br />
+      <p style={{marginLeft: '530px',fontSize:'15px'}}>
+        专业水平: &nbsp;
+        <Rate allowHalf defaultValue={2.5} />
+      </p>
+      <br />
+      <p style={{marginLeft: '530px',fontSize:'15px'}}>
+        响应速度: &nbsp;
+        <Rate allowHalf defaultValue={2.5} />
+      </p>
+      <br />
+      <p style={{marginLeft: '530px',fontSize:'15px'}}>
+        服务体验: &nbsp;
+        <Rate allowHalf defaultValue={2.5} />
+      </p>
+      <p style={{marginLeft: '600px',fontSize:'15px'}}> 合作愉快</p>
+      <Rate style={{marginLeft:'600px',fontSize:'30px'}}defaultValue={2} character={({ index }) => customIcons1[index + 1]} />
+      <TextArea showCount maxLength={100} rows={8} placeholder={'请输入对本次服务的感受和意见：'} style={{marginTop: '8px',width:'800px', marginLeft:'260px'}}/>
+      <Button type="primary" style={{float:'right',marginTop:'10px',marginRight:'240px'}}>提交</Button>
+    </div>
+    </div>
+  )
+}
 class Advanced extends Component {
   state = {
     tabActiveKey: 'detail',
@@ -185,32 +369,34 @@ class Advanced extends Component {
     const { current, tabActiveKey } = this.state;
     const steps = [
       {
-        title: '查找服务',
-        content: 'First-content',
-      },
-      {
         title: '申请服务',
-        content: 'Second-content',
+        content: '正在申请中',
+        component: <Apply title={'正在申请中'}></Apply>
       },
       {
-        title: '线下沟通解决方案',
-        content: 'Last-content',
+        title: '线下沟通',
+        content: '沟通完成后，请进行评价',
+        component:<Communi title={'沟通完成后，请进行评价'}></Communi>
       },
       {
         title: '签署协议',
-        content: 'Last-content',
+        content: '请上传协议',
+        component: <Protocal title={'请上传协议'}></Protocal>
       },
       {
         title: '服务实施',
-        content: 'Last-content',
+        content: '服务实施追踪中',
+        component: <Trace title={'服务实施追踪中'}></Trace>
       },
       {
         title: '服务验收',
-        content: 'Last-content',
+        content: '请评价服务验收成果',
+        component: <Check title={'请评价服务验收成果'}></Check>
       },
       {
         title: '服务评价',
-        content: 'Last-content',
+        content: '请进行综合服务评价',
+        component: <Comment title={'请进行综合服务评价'}></Comment>
       },
     ];
     const next = () => {
@@ -260,31 +446,37 @@ class Advanced extends Component {
                       progressDot={customDot}
                       current={current}
                     >
-                      <Step title="查找服务" description={desc1} />
-                      <Step title="申请服务" description={desc2} />
-                      <Step title="线下沟通解决方案" />
-                      <Step title="签署协议" />
-                      <Step title="服务实施" />
-                      <Step title="服务验收" />
-                      <Step title="服务评价" />
+                      {steps.map(item => (
+                        <Step key={item.title} title={item.title} />
+                      ))}
                     </Steps>
-                    <div className="steps-action">
+                    {/* <div className='context-type'>
+                      {steps[current].content}
+                    </div> */}
+                    {steps[current].component}
+                    {/* <Communi context={steps[current].content}></Communi> */}
+                    {/* <Protocal context={steps[current].content}></Protocal> */}
+                    {/* <Trace></Trace> */}
+                    {/* <Comment></Comment> */}
+                    {/* <Check></Check> */}
+                    <div className='steps-action'>
+                      {current > 0 && (
+                        <Button onClick={() => prev()}>
+                          上一状态
+                        </Button>
+                      )}
                       {current < steps.length - 1 && (
-                        <Button type="primary" onClick={() => next()}>
+                        <Button type="primary" style={{ margin: '8px' }} onClick={() => next()}>
                           下一状态
                         </Button>
                       )}
                       {current === steps.length - 1 && (
-                        <Button
+                        <Button 
                           type="primary"
+                          style={{ margin: '8px' }}
                           onClick={() => message.success('Processing complete!')}
                         >
                           完成
-                        </Button>
-                      )}
-                      {current > 0 && (
-                        <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                          上一状态
                         </Button>
                       )}
                     </div>

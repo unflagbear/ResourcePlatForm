@@ -1,0 +1,13 @@
+.style{
+    margin-top: 50px
+}
+.buttonMargin{
+    margin-top: 50px;
+    margin-bottom: 18px;
+    float: right;
+}
+.ant-modal-content{
+    top: 100px;
+    width:1200px;
+    height:550px;
+}
