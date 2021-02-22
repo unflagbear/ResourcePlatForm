@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useLocation } from 'umi';
+import './index.css'
 import {
   Typography,
   Image,
@@ -11,24 +12,36 @@ import {
   Divider,
   Rate,
   Button,
-  Affix
+  Affix,
+  Steps,
+  Modal,
+  Form,
+  Input, 
+  InputNumber,
+  message,
+  Space
 } from 'antd';
+import {
+  MessageOutlined
+} from '@ant-design/icons';
 import { FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import defaultImg from '@/assets/defaultImg.svg';
 import 'antd/dist/antd.css';
 import ChatforAccessService from '@/components/ChatForAccessService';
 
 const { Title } = Typography;
+const { Step } = Steps;
 
 function Details({ dispatch, resource: { resourceDetail = {} } }) {
-  const [haveSource] = useState(false);
+  const [haveSource, setHaveSource] = useState(false);
   const [chatLog, setChatLog] = useState(false);
   // const text = (
   //   <Affix offsetTop={70}>
   //     <div>对方服务人员</div>
   //   </Affix>
   // );
-  const [top] = useState(60);
+  const [top,setTop] = useState(60);
+  const [modalVisible,setModalVisible] = useState(false);
   const location = useLocation();
   const { productID } = location.query;
   // const content =<Affix offsetTop={80}><div style={{width: 500,height:600}}> <ChatforAccessService /></div></Affix>
@@ -43,6 +56,92 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
       });
     }
   }, []);
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  };
+  
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+      number: '${label} is not a valid number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+  const success = () => {
+    setModalVisible(false);
+    message.success('您的申请已提交');
+  };
+  
+  const Demo = () => {
+    const onFinish = (values) => {
+      console.log(values);
+    };
+  
+    return (
+      <div >
+      <Form {...layout} name="nest-messages" 
+      onFinish={onFinish} validateMessages={validateMessages}>
+        <Form.Item name={['apply', 'demand']} label="需求概述" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name={['apply', 'intro']} label="详细说明">
+        <Input.TextArea />
+        </Form.Item>
+        <Form.Item name={['apply', 'institution']} label="需求单位">
+          <Input />
+        </Form.Item>
+        <Form.Item name={['apply', 'website']} label="预算金额(万元)" rules={[{ type: 'number', min: 0, max: 999999 }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name={['apply', 'introduction']} label="联系人姓名">
+          <Input/>
+        </Form.Item>
+        <Form.Item name={['apply', 'introduction']} label="联系电话" rules={[{ type: 'number', length:11 }]}>
+          <Input/>
+        </Form.Item>
+        <Form.Item name={['apply', 'email']} label="邮箱" rules={[{ type: 'email' }]}>
+          <Input/>
+        </Form.Item>
+        {/* <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item> */}
+      </Form>
+      </div>
+    );
+  };
+  const Progress=(props)=>(
+    <div //style={props.style}
+    className='style'>
+    {props.title}
+    <Divider />
+    <Steps //style={props.style}
+    style={{marginTop: '20px'}}
+  
+    //title={props.title}
+    current={0}>
+      <Step title="申请服务" description="This is a description." />
+      <Step title="线下沟通" /*subTitle="Left 00:00:08"*/ description="This is a description." />
+      <Step title="签署协议" description="This is a description." />
+      <Step title="服务实施" description="This is a description." />
+      <Step title="服务验收" description="This is a description." />
+      <Step title="服务评价" description="This is a description." />
+    </Steps>
+    </div>
+  )
+  const clickApply=()=>{
+   // debugger
+    setModalVisible(true);
+    console.log(modalVisible);
+  }
+  const closeHandler = ()=>{
+    setModalVisible(false);
+  }
 
   // 详细内容卡片
   const Detail = () => (
@@ -96,10 +195,48 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
               </Tag>
             );
           })}
-        </Descriptions.Item>
+        </Descriptions.Item> 
       </Descriptions>
+      <Progress 
+        //style={{marginTop: '50px'}}
+        title={
+        <span style={{fontWeight:'500', fontSize:'16px'}}>
+          <Divider
+            plain
+            style={{ borderLeft: '2px solid rgba(0,0,0,0.5)', fontSize: '20px' }}
+            type="vertical"
+          />
+          申请流程
+        </span>
+      }>       
+      </Progress>
+      <Modal 
+        title="提交申请" 
+        centered 
+        style={{top: '10px'}}
+        width='900px'
+        height='550px'
+        visible={modalVisible} 
+        onOk={closeHandler} 
+        onCancel={closeHandler}
+        bodyStyle={{
+          marginRight:'120px'
+        }}
+        footer={[
+          <Button key="back" onClick={closeHandler}>
+            取消
+          </Button>,
+          <Button key="submit" type="primary" htmlType="submit" loading={false} onClick={success}>
+            提交
+          </Button>,
+        ]}>
+        <Demo />
+      </Modal>
+      <Button type="primary" className='buttonMargin' onClick={clickApply}>立刻申请</Button>
+      
     </Card>
   );
+  
   const Comment = () => (
     <Card
       style={{ width: '100%' }}
@@ -257,16 +394,17 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
                 </Col> */}
         <Col span={24}>
           <Detail  />
-        </Col>
-      </Row>
-      <Row justify="center">
-        {/* <Col offset={0}>
-                    
-                </Col> */}
-        <Col>
           <Comment />
         </Col>
       </Row>
+      {/* <Row justify="center">
+        <Col offset={0}>
+                    
+                </Col>
+        <Col>
+          <Comment />
+        </Col>
+      </Row> */}
       <div
         style={{
           zIndex: '999999',
@@ -290,11 +428,14 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
           </div>
         </Card>
         <Button
-          style={{ left: 30 }}
+          style={{ left: 30 ,
+            backgroundColor: 'black',
+            bordercolor: 'black'}}
           type="primary"
           onClick={() => (chatLog ? setChatLog(false) : setChatLog(true))}
         >
-          联系服务方获取资源
+          <MessageOutlined style={{bottom:2}}/>
+          在线客服
         </Button>
       </div>
     </>
