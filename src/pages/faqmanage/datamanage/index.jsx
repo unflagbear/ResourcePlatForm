@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Drawer } from 'antd';
+import { Button, message, Drawer,Input,Divider } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
@@ -18,7 +18,7 @@ const handleAdd = async (fields) => {
   const hide = message.loading('正在添加');
 
   try {
-    await addRule({ ...fields });
+    await addRule({ domain:fields.domain,name: fields.name,data_path: fields.dataPath,category_num: fields.categoryNum });
     hide();
     message.success('添加成功');
     return true;
@@ -39,8 +39,8 @@ const handleUpdate = async (fields) => {
   try {
     await updateRule({
       name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
+      record_id: fields.recordId,
+      domain: fields.domain,
     });
     hide();
     message.success('配置成功');
@@ -55,15 +55,15 @@ const handleUpdate = async (fields) => {
  *  删除节点
  * @param selectedRows
  */
-
+const mapRemove = (selectedRows)=>{
+  selectedRows.map((row) =>removeRule({record_id:row.recordId}) )
+}
 const handleRemove = async (selectedRows) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
 
   try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
+    await mapRemove(selectedRows);
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -74,18 +74,17 @@ const handleRemove = async (selectedRows) => {
   }
 };
 
-const DialogData = () => {
+const Faqmanage = () => {
   const [createModalVisible, handleModalVisible] = useState(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  const [stepFormValues, setStepFormValues] = useState({});
+  // const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+  // const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef();
   const [row, setRow] = useState();
   const [selectedRowsState, setSelectedRows] = useState([]);
-  const [data, setData] = useState([]);
   const columns = [
     {
-      title: '语料ID',
-      dataIndex: 'id',
+      title: '记录id',
+      dataIndex: 'recordId',
       formItemProps: {
         rules: [
           {
@@ -99,111 +98,109 @@ const DialogData = () => {
       },
     },
     {
-      title: '语句内容',
-      dataIndex: 'context',
+      title: '模型名',
+      dataIndex: 'name',
       valueType: 'textarea',
     },
     {
-      title: '相似语料组',
-      dataIndex: 'intent',
+      title: '领域',
+      dataIndex: 'domain',
+      valueType: 'textarea',
+    },
+    {
+      title: '数据路径',
+      dataIndex: 'dataPath',
+      valueType: 'textarea',
+    },{
+      title: '类别数量',
+      dataIndex: 'categoryNum',
+      valueType: 'textarea',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      sorter: true,
+      valueType: 'dateTime',
       hideInForm: true,
-      valueEnum: {
-        'request_instrument': {
-          text: '询问设备',
-          status: 'Processing',
-        },
-        'request_patent': {
-          text: '询问专利',
-          status: 'Success',
-        },
-        'request_expert': {
-          text: '询问专家',
-          status: 'Error',
-        },
-        'faq':{
-          text: '相关问答',
-          status: 'Default',
-        },
-        'affirm':{
-          text: '同意',
-          status: 'Finish',
-        },
-        'deny':{
-          text: '否认',
-          status: 'Warning',
-        },
-        'inform':{
-          text: '信息',
-          status: 'Processing',
+      renderFormItem: (item, { defaultRender, ...rest }, form) => {
+        const status = form.getFieldValue('status');
+
+        if (`${status}` === '0') {
+          return false;
         }
+
+        if (`${status}` === '3') {
+          return <Input {...rest} placeholder="请输入异常原因！" />;
+        }
+
+        return defaultRender(item);
       },
     },
-    // {
-    //   title: '服务调用次数',
-    //   dataIndex: 'callNo',
-    //   sorter: true,
-    //   hideInForm: true,
-    //   renderText: (val) => `${val} 万`,
-    // },
-    // {
-    //   title: '状态',
-    //   dataIndex: 'status',
-    //   hideInForm: true,
-    //   valueEnum: {
-    //     0: {
-    //       text: '关闭',
-    //       status: 'Default',
-    //     },
-    //     1: {
-    //       text: '运行中',
-    //       status: 'Processing',
-    //     },
-    //     2: {
-    //       text: '已上线',
-    //       status: 'Success',
-    //     },
-    //     3: {
-    //       text: '异常',
-    //       status: 'Error',
-    //     },
-    //   },
-    // },
-    // {
-    //   title: '上次调度时间',
-    //   dataIndex: 'updatedAt',
-    //   sorter: true,
-    //   valueType: 'dateTime',
-    //   hideInForm: true,
-    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
-    //     const status = form.getFieldValue('status');
-
-    //     if (`${status}` === '0') {
-    //       return false;
-    //     }
-
-    //     if (`${status}` === '3') {
-    //       return <Input {...rest} placeholder="请输入异常原因！" />;
-    //     }
-
-    //     return defaultRender(item);
-    //   },
-    // },
+    {
+      title: '状态',
+      dataIndex: 'state',
+      hideInForm: true,
+      valueEnum: {
+        '1': {
+          text: '正在训练',
+          status: 'Processing',
+        },
+        '2': {
+          text: '上线中',
+          status: 'Success',
+        },
+        '-1': {
+          text: '错误',
+          status: 'Error',
+        },
+        '0':{
+          text: '就绪',
+          status: 'Default',
+        }
+      }
+    },{
+      title: '备注',
+      dataIndex: 'comment',
+      valueType: 'textarea',
+    },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
         <>
+        {record.state==='2'?null:
+        <span>
           <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            修改
-          </a>
-          {/* <Divider type="vertical" />
-          <a href="">提交</a> */}
+              onClick={async() => {
+                // handleUpdateModalVisible(true);
+                // setStepFormValues(record);
+                const success = await handleUpdate(record);
+                if (success) {
+
+
+                  if (actionRef.current) {
+                    actionRef.current.reload();
+                  }
+                }
+              }}
+            >
+              上线
+            </a>
+            <Divider type="vertical" />
+          </span>}
+          
+          
+          <a onClick={async() => {
+                // handleUpdateModalVisible(true);
+                // setStepFormValues(record);
+                const success = await handleRemove([record]);
+                if (success) {
+                  if (actionRef.current) {
+                    actionRef.current.reload();
+                  }
+                }
+              }}>删除</a>
         </>
       ),
     },
@@ -214,7 +211,7 @@ const DialogData = () => {
         <ProTable
           headerTitle="查询表格"
           actionRef={actionRef}
-          rowKey="id"
+          rowKey="recordId"
           search={{
             labelWidth: 120,
           }}
@@ -223,22 +220,7 @@ const DialogData = () => {
               <PlusOutlined /> 新建
             </Button>,
           ]}
-          dataSource={data}
-          request={(params, sorter, filter) => {
-            const  resData=[]
-            queryRule({ ...params, sorter, filter }).then((res) => {
-              debugger
-              let num = 0
-              res.map(({intent,examples})=>{
-                  examples.map((context)=>{
-                     resData.push({intent,context,id:num++})
-                  })
-              })
-              setData(resData);
-            }).finally(()=>{
-              return resData;
-            });
-          }}
+          request={(params, sorter, filter) => queryRule({ ...params, sorter, filter })}
           columns={columns}
           rowSelection={{
             onChange: (_, selectedRows) => setSelectedRows(selectedRows),
@@ -269,7 +251,7 @@ const DialogData = () => {
             >
               批量删除
             </Button>
-            <Button type="primary">批量审批</Button>
+            {/* <Button type="primary">批量审批</Button> */}
           </FooterToolbar>
         )}
         <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
@@ -285,12 +267,12 @@ const DialogData = () => {
                 }
               }
             }}
-            rowKey="key"
+            rowKey="recordId"
             type="form"
-            columns={columns}
+            columns={columns.slice(1,7)}
           />
         </CreateForm>
-        {stepFormValues && Object.keys(stepFormValues).length ? (
+        {/* {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm
             onSubmit={async (value) => {
               const success = await handleUpdate(value);
@@ -311,7 +293,7 @@ const DialogData = () => {
             updateModalVisible={updateModalVisible}
             values={stepFormValues}
           />
-        ) : null}
+        ) : null} */}
 
         <Drawer
           width={600}
@@ -340,4 +322,4 @@ const DialogData = () => {
   );
 };
 
-export default DialogData;
+export default Faqmanage;

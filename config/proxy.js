@@ -8,7 +8,7 @@
 export default {
   dev: {
     '/api': {
-      target: 'http://localhost:8088',
+      target: 'http://localhost:9870',
       changeOrigin: true,
       pathRewrite: {
         '^/api': '/resource',
@@ -19,6 +19,13 @@ export default {
       changeOrigin: true,
       pathRewrite: {
         '^': '',
+      },
+    },
+    '/faq_api': {
+      target: 'http://10.108.210.65:9900',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/faq_api': '',
       },
     },
   },

@@ -275,6 +275,29 @@ export default defineConfig({
               ],
             },
             {
+              path: '/faqmanage',
+              name: '问答模型',
+              icon: 'CheckCircleOutlined',
+              routes: [
+                {
+                  path: '/',
+                  redirect: '/faqmodel/datamanage',
+                },
+                {
+                  name: '问答模型管理',
+                  icon: 'smile',
+                  path: '/faqmanage/datamanage',
+                  component: './faqmanage/datamanage',
+                },
+                // {
+                //   name: '模型管理',
+                //   icon: 'smile',
+                //   path: '/faqmanage/modelmanage',
+                //   component: './faqmanage/modelmanage',
+                // },
+              ],
+            },
+            {
               name: '新闻中心',
               icon: 'CheckCircleOutlined',
               path: '/result',
