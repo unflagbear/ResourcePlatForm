@@ -23,8 +23,8 @@ import {
 } from 'antd';
 import {
   MessageOutlined
-} from '@ant-design/icons';
-import { FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
+, FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
+
 import defaultImg from '@/assets/defaultImg.svg';
 import 'antd/dist/antd.css';
 import ChatforAccessService from '@/components/ChatForAccessService';
@@ -116,17 +116,17 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
     );
   };
   const Progress=(props)=>(
-    <div //style={props.style}
+    <div // style={props.style}
     className='style'>
     {props.title}
     <Divider />
-    <Steps //style={props.style}
+    <Steps // style={props.style}
     style={{marginTop: '20px'}}
   
-    //title={props.title}
+    // title={props.title}
     current={0}>
       <Step title="申请服务" description="This is a description." />
-      <Step title="线下沟通" /*subTitle="Left 00:00:08"*/ description="This is a description." />
+      <Step title="线下沟通" /* subTitle="Left 00:00:08" */ description="This is a description." />
       <Step title="签署协议" description="This is a description." />
       <Step title="服务实施" description="This is a description." />
       <Step title="服务验收" description="This is a description." />
@@ -198,7 +198,7 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
         </Descriptions.Item> 
       </Descriptions>
       <Progress 
-        //style={{marginTop: '50px'}}
+        // style={{marginTop: '50px'}}
         title={
         <span style={{fontWeight:'500', fontSize:'16px'}}>
           <Divider
@@ -208,8 +208,7 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
           />
           申请流程
         </span>
-      }>       
-      </Progress>
+      } />
       <Modal 
         title="提交申请" 
         centered 
@@ -438,22 +437,7 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
           <Comment />
         </Col>
       </Row>
-       <Row justify="center">
-       {/* <Col offset={0}>
-                    
-                </Col>
-        <Col>
-          <Comment />
-        </Col>
-      </Row>
-      <Row justify="center">
-        {/* <Col offset={0}>
-                    
-                </Col> */}
-        <Col>
-          <Recomment />
-        </Col>
-      </Row>
+      
       {/* <div
         style={{
           zIndex: '999999',
