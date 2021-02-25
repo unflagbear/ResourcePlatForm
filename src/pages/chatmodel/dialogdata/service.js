@@ -1,25 +1,61 @@
 import request from 'umi-request';
 
-export async function queryRule(params) {
+// export async function queryRule(params) {
+//   return request('/nlu_api/display_data/', {
+//     params,
+//   });
+// }
+
+export const getRemoteList=async()=>{
   return request('/nlu_api/display_data/', {
-    params,
+    method: 'get',
+  })
+  .then(function(response) {
+    //console.log(response);
+    return response;
+  })
+  .catch(function(error) {
+    return false;
+  })
+}
+
+export const editRule=async({values})=>{
+  console.log(values);
+  return request('/nlu_api/edit_example/', {
+    method: 'get',
+    params: values,
+  })
+  .then(function(response) {
+    return true;
+  })
+  .catch(function(error) {
+     return false;
   });
 }
-export async function removeRule(params) {
-  return request('/api/dialogData/remove', {
-    method: 'POST',
-    data: { ...params, method: 'delete' },
+
+export const deleteRule=async({values})=>{
+  console.log(values);
+  return request('/nlu_api/del_example/', {
+    method: 'get',
+    params: values,
+    //data: { ...params, method: 'delete' },
+  })
+  .then(function(response) {
+    return true;
+  })
+  .catch(function(error) {
+     return false;
   });
 }
-export async function addRule(params) {
-  return request('/api/dialogData/add', {
-    method: 'POST',
-    data: { ...params, method: 'post' },
-  });
-}
-export async function updateRule(params) {
-  return request('/api/dialogData/update', {
-    method: 'POST',
-    data: { ...params, method: 'update' },
+export const addRule=async({values})=>{
+  return request('/nlu_api/add_example', {
+    method: 'get',
+    params: values,
+  })
+  .then(function(response) {
+    return true;
+  })
+  .catch(function(error) {
+     return false;
   });
 }

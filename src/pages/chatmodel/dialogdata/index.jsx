@@ -6,6 +6,8 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
+import EditModal from './components/EditModal';
+import {connect} from 'umi'
 
 import { queryRule, updateRule, addRule, removeRule } from './service';
 
@@ -14,74 +16,17 @@ import { queryRule, updateRule, addRule, removeRule } from './service';
  * @param fields
  */
 
-const handleAdd = async (fields) => {
-  const hide = message.loading('正在添加');
-
-  try {
-    await addRule({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-/**
- * 更新节点
- * @param fields
- */
-
-const handleUpdate = async (fields) => {
-  const hide = message.loading('正在配置');
-
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
-/**
- *  删除节点
- * @param selectedRows
- */
-
-const handleRemove = async (selectedRows) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-
-  try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
-
-const DialogData = () => {
+const DialogData = ({dialogdata, dispatch, userListLoading}) => {
   const [createModalVisible, handleModalVisible] = useState(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef();
   const [row, setRow] = useState();
   const [selectedRowsState, setSelectedRows] = useState([]);
   const [data, setData] = useState([]);
+  const [record,setRecord] = useState(undefined);
+  const [modalVisible,setModalVisible] = useState(false);
+  const [name,setName] = useState(undefined);
+  const [ID,setID] = useState(-1);
+  const [values,setValues] = useState({tgt_example:[],tgt_intent:[]});
   const columns = [
     {
       title: '语料ID',
@@ -138,76 +83,85 @@ const DialogData = () => {
         }
       },
     },
-    // {
-    //   title: '服务调用次数',
-    //   dataIndex: 'callNo',
-    //   sorter: true,
-    //   hideInForm: true,
-    //   renderText: (val) => `${val} 万`,
-    // },
-    // {
-    //   title: '状态',
-    //   dataIndex: 'status',
-    //   hideInForm: true,
-    //   valueEnum: {
-    //     0: {
-    //       text: '关闭',
-    //       status: 'Default',
-    //     },
-    //     1: {
-    //       text: '运行中',
-    //       status: 'Processing',
-    //     },
-    //     2: {
-    //       text: '已上线',
-    //       status: 'Success',
-    //     },
-    //     3: {
-    //       text: '异常',
-    //       status: 'Error',
-    //     },
-    //   },
-    // },
-    // {
-    //   title: '上次调度时间',
-    //   dataIndex: 'updatedAt',
-    //   sorter: true,
-    //   valueType: 'dateTime',
-    //   hideInForm: true,
-    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
-    //     const status = form.getFieldValue('status');
-
-    //     if (`${status}` === '0') {
-    //       return false;
-    //     }
-
-    //     if (`${status}` === '3') {
-    //       return <Input {...rest} placeholder="请输入异常原因！" />;
-    //     }
-
-    //     return defaultRender(item);
-    //   },
-    // },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
         <>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            修改
-          </a>
-          {/* <Divider type="vertical" />
-          <a href="">提交</a> */}
+          <a onClick={() => {editHandler(record);}}>修改</a>&nbsp;&nbsp;
+          <a onClick={() => {deleteHandler(record);}}>删除</a>
         </>
       ),
     },
   ];
+  const closeHandler = ()=>{
+    setModalVisible(false);
+  };
+  const editHandler = (record)=>{
+    setName('修改');
+    setModalVisible(true);
+    setRecord(record);
+    setID(record.id);
+  };
+  const deleteHandler=(record)=>{
+    const values = {tgt_example:record.context,tgt_intent:record.intent};
+    dispatch({
+      type:'dialogdata/delete',
+      payload:{
+        values,
+      },
+    });
+  }
+  const batchDelete=(selectedRows)=>{
+    const hide = message.loading('正在删除');
+    if (!selectedRows) return true;
+    try {
+      // await removeRule({
+      //   key: selectedRows.map((row) => row.key),
+      // });
+      deleteHandler(selectedRows.map((row) => row.key));
+      hide();
+      message.success('删除成功，即将刷新');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请重试');
+      return false;
+    }
+  }
+  const onFinsh=(value)=>{
+    let id=0;
+    if(record){
+      id = record.id;
+    }
+    console.log(id);
+    if(id){
+      const values = {new_example:value.context,tgt_example:record.context,tgt_intent:record.intent}; 
+      dispatch({
+        type:'dialogdata/edit',
+        payload:{
+          values,
+        },
+      });
+    }
+    else{
+      const values = {new_example:value.context,tgt_intent:value.intent};
+      dispatch({
+        type:'dialogdata/add',
+        payload:{
+          values,
+        },
+      });
+    }
+    setModalVisible(false);
+  };
+
+  const addHandler=()=>{
+    setName('添加');
+    setRecord(undefined);
+    setModalVisible(true);
+  };
   return (
     <>
       <PageContainer>
@@ -219,24 +173,13 @@ const DialogData = () => {
             labelWidth: 120,
           }}
           toolBarRender={() => [
-            <Button type="primary" onClick={() => handleModalVisible(true)}>
+            <Button type="primary" onClick={addHandler}>
               <PlusOutlined /> 新建
             </Button>,
           ]}
-          dataSource={data}
-          request={(params, sorter, filter) => {
-            queryRule({ ...params, sorter, filter }).then((res) => {
-              let resData=[]
-              let num = 0
-              res.map(({intent,examples})=>{
-                  examples.map((context)=>{
-                     resData.push({intent,context,id:num++})
-                  })
-              })
-              setData(resData);
-            });
-          }}
           columns={columns}
+          dataSource={dialogdata}
+          loading={userListLoading}
           rowSelection={{
             onChange: (_, selectedRows) => setSelectedRows(selectedRows),
           }}
@@ -259,7 +202,7 @@ const DialogData = () => {
           >
             <Button
               onClick={async () => {
-                await handleRemove(selectedRowsState);
+                await batchDelete(selectedRowsState);
                 setSelectedRows([]);
                 actionRef.current?.reloadAndRest?.();
               }}
@@ -269,7 +212,7 @@ const DialogData = () => {
             <Button type="primary">批量审批</Button>
           </FooterToolbar>
         )}
-        <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
+        {/* <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
           <ProTable
             onSubmit={async (value) => {
               const success = await handleAdd(value);
@@ -286,15 +229,16 @@ const DialogData = () => {
             type="form"
             columns={columns}
           />
-        </CreateForm>
-        {stepFormValues && Object.keys(stepFormValues).length ? (
+        </CreateForm> */}
+        <EditModal visible={modalVisible} closeHandler={closeHandler} record={record} id={ID} onFinsh={onFinsh} name={name}> </EditModal>
+        {/* {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm
             onSubmit={async (value) => {
               const success = await handleUpdate(value);
 
               if (success) {
                 handleUpdateModalVisible(false);
-                setStepFormValues({});
+                setFormValues({});
 
                 if (actionRef.current) {
                   actionRef.current.reload();
@@ -303,14 +247,14 @@ const DialogData = () => {
             }}
             onCancel={() => {
               handleUpdateModalVisible(false);
-              setStepFormValues({});
+              setFormValues({});
             }}
             updateModalVisible={updateModalVisible}
             values={stepFormValues}
           />
-        ) : null}
+        ) : null} */}
 
-        <Drawer
+        {/* <Drawer
           width={600}
           visible={!!row}
           onClose={() => {
@@ -331,10 +275,15 @@ const DialogData = () => {
               columns={columns}
             />
           )}
-        </Drawer>
+        </Drawer> */}
       </PageContainer>
     </>
   );
 };
 
-export default DialogData;
+//export default DialogData;
+
+export default connect(({ dialogdata, loading }) => ({
+  dialogdata,
+  userListLoading: loading.models.users,
+}))(DialogData);
