@@ -12,6 +12,7 @@ const Model = {
         *getRemote({ payload }, { call, put }) {
             //console.log('failed');
             const data = yield call(getRemoteList);
+            //console.log(data);
             if(data){
                 yield put({
                 type:"getList",
@@ -70,7 +71,8 @@ const Model = {
                   resData.push({intent,context,id:num++})
                 })
             })
-            return resData;
+            //console.log(resData);
+            return {resData};
         },
     },
     subscriptions: {

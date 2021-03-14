@@ -246,10 +246,10 @@ export default defineConfig({
               component: './details',
             },
             {
-              path: '/comment',
-              name: '评价页面',
+              path: '/recommend',
+              name: '推荐模型管理',
               icon: 'CheckCircleOutlined',
-              component: './comment',
+              component: './recommend',
             },
             {
               path: '/chatmodel',

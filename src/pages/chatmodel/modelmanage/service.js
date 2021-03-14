@@ -1,25 +1,67 @@
 import request from 'umi-request';
 
-export async function queryRule(params) {
+export const getRemoteList=async()=>{
   return request('/nlu_api/show_all_models/', {
-    params,
+    method: 'get',
+  })
+  .then(function(response) {
+    //console.log(response);
+    return response;
+  })
+  .catch(function(error) {
+    return false;
+  })
+}
+
+export const changeRule=async({values})=>{
+  return request('/nlu_api/change_running_model/', {
+    method: 'get',
+    params: values,
+  })
+  .then(function(response) {
+    return response;
+  })
+  .catch(function(error) {
+     return false;
   });
 }
-export async function removeRule(params) {
-  return request('/faq_api/delete', {
-    method: 'POST',
-    data: { ...params },
+
+export const deleteRule=async({values})=>{
+  return request('/nlu_api/delete_model/', {
+    method: 'get',
+    params: values,
+    //data: { ...params, method: 'delete' },
+  })
+  .then(function(response) {
+    return response;
+  })
+  .catch(function(error) {
+     return false;
   });
 }
-export async function addRule(data) {
-  return request('/faq_api/create', {
-    method: 'POST',
-    data,
+export const addRule=async({values})=>{
+  return request('/nlu_api/create_model/', {
+    method: 'get',
+    params: values,
+  })
+  .then(function(response) {
+    return response;
+  })
+  .catch(function(error) {
+     return false;
   });
 }
-export async function updateRule(params) {
-  return request('/faq_api/update', {
-    method: 'POST',
-    data: { ...params, method: 'update' },
+
+export const testRule=async({values})=>{
+  return request('/nlu_api/test_running_model/', {
+    method: 'get',
+    params: values,
+  })
+  .then(function(response) {
+    return response;
+  })
+  .catch(function(error) {
+     return false;
   });
 }
+
