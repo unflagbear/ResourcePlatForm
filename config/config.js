@@ -289,12 +289,12 @@ export default defineConfig({
                   path: '/faqmanage/datamanage',
                   component: './faqmanage/datamanage',
                 },
-                // {
-                //   name: '模型管理',
-                //   icon: 'smile',
-                //   path: '/faqmanage/modelmanage',
-                //   component: './faqmanage/modelmanage',
-                // },
+                {
+                  name: '问答数据管理',
+                  icon: 'smile',
+                  path: '/faqmanage/modelmanage',
+                  component: './faqmanage/modelmanage',
+                },
               ],
             },
             {
