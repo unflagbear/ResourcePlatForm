@@ -3,9 +3,6 @@ import { Button, message, Drawer } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
-import CreateForm from './components/CreateForm';
-import UpdateForm from './components/UpdateForm';
 import EditModal from './components/EditModal';
 import {connect} from 'umi'
 
@@ -120,7 +117,9 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
       // await removeRule({
       //   key: selectedRows.map((row) => row.key),
       // });
-      deleteHandler(selectedRows.map((row) => row.key));
+      let key=selectedRows.map((row) => row.key);
+      console.log(key);
+      //deleteHandler(selectedRows.map((row) => row.key));
       hide();
       message.success('删除成功，即将刷新');
       return true;
@@ -178,7 +177,7 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
             </Button>,
           ]}
           columns={columns}
-          dataSource={dialogdata}
+          dataSource={dialogdata.resData}
           loading={userListLoading}
           rowSelection={{
             onChange: (_, selectedRows) => setSelectedRows(selectedRows),

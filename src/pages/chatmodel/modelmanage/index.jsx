@@ -1,96 +1,51 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Drawer,Input } from 'antd';
+import { Button, message, Drawer, Form, Select, Modal, Table, InputNumber, Input} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
-import CreateForm from './components/CreateForm';
-import UpdateForm from './components/UpdateForm';
+import EditModal from './components/EditModal';
+import {connect} from 'umi'
+import './modelmanage.css';
 
 import { queryRule, updateRule, addRule, removeRule } from './service';
+import { white } from 'chalk';
 
 /**
  * 添加节点
  * @param fields
  */
 
-const handleAdd = async (fields) => {
-  const hide = message.loading('正在添加');
-
-  try {
-    await addRule({ domain:fields.domain,name: fields.name,data_path: fields.dataPath,category_num: fields.categoryNum });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-/**
- * 更新节点
- * @param fields
- */
-
-const handleUpdate = async (fields) => {
-  const hide = message.loading('正在配置');
-
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
-/**
- *  删除节点
- * @param selectedRows
- */
-
-const handleRemove = async (selectedRows) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-
-  try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
-
-const ModelManage = () => {
-  const [createModalVisible, handleModalVisible] = useState(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  const [stepFormValues, setStepFormValues] = useState({});
+const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
+  const [form]=Form.useForm();
   const actionRef = useRef();
-  const [row, setRow] = useState();
   const [selectedRowsState, setSelectedRows] = useState([]);
-  const [data, setData] = useState([]);
+  const [record,setRecord] = useState(undefined);
+  const [modalVisible,setModalVisible] = useState(false);
+  const [name,setName] = useState(undefined);
+  const [ID,setID] = useState(-1);
+  const [selectModelId,setSelectModelId] = useState();
+  const [text,setText] = useState();
+  const [result,setResult] = useState('');
+  let modeldata = modelmanage.resData;
+  let modelname = modelmanage.current_model;
+  // let modelData = modelmanage.resData;
+  // console.log(modelData);
+  // for(let i=0;i<modelData.length();i++){
+  //   //model_id.push(modelData[i].model_id);
+  //   if(modelData[i].model_status=="running"){
+  //     current_model = modelData[i].model_name;
+  //   }
+  // }
+  //console.log(current_model);
   const columns = [
     {
-      title: '记录id',
-      dataIndex: 'recordId',
+      title: '模型id',
+      dataIndex: 'model_id',
       formItemProps: {
         rules: [
           {
             required: true,
-            message: '规则名称为必填项',
+            message: '模型id为必填项',
           },
         ],
       },
@@ -100,26 +55,21 @@ const ModelManage = () => {
     },
     {
       title: '模型名',
-      dataIndex: 'name',
+      dataIndex: 'model_name',
       valueType: 'textarea',
     },
     {
-      title: '领域',
-      dataIndex: 'domain',
+      title: '模型描述',
+      dataIndex: 'model_desc',
       valueType: 'textarea',
     },
     {
-      title: '数据路径',
-      dataIndex: 'dataPath',
+      title: '模型路径',
+      dataIndex: 'model_path',
       valueType: 'textarea',
     },{
-      title: '类别数量',
-      dataIndex: 'categoryNum',
-      valueType: 'textarea',
-    },
-    {
       title: '创建时间',
-      dataIndex: 'createTime',
+      dataIndex: 'create_time',
       sorter: true,
       valueType: 'dateTime',
       hideInForm: true,
@@ -138,30 +88,26 @@ const ModelManage = () => {
       },
     },
     {
-      title: '状态',
-      dataIndex: 'state',
+      title: '模型状态',
+      dataIndex: 'model_status',
       hideInForm: true,
       valueEnum: {
-        '1': {
+        'training': {
           text: '正在训练',
           status: 'Processing',
         },
-        '2': {
+        'ready': {
           text: '就绪',
           status: 'Success',
         },
-        '-1': {
-          text: '错误',
+        'running': {
+          text: '运行',
           status: 'Error',
         },
-        '0':{
-          text: '就绪',
-          status: 'Default',
-        }
       }
     },{
-      title: '备注',
-      dataIndex: 'comment',
+      title: '训练日志路径',
+      dataIndex: 'train_log_path',
       valueType: 'textarea',
     },
     {
@@ -170,37 +116,149 @@ const ModelManage = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            修改
-          </a>
-          {/* <Divider type="vertical" />
-          <a href="">提交</a> */}
+          {/* <a onClick={() => {editHandler(record);}}>修改</a>&nbsp;&nbsp; */}
+          <a onClick={() => {deleteHandler(record);}}>删除</a>
         </>
       ),
     },
   ];
+  const closeHandler = ()=>{
+    setModalVisible(false);
+  };
+ 
+  const deleteHandler=(record)=>{
+    const values = {model_id:record.model_id};
+    dispatch({
+      type:'modelmanage/delete',
+      payload:{
+        values,
+      },
+    });
+  }
+  const batchDelete=(selectedRows)=>{
+    const hide = message.loading('正在删除');
+    if (!selectedRows) return true;
+    try {
+      // await removeRule({
+      //   key: selectedRows.map((row) => row.key),
+      // });
+      let key=selectedRows.map((row) => row.key);
+      console.log(key);
+      //deleteHandler(selectedRows.map((row) => row.key));
+      hide();
+      message.success('删除成功，即将刷新');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请重试');
+      return false;
+    }
+  }
+  const onFinsh=(value)=>{
+    let id=0;
+    if(record){
+      id = record.id;
+    }
+    console.log(id);
+    if(id){
+      const values = {new_example:value.context,tgt_example:record.context,tgt_intent:record.intent}; 
+      dispatch({
+        type:'modelmanage/edit',
+        payload:{
+          values,
+        },
+      });
+    }
+    else{
+      console.log(value);
+      const values = value;
+      dispatch({
+        type:'modelmanage/add',
+        payload:{
+          values,
+        },
+      });
+    }
+    setModalVisible(false);
+  };
+
+  const changeHandler=()=>{
+    const values = {model_id:selectModelId}; 
+      dispatch({
+        type:'modelmanage/change',
+        payload:{
+          values,
+        },
+      });
+  };
+
+  const addHandler=()=>{
+    setName('添加');
+    setRecord(undefined);
+    setModalVisible(true);
+  };
+
+  const testHandler=()=>{
+    const values = {test_utterance: text}; 
+    console.log(values);
+      dispatch({
+        type:'modelmanage/test',
+        payload:{
+          values,
+        },
+      });
+    // console.log(modelmanage.result);
+    // setResult(modelmanage.result);
+  };
+
+  function testOnChange(e){
+   // console.log(e.target.value);
+    setText(e.target.value);
+  }
+
+  function onChange(value) {
+     setSelectModelId(value);
+ }
   return (
     <>
       <PageContainer>
+      <div className='test-type'>
+        <h4>模型测试</h4>
+              <p style={{marginLeft:330, marginTop:18, fontSize: 16}}>当前模型:&nbsp;&nbsp;&nbsp;{modelname}
+              <a style={{ color:'black', marginLeft:260 }}>测试语料:</a><Input style={{ width: 170, marginLeft:15 }} maxLength={100} onChange={testOnChange}/>
+           </p>
+            <Button style={{marginBottom:20, marginLeft:1200}} type="primary" onClick={testHandler}>提交</Button>
+            <div>
+            <p style={{marginLeft:330, marginTop:0, fontSize: 16}}>测试结果:
+              <p className='tt-type'> {modelmanage.result}</p>
+            </p>
+            </div>
+    
+      </div>
+      <div className='title-type'>
+        <h4>模型切换</h4>
+              <p style={{marginLeft:330, marginTop:18, fontSize: 16}}>当前模型:&nbsp;&nbsp;&nbsp;{modelname}
+              <a style={{ color:'black', marginLeft:260 }}>模型id:</a><InputNumber style={{ width: 170, marginLeft:15 }} onChange={onChange}/>
+           </p>
+            <Button style={{marginBottom:20, marginLeft:1200}} type="primary" onClick={changeHandler}>切换</Button>
+    
+        </div>
         <ProTable
+          style={{marginTop:40}}
           headerTitle="查询表格"
           actionRef={actionRef}
-          rowKey="recordId"
+          rowKey="id"
           search={{
             labelWidth: 120,
           }}
           toolBarRender={() => [
-            <Button type="primary" onClick={() => handleModalVisible(true)}>
+            <Button type="primary" onClick={addHandler}>
               <PlusOutlined /> 新建
             </Button>,
           ]}
-          request={(params, sorter, filter) => queryRule({ ...params, sorter, filter })}
           columns={columns}
+          dataSource={modeldata}
+          loading={userListLoading}
           rowSelection={{
             onChange: (_, selectedRows) => setSelectedRows(selectedRows),
           }}
@@ -223,7 +281,7 @@ const ModelManage = () => {
           >
             <Button
               onClick={async () => {
-                await handleRemove(selectedRowsState);
+                await batchDelete(selectedRowsState);
                 setSelectedRows([]);
                 actionRef.current?.reloadAndRest?.();
               }}
@@ -233,32 +291,15 @@ const ModelManage = () => {
             <Button type="primary">批量审批</Button>
           </FooterToolbar>
         )}
-        <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
-          <ProTable
-            onSubmit={async (value) => {
-              const success = await handleAdd(value);
-
-              if (success) {
-                handleModalVisible(false);
-
-                if (actionRef.current) {
-                  actionRef.current.reload();
-                }
-              }
-            }}
-            rowKey="recordId"
-            type="form"
-            columns={columns.slice(1,7)}
-          />
-        </CreateForm>
-        {stepFormValues && Object.keys(stepFormValues).length ? (
+        <EditModal visible={modalVisible} closeHandler={closeHandler} record={record} id={ID} onFinsh={onFinsh} name={name}> </EditModal>
+        {/* {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm
             onSubmit={async (value) => {
               const success = await handleUpdate(value);
 
               if (success) {
                 handleUpdateModalVisible(false);
-                setStepFormValues({});
+                setFormValues({});
 
                 if (actionRef.current) {
                   actionRef.current.reload();
@@ -267,14 +308,14 @@ const ModelManage = () => {
             }}
             onCancel={() => {
               handleUpdateModalVisible(false);
-              setStepFormValues({});
+              setFormValues({});
             }}
             updateModalVisible={updateModalVisible}
             values={stepFormValues}
           />
-        ) : null}
+        ) : null} */}
 
-        <Drawer
+        {/* <Drawer
           width={600}
           visible={!!row}
           onClose={() => {
@@ -295,10 +336,19 @@ const ModelManage = () => {
               columns={columns}
             />
           )}
-        </Drawer>
+        </Drawer> */}
       </PageContainer>
     </>
   );
 };
 
-export default ModelManage;
+//export default DialogData;
+
+export default connect(({ modelmanage,trainmodel,loading }) => ({
+  modelmanage,
+  trainmodel,
+  userListLoading: loading.models.users,
+}))(ModelManage);
+
+
+
