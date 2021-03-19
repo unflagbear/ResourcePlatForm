@@ -298,6 +298,23 @@ export default defineConfig({
               ],
             },
             {
+              path: '/demand',
+              name: '需求中心',
+              icon: 'CheckCircleOutlined',
+              routes: [
+                {
+                  path: '/',
+                  redirect: '/demand/index',
+                },
+                {
+                  name: '发布需求',
+                  icon: 'smile',
+                  path: '/demand/index',
+                  component: './demandprogress/',
+                }
+              ],
+            },
+            {
               name: '新闻中心',
               icon: 'CheckCircleOutlined',
               path: '/result',
