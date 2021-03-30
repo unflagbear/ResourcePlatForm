@@ -9,11 +9,11 @@ import { getChildrenToRender } from './utils';
 
 class Content5 extends React.PureComponent {
 
-  getChildrenToRender = (data,equipmentList) =>
+  getChildrenToRender = (data,expertlist) =>
     data.map((item) => {
       const {name} = item
       const index = name.charAt(name.length-1)
-      if(!equipmentList){
+      if(!expertlist){
         return null;
       }
       return (
@@ -22,12 +22,12 @@ class Content5 extends React.PureComponent {
             <span {...item.children.img}>
             <Image
             height="100%"
-            alt={equipmentList[index].title}
-            src={equipmentList[index].imgLink}
+            alt={expertlist[index].title}
+            src={expertlist[index].imgLink}
             fallback={defaultImg}
           />
             </span>
-            <p {...item.children.content}>{equipmentList[index].name}</p>
+            <p {...item.children.content}>{expertlist[index].name}</p>
           </a>
         </Col>
       );
@@ -35,11 +35,11 @@ class Content5 extends React.PureComponent {
 
   render() {
     const { ...props } = this.props;
-    const { dataSource,equipmentList } = props;
+    const { dataSource,expertlist } = props;
     delete props.dataSource;
     delete props.isMobile;
     const childrenToRender = this.getChildrenToRender(
-      dataSource.block.children,equipmentList
+      dataSource.block.children,expertlist
     );
     return (
       <div {...props} {...dataSource.wrapper}>

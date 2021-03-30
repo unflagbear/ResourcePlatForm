@@ -216,6 +216,8 @@ export default defineConfig({
               ],
             },
             {
+              // hideInMenu:true,
+
               path: '/profile',
               name: '订单',
               icon: 'profile',
@@ -240,20 +242,28 @@ export default defineConfig({
               ],
             },
             {
+              // hideInMenu:true,
               path: '/details',
               name: '详情页',
               icon: 'CheckCircleOutlined',
               component: './details',
             },
             {
+              // hideInMenu:true,
+
               path: '/recommend',
               name: '推荐模型管理',
+              authority: ['admin'],
               icon: 'CheckCircleOutlined',
               component: './recommend',
             },
             {
+              // hideInMenu:true,
+
               path: '/chatmodel',
               name: '对话模型管理',
+              authority: ['admin'],
+
               icon: 'CheckCircleOutlined',
               routes: [
                 {
@@ -275,8 +285,12 @@ export default defineConfig({
               ],
             },
             {
+              // hideInMenu:true,
+
               path: '/faqmanage',
               name: '问答模型',
+              authority: ['admin'],
+
               icon: 'CheckCircleOutlined',
               routes: [
                 {
@@ -298,6 +312,28 @@ export default defineConfig({
               ],
             },
             {
+              // hideInMenu:true,
+
+              path: '/knowledgegraph',
+              name: '知识图谱',
+              authority: ['admin'],
+              icon: 'CheckCircleOutlined',
+              routes: [
+                {
+                  path: '/',
+                  redirect: '/knowledgegraph/',
+                },
+                {
+                  name: '知识图谱管理',
+                  icon: 'smile',
+                  path: '/knowledgegraph/',
+                  component: './knowledge_graph/index.jsx',
+                }
+              ],
+            },
+            {
+              // hideInMenu:true,
+
               path: '/demand',
               name: '需求中心',
               icon: 'CheckCircleOutlined',
@@ -401,19 +437,19 @@ export default defineConfig({
                   redirect: '/dashboard/analysis',
                 },
                 {
-                  name: 'analysis',
+                  name: '数据展示',
                   icon: 'smile',
                   path: '/dashboard/analysis',
                   component: './dashboard/analysis',
                 },
                 {
-                  name: 'monitor',
+                  name: '监控页面',
                   icon: 'smile',
                   path: '/dashboard/monitor',
                   component: './dashboard/monitor',
                 },
                 {
-                  name: 'workplace',
+                  name: '工作台',
                   icon: 'smile',
                   path: '/dashboard/workplace',
                   component: './dashboard/workplace',

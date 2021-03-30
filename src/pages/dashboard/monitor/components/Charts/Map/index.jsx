@@ -32,6 +32,8 @@ export default class Map extends React.Component {
       <PageLoading />
     ) : (
       <MapboxScene
+      logoPosition="bottomright"
+      logoVisible={false}
         map={{
           center: [110.19382669582967, 50.258134],
           pitch: 0,

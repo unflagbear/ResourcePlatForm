@@ -91,21 +91,21 @@ export default class Home extends React.Component {
       <Content5
         id="Content5_0"
         key="Content5_0"
-        equipmentList={equipmentList}
+        expertlist={equipmentList}
         dataSource={Content50DataSource}
         isMobile={this.state.isMobile}
       />,
       <Feature7
         id="Feature7_0"
         key="Feature7_0"
-        companyList = {companies}
+        companylist = {companies}
         dataSource={Feature70DataSource}
         isMobile={this.state.isMobile}
       />,
       <Teams2
         id="Teams2_0"
         key="Teams2_0"
-        expertList = {experts}
+        expertlist = {experts}
         dataSource={Teams20DataSource}
         isMobile={this.state.isMobile}
       />,

@@ -3,15 +3,15 @@ import {connect,history,useLocation} from 'umi'
 import { Layout, Menu, Table,Button, Space, AutoComplete, Card, message,Spin } from 'antd'
 import { SyncOutlined , SearchOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
-
-const { Header, Content, Footer, Sider } = Layout;
 import './components/layout.css'
 import Search from './components/Search'
 import TrainModel from './components/TrainModel'
 import SetModal from './components/SetModal';
 import styles from './style.less';
 import RecommendResult from './components/RecommendResult';
-import { white } from 'chalk';
+
+const { Header, Content, Footer, Sider } = Layout;
+
 
 const Recommend = ({ dispatch, recommend })=>{
   const [domain,setDomain] = useState();

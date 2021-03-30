@@ -57,7 +57,7 @@ const request = extend({
 });
 
 request.interceptors.request.use(async (url, options) => {
-  console.log(options)
+  // console.log(options)
   if (
     options.method === 'post' ||
     options.method === 'put' ||
@@ -65,8 +65,8 @@ request.interceptors.request.use(async (url, options) => {
     options.method === 'get'
   ) {
     const headers = {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
+      // 'Content-Type': 'application/json',
+      // Accept: 'application/json',
       access_token: localStorage.getItem('token'),
     };
     return {

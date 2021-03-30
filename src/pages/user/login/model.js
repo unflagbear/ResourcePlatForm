@@ -31,7 +31,7 @@ const Model = {
       const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
-        payload: response,
+        payload: response.data,
       }); // Login successfully
 
       if (response.status === 'ok') {
@@ -64,6 +64,7 @@ const Model = {
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
+      console.log(payload.currentAuthority)
       setAuthority(payload.currentAuthority);
       return { ...state, status: payload.status, type: payload.type };
     },

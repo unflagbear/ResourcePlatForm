@@ -6,14 +6,14 @@ import expert from '@/assets/expert.svg'
 import { getChildrenToRender } from './utils';
 const { Paragraph } = Typography;
 class Teams2 extends React.PureComponent {
-  getBlockChildren = (data,expertList) =>
+  getBlockChildren = (data,expertlist) =>
     data.map((item, i) => {
       const { titleWrapper, image, ...$item } = item;
-      const name = expertList?expertList[i].name:"加载中";
-      const img = expertList?expertList[i].picpath:expert
-      const intro = expertList?expertList[i].expertIntroduce:"Loading"
-      const company = expertList?expertList[i].workUnit:"加载中"
-      const position = expertList?expertList[i].position:"加载中"
+      const name = expertlist?expertlist[i].name:"加载中";
+      const img = expertlist?expertlist[i].picpath:expert
+      const intro = expertlist?expertlist[i].expertIntroduce:"Loading"
+      const company = expertlist?expertlist[i].workUnit:"加载中"
+      const position = expertlist?expertlist[i].position:"加载中"
       return (
         <Col key={i.toString()} {...$item}>
           <Row>
@@ -43,10 +43,10 @@ class Teams2 extends React.PureComponent {
 
   render() {
     const { ...props } = this.props;
-    const { dataSource,expertList } = props;
+    const { dataSource,expertlist } = props;
     delete props.dataSource;
     delete props.isMobile;
-    const listChildren = this.getBlockChildren(dataSource.block.children,expertList);
+    const listChildren = this.getBlockChildren(dataSource.block.children,expertlist);
     return (
       <div {...props} {...dataSource.wrapper}>
         <div {...dataSource.page}>

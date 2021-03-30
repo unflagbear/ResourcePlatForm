@@ -5,7 +5,12 @@ export async function queryRule(params) {
     params,
   });
 }
-
+export async function trainModel(params) {
+  return request('/faq_api/model/create/', {
+    method:'post',
+    data: { ...params },
+  });
+}
 export async function queryQues(params) {
   return request('/api/faqManagementQuery/list', {
     params,

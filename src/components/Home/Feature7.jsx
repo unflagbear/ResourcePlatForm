@@ -10,19 +10,19 @@ const { Paragraph } = Typography;
 const { Meta } = Card;
 function Feature7(props) {
   const [isLoading,setIsLoading] = useState(true)
-  const { dataSource, isMobile,companyList, ...tagProps } = props;
+  const { dataSource, isMobile,companylist, ...tagProps } = props;
   const { blockWrapper, titleWrapper } = dataSource;
   useEffect(()=>{
-    companyList?setIsLoading(false):setIsLoading(true)
-  },[companyList])
+    companylist?setIsLoading(false):setIsLoading(true)
+  },[companylist])
   const childrenToRender = blockWrapper.children.map((item, i) => {
     const data = isLoading?{}:(
       <div>
-        <p>{companyList[i].businessscope}</p>
+        <p>{companylist[i].businessscope}</p>
       </div>
     );
-    const title = isLoading?"加载中":companyList[i].name
-    const context = isLoading?"Loading":companyList[i].businessscope
+    const title = isLoading?"加载中":companylist[i].name
+    const context = isLoading?"Loading":companylist[i].businessscope
     return(
       <Col {...item} key={i.toString()}>
         <Popover content={data} title={title} style={{width:"200px"}}>

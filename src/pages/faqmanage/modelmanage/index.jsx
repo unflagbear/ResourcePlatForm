@@ -4,10 +4,12 @@ import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
+import CreateModelForm from './components/CreateModelForm';
+
 import CreateForm from './components/CreateForm';
 import DetailForm from './components/DetailForm';
 
-import { queryRule, updateRule, addRule, removeRule,queryQues } from './service';
+import { queryRule, updateRule, addRule, removeRule,queryQues ,trainModel} from './service';
 
 /**
  * 添加节点
@@ -77,10 +79,29 @@ const handleRemove = async (selectedRows) => {
     return false;
   }
 };
+const handleTrain = async (value,selectedRows) => {
+  const hide = message.loading('正在根据所选分类创建模型');
+  if (!selectedRows) return true;
+  const idList = selectedRows.map((item)=>{return item.categoryId})
+
+  // hide()
+  try {
+    await trainModel({...value,categories:idList})
+
+    hide();
+    message.success('模型创建成功');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('模型创建失败，请重试');
+    return false;
+  }
+};
 
 const Faqmanage = () => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const [detailModalVisible, handleDetailModalVisible] = useState(false);
+  const [createModelVisible, handleModelVisible] = useState(false);
 
   // const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [stepFormValues, setStepFormValues] = useState({});
@@ -110,6 +131,7 @@ const Faqmanage = () => {
     },
     {
       title: '回答',
+      width: 700,
       dataIndex: 'answer',
       valueType: 'textarea',
     },
@@ -135,6 +157,7 @@ const Faqmanage = () => {
     },
     {
       title: '操作',
+      width: 130,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
@@ -150,7 +173,8 @@ const Faqmanage = () => {
                   }
                 }
               }}>删除</a>
-              <a onClick={async() => {
+              <Divider type="vertical" />
+              <a  onClick={async() => {
                 handleDetailModalVisible(true)
                 setStepFormValues(record);
                 
@@ -272,9 +296,51 @@ const Faqmanage = () => {
             >
               批量删除
             </Button>
-            <Button type="primary">训练</Button>
+            <Button type="primary" onClick={async () => {
+               handleModelVisible(true)
+              }}>训练</Button>
           </FooterToolbar>
         )}
+        
+        <CreateModelForm onCancel={() => handleModelVisible(false)} modalVisible={createModelVisible}>
+          <ProTable
+            onSubmit={async (value) => {
+              const success = await handleTrain(value,selectedRowsState);
+              setSelectedRows([]);
+              actionRef.current?.reloadAndRest?.();
+              if (success) {
+                handleModelVisible(false);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
+              }
+            }}
+            rowKey="categoryId"
+            type="form"
+            columns={[{
+              title: '所属领域',
+              dataIndex: 'domain',
+              valueEnum: {
+                'patent': {
+                  text: '专利',
+                  status: 'Processing',
+                },
+                'expert': {
+                  text: '专家',
+                  status: 'Success',
+                },
+                'equipment': {
+                  text: '设备',
+                  status: 'Error',
+                }
+              }
+            },{
+              title: '模型名',
+              dataIndex: 'name',
+              valueType: 'textarea',
+            }]}
+          />
+        </CreateModelForm>
         <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
           <ProTable
             onSubmit={async (value) => {
@@ -295,6 +361,11 @@ const Faqmanage = () => {
         </CreateForm>
         {stepFormValues?<DetailForm onCancel={() => handleDetailModalVisible(false)} modalVisible={detailModalVisible}>
           <ProTable
+            toolBarRender={() => [
+              <Button type="primary" onClick={() => handleModalVisible(true)}>
+                <PlusOutlined /> 新建
+              </Button>,
+            ]}
             request={(params, sorter, filter) => queryQues({ ...params, sorter, filter,categoryId:stepFormValues.categoryId })}
             rowKey="queryId"
             columns={queryCom}

@@ -1,13 +1,12 @@
 import React from 'react';
 import { Modal } from 'antd';
 
-const DetailForm = (props) => {
+const CreateModelForm = (props) => {
   const { modalVisible, onCancel } = props;
   return (
     <Modal
-    width={800}
       destroyOnClose
-      title="相关分类问题"
+      title="根据分类创建模型"
       visible={modalVisible}
       onCancel={() => onCancel()}
       footer={null}
@@ -17,4 +16,4 @@ const DetailForm = (props) => {
   );
 };
 
-export default DetailForm;
+export default CreateModelForm;

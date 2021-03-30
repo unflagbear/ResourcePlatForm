@@ -28,6 +28,13 @@ export default {
         '^/faq_api': '',
       },
     },
+    '/knowledge_graph':{
+      target:'http://10.108.210.65:10081',
+      changeOrigin: true,
+      pathRewrite:{
+        '^/knowledge_graph': '',
+      }
+    }
   },
   test: {
     '/api/': {
