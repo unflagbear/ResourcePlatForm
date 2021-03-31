@@ -6,19 +6,19 @@ export async function queryRule(params) {
   });
 }
 export async function removeRule(params) {
-  return request('/faq_api/delete', {
+  return request('http://10.108.210.65:9900/delete', {
     method: 'POST',
     data: { ...params },
   });
 }
 export async function addRule(data) {
-  return request('/faq_api/create', {
+  return request('http://10.108.210.65:9900/create', {
     method: 'POST',
     data,
   });
 }
 export async function updateRule(params) {
-  return request('/faq_api/update', {
+  return request('http://10.108.210.65:9900/update', {
     method: 'POST',
     data: { ...params },
   });
