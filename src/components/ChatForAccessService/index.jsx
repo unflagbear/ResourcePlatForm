@@ -47,7 +47,7 @@ const ChatForAccessService = () => {
       });
 
       setTyping(true);
-      let url = `http://10.108.210.65:8452/nlu_api/dialog_api/`
+      let url = `http://10.108.210.65:8452/dialog_api/`
       let conversation_id = 55555555
       let user_utterance = val
 

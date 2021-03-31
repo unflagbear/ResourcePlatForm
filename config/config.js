@@ -115,7 +115,7 @@ export default defineConfig({
               path: '/form',
               icon: 'form',
               name: '资源商城',
-              hideChildrenInMenu: hide,
+              hideInMenu: hide,
               routes: [
                 {
                   path: '/',
@@ -217,7 +217,7 @@ export default defineConfig({
             },
             {
               // hideInMenu:true,
-
+              
               path: '/profile',
               name: '订单',
               icon: 'profile',
@@ -242,7 +242,7 @@ export default defineConfig({
               ],
             },
             {
-              // hideInMenu:true,
+              hideInMenu:true,
               path: '/details',
               name: '详情页',
               icon: 'CheckCircleOutlined',
@@ -354,7 +354,7 @@ export default defineConfig({
               name: '新闻中心',
               icon: 'CheckCircleOutlined',
               path: '/result',
-              hideChildrenInMenu: hide,
+              hideInMenu: true,
               routes: [
                 {
                   path: '/',
@@ -431,6 +431,8 @@ export default defineConfig({
               path: '/dashboard',
               name: '统计分析',
               icon: 'dashboard',
+              hideInMenu: true,
+
               routes: [
                 {
                   path: '/',
@@ -449,6 +451,7 @@ export default defineConfig({
                   component: './dashboard/monitor',
                 },
                 {
+                  hideInMenu:true,
                   name: '工作台',
                   icon: 'smile',
                   path: '/dashboard/workplace',

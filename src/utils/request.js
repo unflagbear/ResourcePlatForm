@@ -80,22 +80,23 @@ request.interceptors.request.use(async (url, options) => {
 request.interceptors.response.use(async (response) => {
   const data = await response.clone().json();
   const token = response.headers.get('access_token');
+  if (token) {
+    localStorage.setItem('token', token);
+  }
   const btn = (
-    <Button type="primary" size="small" onClick={() => {location.href = 'http://localhost:8000/user/login';}}>
+    <Button type="primary" size="small" onClick={() => {location.href = 'http://10.108.211.130:7456/user/login';}}>
       前往登录
     </Button>
   );
   // console.log(data)
-  if(data.code === 50014){
+  if(!token && data.code === 50014){
     notification.info({
       message: `您需要登录获得更多功能`,
       description: `前往登录`,
       btn
     });
   }
-  if (token) {
-    localStorage.setItem('token', token);
-  }
+  
   return response;
 });
 export default request;
