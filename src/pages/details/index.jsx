@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useLocation } from 'umi';
-import './index.css'
+import './index.css';
+import ApplyModal from './components/ApplyModal';
 import {
   Typography,
   Image,
@@ -22,15 +23,18 @@ import {
   Space
 } from 'antd';
 import {
+  EditFilled,
   MessageOutlined
-, FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
-
+} from '@ant-design/icons';
+import { FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import defaultImg from '@/assets/defaultImg.svg';
 import 'antd/dist/antd.css';
 import ChatforAccessService from '@/components/ChatForAccessService';
+import EditModal from '../chatmodel/dialogdata/components/EditModal';
 
 const { Title } = Typography;
 const { Step } = Steps;
+let num=0;
 
 function Details({ dispatch, resource: { resourceDetail = {} } }) {
   const [haveSource, setHaveSource] = useState(false);
@@ -76,57 +80,58 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
     message.success('您的申请已提交');
   };
   
-  const Demo = () => {
-    const onFinish = (values) => {
-      console.log(values);
-    };
+  // const Demo = () => {
+  //   const onFinish = (values) => {
+  //     console.log(values);
+  //     console.log('11');
+  //   };
   
-    return (
-      <div >
-      <Form {...layout} name="nest-messages" 
-      onFinish={onFinish} validateMessages={validateMessages}>
-        <Form.Item name={['apply', 'demand']} label="需求概述" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name={['apply', 'intro']} label="详细说明">
-        <Input.TextArea />
-        </Form.Item>
-        <Form.Item name={['apply', 'institution']} label="需求单位">
-          <Input />
-        </Form.Item>
-        <Form.Item name={['apply', 'website']} label="预算金额(万元)" rules={[{ type: 'number', min: 0, max: 999999 }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name={['apply', 'introduction']} label="联系人姓名">
-          <Input/>
-        </Form.Item>
-        <Form.Item name={['apply', 'introduction']} label="联系电话" rules={[{ type: 'number', length:11 }]}>
-          <Input/>
-        </Form.Item>
-        <Form.Item name={['apply', 'email']} label="邮箱" rules={[{ type: 'email' }]}>
-          <Input/>
-        </Form.Item>
-        {/* <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item> */}
-      </Form>
-      </div>
-    );
-  };
+  //   return (
+  //     <div >
+  //     <Form {...layout} name="nest-messages" 
+  //     onFinish={onFinish} validateMessages={validateMessages}>
+  //       <Form.Item name={['apply', 'demand']} label="需求概述" rules={[{ required: true }]}>
+  //         <Input />
+  //       </Form.Item>
+  //       <Form.Item name={['apply', 'intro']} label="详细说明">
+  //       <Input.TextArea />
+  //       </Form.Item>
+  //       <Form.Item name={['apply', 'institution']} label="需求单位">
+  //         <Input />
+  //       </Form.Item>
+  //       <Form.Item name={['apply', 'website']} label="预算金额(万元)" rules={[{ type: 'number', min: 0, max: 999999 }]}>
+  //         <Input />
+  //       </Form.Item>
+  //       <Form.Item name={['apply', 'name']} label="联系人姓名">
+  //         <Input/>
+  //       </Form.Item>
+  //       <Form.Item name={['apply', 'phone']} label="联系电话" rules={[{ type: 'number', length:11 }]}>
+  //         <Input/>
+  //       </Form.Item>
+  //       <Form.Item name={['apply', 'email']} label="邮箱" rules={[{ type: 'email' }]}>
+  //         <Input/>
+  //       </Form.Item>
+  //       {/* <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+  //         <Button type="primary" htmlType="submit">
+  //           Submit
+  //         </Button>
+  //       </Form.Item> */}
+  //     </Form>
+  //     </div>
+  //   );
+  // };
   const Progress=(props)=>(
-    <div // style={props.style}
+    <div //style={props.style}
     className='style'>
     {props.title}
     <Divider />
-    <Steps // style={props.style}
+    <Steps //style={props.style}
     style={{marginTop: '20px'}}
   
-    // title={props.title}
+    //title={props.title}
     current={0}>
       <Step title="申请服务" description="This is a description." />
-      <Step title="线下沟通" /* subTitle="Left 00:00:08" */ description="This is a description." />
+      <Step title="线下沟通" /*subTitle="Left 00:00:08"*/ description="This is a description." />
       <Step title="签署协议" description="This is a description." />
       <Step title="服务实施" description="This is a description." />
       <Step title="服务验收" description="This is a description." />
@@ -137,14 +142,29 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
   const clickApply=()=>{
    // debugger
     setModalVisible(true);
-    console.log(modalVisible);
+    //console.log(modalVisible);
   }
   const closeHandler = ()=>{
     setModalVisible(false);
   }
+  const onFinish= (value) => {
+   // console.log(value);
+   
+    const values={serviceId: resourceDetail.id, ...value.apply};
+    //const values={id:num++,create_time:time,demand:value.apply.demand,intro:value.intro,institution:value.institution,budget:value.budget,contact_name:value.contact_name,contact_phone:value.contact_name,contact_email:value.contact_email};
+    console.log(values);
+    dispatch({
+      type:'details/apply',
+      payload:{
+        values,
+      },
+    });
+    setModalVisible(false);
+}
 
   // 详细内容卡片
   const Detail = () => (
+
     <Card
       hoverable
       extra={
@@ -198,7 +218,7 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
         </Descriptions.Item> 
       </Descriptions>
       <Progress 
-        // style={{marginTop: '50px'}}
+        //style={{marginTop: '50px'}}
         title={
         <span style={{fontWeight:'500', fontSize:'16px'}}>
           <Divider
@@ -208,29 +228,10 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
           />
           申请流程
         </span>
-      } />
-      <Modal 
-        title="提交申请" 
-        centered 
-        style={{top: '10px'}}
-        width='900px'
-        height='550px'
-        visible={modalVisible} 
-        onOk={closeHandler} 
-        onCancel={closeHandler}
-        bodyStyle={{
-          marginRight:'120px'
-        }}
-        footer={[
-          <Button key="back" onClick={closeHandler}>
-            取消
-          </Button>,
-          <Button key="submit" type="primary" htmlType="submit" loading={false} onClick={success}>
-            提交
-          </Button>,
-        ]}>
-        <Demo />
-      </Modal>
+      }>       
+      </Progress>
+      <ApplyModal  style={{marginBottom:40}} visible={modalVisible} closeHandler={closeHandler} onFinish={onFinish} > </ApplyModal>
+      
       <Button type="primary" className='buttonMargin' onClick={clickApply}>立刻申请</Button>
       
     </Card>
@@ -472,8 +473,9 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
         </Button>
       </div> */}
     </>
-  );
+  )
 }
+
 
 export default connect(({ resource, loading }) => ({
   resource,

@@ -219,7 +219,7 @@ export default defineConfig({
               // hideInMenu:true,
               
               path: '/profile',
-              name: '订单',
+              name: '订单管理',
               icon: 'profile',
               routes: [
                 {
@@ -234,10 +234,30 @@ export default defineConfig({
                   component: './profile/basic',
                 },
                 {
-                  name: '订单状态',
+                  name: '服务商',
                   icon: 'smile',
-                  path: '/profile/advanced',
-                  component: './profile/advanced',
+                  path: '/profile/sOrderManage',
+                  component: './profile/sOrderManage',
+                },
+                {
+                  name: '客户',
+                  icon: 'smile',
+                  path: '/profile/cOrderManage',
+                  component: './profile/cOrderManage',
+                },
+                {
+                  name: '服务商订单详情',
+                  icon: 'smile',
+                  path: '/profile/server',
+                  hideInMenu: true,
+                  component: './profile/server',
+                },
+                {
+                  name: '客户订单详情',
+                  icon: 'smile',
+                  path: '/profile/customer',
+                  hideInMenu: true,
+                  component: './profile/customer',
                 },
               ],
             },

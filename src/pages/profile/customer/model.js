@@ -1,7 +1,7 @@
 import { queryAdvancedProfile } from './service';
 
 const Model = {
-  namespace: 'profileAndadvanced',
+  namespace: 'profileCustomer',
   state: {
     advancedOperation1: [],
     advancedOperation2: [],

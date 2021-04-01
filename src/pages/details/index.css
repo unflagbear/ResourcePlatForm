@@ -8,6 +8,5 @@
 }
 .ant-modal-content{
     top: 100px;
-    width:1200px;
-    height:550px;
+    /* height:600px; */
 }
