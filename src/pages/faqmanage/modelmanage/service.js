@@ -6,7 +6,7 @@ export async function queryRule(params) {
   });
 }
 export async function trainModel(params) {
-  return request('http://10.108.210.65:9900/model/create/', {
+  return request('http://10.112.205.250:9900/model/create/', {
     method:'post',
     data: { ...params },
   });
@@ -18,19 +18,19 @@ export async function queryQues(params) {
 }
 
 export async function removeRule(params) {
-  return request('http://10.108.210.65:9900/category/delete', {
+  return request('http://10.112.205.250:9900/category/delete', {
     method: 'POST',
     data: { ...params },
   });
 }
 export async function addRule(data) {
-  return request('http://10.108.210.65:9900/category/create', {
+  return request('http://10.112.205.250:9900/category/create', {
     method: 'POST',
     data,
   });
 }
 export async function updateRule(params) {
-  return request('http://10.108.210.65:9900/category/update', {
+  return request('http://10.112.205.250:9900/category/update', {
     method: 'POST',
     data: { ...params },
   });

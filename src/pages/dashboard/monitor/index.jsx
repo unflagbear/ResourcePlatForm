@@ -35,11 +35,11 @@ class Monitor extends Component {
                 marginBottom: 24,
               }}
             >
-              <Card title="活动实时交易情况" bordered={false}>
+              <Card title="资源汇聚情况" bordered={false}>
                 <Row>
                   <Col md={6} sm={12} xs={24}>
                     <Statistic
-                      title="今日交易总额"
+                      title="现存交易量"
                       suffix="元"
                       value={numeral(124543233).format('0,0')}
                     />

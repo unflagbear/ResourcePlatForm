@@ -5,7 +5,7 @@ export async function queryKnowledgeGraph(params) {
     filedata.append("db",params.db)
     filedata.append("data",params.data)
 
-  return request('http://10.108.210.65:10081/get_info',{
+  return request('http://10.112.205.250:10081/get_info',{
       method:'post',
       body:filedata,
       // headers:{'Content-Type': 'multipart/form-data',}
