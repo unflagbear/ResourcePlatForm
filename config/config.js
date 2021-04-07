@@ -226,8 +226,8 @@ export default defineConfig({
               path: '/profile/cOrderManage',
               name: '订单管理',
               icon: 'profile',
-              authority: ['admin','customer'],
-              component: './profile/sOrderManage',
+              authority: ['customer'],
+              component: './profile/cOrderManage',
             },
             {
               path: '/profile/server',
@@ -241,7 +241,7 @@ export default defineConfig({
               path: '/profile/customer',
               name: '订单详情',
               icon: 'profile',
-              authority: ['admin','customer'],
+              authority: ['customer'],
               hideInMenu: true,
               component: './profile/customer',
             },
@@ -436,7 +436,7 @@ export default defineConfig({
               name: '资源池管理',
               icon: 'dashboard',
               // hideInMenu: true,
-
+              authority: ['admin'],
               routes: [
                 {
                   path: '/',

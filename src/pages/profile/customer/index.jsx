@@ -29,7 +29,7 @@ import {
   import styles from './style.less';
   import './advanced.css';
   import { FrownOutlined, MehOutlined, SmileOutlined, UploadOutlined } from '@ant-design/icons';
-  import { queryOrder } from './service';
+  import { queryOrder, nextState, communiCommend, check, comment, protocal } from './service';
   
   const { Step } = Steps;
   const { TextArea } = Input;
@@ -219,15 +219,17 @@ import {
       4: <SmileOutlined />,
       5: <SmileOutlined />,
     };
+    const {setRate, setCommtext, onClick} = props;
+
     return(
       <div className='title-type'>
         {props.title}
         <div className='comment-type'>
           <p style={{fontSize:'15px',paddingTop: '20px'}}>沟通体验:</p>
-          <Rate style={{marginTop: '5px',fontSize:'30px'}} defaultValue={3} character={({ index }) => customIcons[index + 1]} />
+          <Rate style={{marginTop: '5px',fontSize:'30px'}} defaultValue={3} onChange={(value)=>{setRate(value)}} character={({ index }) => customIcons[index + 1]} />
           <p style={{fontSize:'15px',marginTop: '10px'}}>对本次沟通的感受和意见:</p>
-          <TextArea showCount maxLength={100} rows={8} placeholder={'请输入您的评价：'} style={{marginTop: '8px',width:'800px', margin:"0 auto"}}/>
-          <Button type="primary" style={{float:'right',marginRight:'230px'}} On>{'提交'}</Button>
+          <TextArea showCount maxLength={100} rows={8} placeholder={'请输入您的评价：'} onChange={setCommtext} style={{marginTop: '8px',width:'800px', margin:"0 auto"}}/>
+          <Button type="primary" style={{float:'right',marginRight:'230px' }} onClick={onClick}>{'提交'}</Button>
         </div>
       </div>
     )
@@ -263,6 +265,7 @@ import {
   // const [buttonSize,setButtonSize]=useState('large');
   const Trace=(props)=>{
     //const { size } = this.state;
+  
     return(
       <div className='title-type'>
         {props.title}
@@ -281,20 +284,21 @@ import {
   }
   
   const Check=(props)=>{
+    const {setComple, setPunct, onClick} = props;
     return(
       <div className='title-type'>
         {props.title}
         <div className='protocal-type'>
           <p style={{marginTop:'20px',fontSize:'15px'}}>
             完成度: &nbsp;
-            <Rate allowHalf defaultValue={2.5} />
+            <Rate defaultValue={3} onChange={(value)=>{setComple(value)}}/>
           </p>
           <br />
           <p style={{fontSize:'15px'}}>
             准时性: &nbsp;
-            <Rate allowHalf defaultValue={2.5} />
+            <Rate defaultValue={3} onChange={(value)=>{setPunct(value)}}/>
           </p>
-          <Button type="primary" style={{float:'right',marginTop:'30px',marginRight:'150px'}}>提交</Button>
+          <Button type="primary" style={{float:'right',marginTop:'30px',marginRight:'150px'}} onClick={onClick}>提交</Button>
         </div>
       </div>
     )
@@ -305,33 +309,34 @@ import {
       1: <FrownOutlined />,
       2: <SmileOutlined />,
     }
+    const {setComment, setProf, setSpeed,setExper, setFeel,setCommtext, onClick} = props;
     return(
       <div className='title-type'>
         {props.title}
       <div className='protocal-type' >
         <p style={{marginTop:'20px',fontSize:'15px'}}>
           总体评价: &nbsp;
-          <Rate allowHalf defaultValue={2.5} />
+          <Rate  defaultValue={3} onChange={(value)=>{setComment(value)}} />
         </p>
         <br />
         <p style={{fontSize:'15px'}}>
           专业水平: &nbsp;
-          <Rate allowHalf defaultValue={2.5} />
+          <Rate defaultValue={3} onChange={(value)=>{setProf(value)}}/>
         </p>
         <br />
         <p style={{fontSize:'15px'}}>
           响应速度: &nbsp;
-          <Rate allowHalf defaultValue={2.5} />
+          <Rate defaultValue={3} onChange={(value)=>{setSpeed(value)}}/>
         </p>
         <br />
         <p style={{fontSize:'15px'}}>
           服务体验: &nbsp;
-          <Rate allowHalf defaultValue={2.5} />
+          <Rate defaultValue={3} onChange={(value)=>{setExper(value)}}/>
         </p>
         <p style={{fontSize:'15px'}}> 合作愉快</p>
-        <Rate style={{fontSize:'30px',marginLeft:20}}defaultValue={2} character={({ index }) => customIcons1[index + 1]} />
-        <TextArea showCount maxLength={100} rows={8} placeholder={'请输入对本次服务的感受和意见：'} style={{marginTop: '8px',width:'800px', margin:"0 auto"}}/>
-        <Button type="primary" style={{float:'right',marginTop:'30px',marginRight:'150px'}}>提交</Button>
+        <Rate style={{fontSize:'30px',marginLeft:20}}defaultValue={2} onChange={(value)=>{setFeel(value)}}character={({ index }) => customIcons1[index + 1]} />
+        <TextArea showCount maxLength={100} rows={8} placeholder={'请输入对本次服务的感受和意见：'} onChange={setCommtext} style={{marginTop: '8px',width:'800px', margin:"0 auto"}}/>
+        <Button type="primary" onClick = {onClick} style={{float:'right',marginTop:'30px',marginRight:'150px'}}>提交</Button>
         <br/>
       </div>
       </div>
@@ -343,6 +348,15 @@ import {
       current: 0,
       order_data:{},
       id:0,
+      rate:0,
+      comm_text:'',
+      comment:0,
+      prof:0,
+      speed:0,
+      exper:0,
+      feel:0,
+      comple:0,
+      punct:0,
     };
   
     async componentDidMount() {
@@ -379,6 +393,75 @@ import {
         tabActiveKey,
       });
     };
+
+    setRate=(value)=>{
+        //console.log(value);
+        this.setState({rate:value});
+      }
+    
+      setCommtext=(e)=>{
+        //console.log(e.target.value);
+        this.setState({comm_text: e.target.value});
+      }
+    
+      setComment = (value)=>{
+        this.setState({comment:value});
+      }
+      setProf = (value)=>{
+        this.setState({prof:value});
+      }
+      setSpeed = (value)=>{
+        this.setState({speed:value});
+      }
+      setExper = (value)=>{
+        this.setState({exper:value});
+      }
+    
+      setFeel = (value) => {
+        this.setState({feel:value});
+      }
+
+      setComple = (value) => {
+        this.setState({comple:value});
+      }
+
+      setPunct = (value) => {
+        this.setState({punct:value});
+      }
+    
+      communiSubmit = async()=>{
+        let values = {order_id: this.state.id, rate: this.state.rate, text: this.state.comm_text};
+        //console.log(values);
+        try {
+          await communiCommend({values}).then((res)=>{     
+          });
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      checkSubmit = async()=>{
+        let values = {order_id: this.state.id, comple: this.state.comple, punct: this.state.punct};
+        try {
+          await check({values}).then((res)=>{     
+          });
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+    
+      commentSubmit = async()=>{
+        let values = {order_id: this.state.id, comment: this.state.comment, prof:this.state.prof, speed:this.state.speed, exper: this.state.exper, feel: this.state.feel, text: this.state.comm_text};
+        try {
+          await comment({values}).then((res)=>{     
+          });
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
   
     render() {
       const { current, tabActiveKey } = this.state;
@@ -391,7 +474,7 @@ import {
         {
           title: '线下沟通',
           content: '沟通完成后，请进行评价',
-          component:<Communi title={'沟通完成后，请进行评价'}></Communi>
+          component:<Communi title={'沟通完成后，请进行评价'} setRate ={this.setRate.bind(this)} setCommtext = {this.setCommtext.bind(this)} onClick = {this.communiSubmit.bind(this)}></Communi>
         },
         {
           title: '签署协议',
@@ -406,12 +489,12 @@ import {
         {
           title: '服务验收',
           content: '请评价服务验收成果',
-          component: <Check title={'请评价服务验收成果'}></Check>
+          component: <Check title={'请评价服务验收成果'} setComple ={this.setComple.bind(this)} setPunct = {this.setPunct.bind(this)} onClick = {this.checkSubmit.bind(this)}></Check>
         },
         {
           title: '服务评价',
           content: '请进行综合服务评价',
-          component: <Comment title={'请进行综合服务评价'}></Comment>
+          component: <Comment title={'请进行综合服务评价'} setComment = {this.setComment.bind(this)} setProf = {this.setProf.bind(this)} setSpeed = {this.setSpeed.bind(this)} setExper = {this.setExper.bind(this)} setFeel = {this.setFeel.bind(this)} setCommtext = {this.setCommtext.bind(this)} onClick = {this.commentSubmit.bind(this)}></Comment>
         },
       ];
       const next = () => {
