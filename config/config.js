@@ -99,7 +99,7 @@ export default defineConfig({
           path: '/',
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
-          authority: ['admin', 'user'],
+          authority: ['admin', 'server', 'customer'],
           routes: [
             {
               path: '/',
@@ -216,50 +216,34 @@ export default defineConfig({
               ],
             },
             {
-              // hideInMenu:true,
-              
-              path: '/profile',
+              path: '/profile/sOrderManage',
               name: '订单管理',
               icon: 'profile',
-              routes: [
-                {
-                  path: '/',
-                  redirect: '/profile/advanced',
-                },
-                {
-                  name: 'basic',
-                  icon: 'smile',
-                  path: '/profile/basic',
-                  hideInMenu: hide,
-                  component: './profile/basic',
-                },
-                {
-                  name: '服务商',
-                  icon: 'smile',
-                  path: '/profile/sOrderManage',
-                  component: './profile/sOrderManage',
-                },
-                {
-                  name: '客户',
-                  icon: 'smile',
-                  path: '/profile/cOrderManage',
-                  component: './profile/cOrderManage',
-                },
-                {
-                  name: '服务商订单详情',
-                  icon: 'smile',
-                  path: '/profile/server',
-                  hideInMenu: true,
-                  component: './profile/server',
-                },
-                {
-                  name: '客户订单详情',
-                  icon: 'smile',
-                  path: '/profile/customer',
-                  hideInMenu: true,
-                  component: './profile/customer',
-                },
-              ],
+              authority: ['admin','server'],
+              component: './profile/sOrderManage',
+            },
+            {
+              path: '/profile/cOrderManage',
+              name: '订单管理',
+              icon: 'profile',
+              authority: ['admin','customer'],
+              component: './profile/sOrderManage',
+            },
+            {
+              path: '/profile/server',
+              name: '订单详情',
+              icon: 'profile',
+              authority: ['admin','server'],
+              hideInMenu: true,
+              component: './profile/server',
+            },
+            {
+              path: '/profile/customer',
+              name: '订单详情',
+              icon: 'profile',
+              authority: ['admin','customer'],
+              hideInMenu: true,
+              component: './profile/customer',
             },
             {
               hideInMenu:true,

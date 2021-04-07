@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react'
 import {connect,history,useLocation} from 'umi'
-import { Layout, Menu, Table,Button, Space, AutoComplete, Card, message,Spin } from 'antd'
+import { Layout, Menu, Table,Button, Space, AutoComplete, Card, message,Spin, Progress } from 'antd'
 import { SyncOutlined , SearchOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import './components/layout.css'
@@ -9,6 +9,7 @@ import TrainModel from './components/TrainModel'
 import SetModal from './components/SetModal';
 import styles from './style.less';
 import RecommendResult from './components/RecommendResult';
+import {showProgress} from './service'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -22,6 +23,10 @@ const Recommend = ({ dispatch, recommend })=>{
   const [modalVisible,setModalVisible] = useState(false);
   const [record,setRecord] = useState(undefined);
   const [selected,setSelected] = useState(1);
+  const [load, setLoad] = useState(false);
+  const [progress, setProgress] = useState(0);
+  // const [timer, setTimer] = useState(null);
+
   const columns = [
     {
         title: '领域',
@@ -113,12 +118,20 @@ const Recommend = ({ dispatch, recommend })=>{
       },
     });
   }
+  // useEffect(()=>{
+  //   clearInterval(timer);
 
+  //     if(progress == 20){
+  //       console.log("progress == 20",timer);
+  //       clearInterval(timer);
+  //     }
+  // },[progress])
   const onFinsh=(value)=>{
     let values={};
     values['domain']=Number(record.domain);
     values[record.uid]=JSON.parse(value.preference);
     const data={domain:record.domain,uid:record.uid};
+    
    // console.log(data);
     dispatch({
       type:'recommend/set',
@@ -131,16 +144,46 @@ const Recommend = ({ dispatch, recommend })=>{
     
   };
 
-  const trainHandler=()=>{
+  const trainHandler=async()=>{
     const values={domain:domain,mid:mid};
-    //console.log(values);
+    const value={d:domain,m:mid-1};
+    console.log(values);
+    setLoad(true);
     dispatch({
       type:'recommend/train',
       payload:{
         values,
       },
     });
-    //setLoading(true);
+    let count=0;
+    const timer= setInterval(frame
+    ,3000);
+    async function frame() {
+        await showProgress({value}).then((res)=>{   
+         
+          
+          if(res.p ==0 && count >20){
+            count = 19
+          }
+          if(res.p ==20 && count >70){
+            count = 70
+          }
+          // debugger
+          // if(res.p ==20 && progress< 70 ){
+          //   setProgress(progress+1);
+          // }
+          setProgress(count+=4);
+
+          // setProgress(res.p);  
+          if(res.p == 100){
+            setProgress(count+=4);
+            setProgress(res.p);
+
+            clearInterval(timer);
+            setTimeout(setLoad(false),9000);
+          }
+        });
+    }
   }
 
     return (
@@ -188,7 +231,8 @@ const Recommend = ({ dispatch, recommend })=>{
                     <SetModal visible={modalVisible} closeHandler={closeHandler} record={record} uid={uid} onFinsh={onFinsh}> </SetModal>
                   </div> 
                   </Card>
-                  <Spin spinning={recommend.load} tip="模型正在训练中..." delay={500}>
+                  {/* <Progress type="circle" strokeColor={{'0%': '#108ee9','100%': '#87d068',}}percent={100} /> */}
+                  {/* <Spin spinning={recommend.load} tip="模型正在训练中..." delay={100}> */}
                     <Card
                       title="模型训练"
                       style={{
@@ -197,8 +241,10 @@ const Recommend = ({ dispatch, recommend })=>{
                       }}
                     >
                     <TrainModel setDomain={setdomain} setModel={setmodel} onClick={trainHandler} />
+                    {load? <div style={{textAlign: 'center'}}><Progress type="circle" showProgress= {false}  strokeColor={{'0%': '#108ee9','100%': '#87d068',}}percent={progress} /></div>:<div />}
                     </Card>
-                  </Spin>
+                  {/* </Spin> */}
+                  {/* </Progress> */}
               </GridContent>
               </div> :
               <div className={styles.main}> 

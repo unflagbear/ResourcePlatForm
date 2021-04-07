@@ -1,5 +1,5 @@
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
-import {queryRule, setRule, trainRule, showRule} from './service';
+import {queryRule, setRule, trainRule, showRule, showProgress} from './service';
 import { message } from 'antd';
 
 let loading = false;
@@ -56,6 +56,17 @@ const Model = {
             else{
                 message.error('Train Failed');
             }
+        
+        },
+        *progress({ payload:{value}},{call, put}){
+            const result = yield call(showProgress,{value});
+            console.log(result);
+            if(result.code==0){
+                yield put({
+                    type:"getProgress",
+                    payload: {progress: result.p},
+                });
+            }
         },
         *show({ payload:{values}},{call, put}) {
             //console.log(values);
@@ -87,6 +98,11 @@ const Model = {
             const load = payload.loading;
             console.log(id);
             return {id, load};
+        },
+        getProgress(state,{payload}){
+           
+            const progress=payload.progress;
+            return {progress};
         }
     },
     subscriptions: {

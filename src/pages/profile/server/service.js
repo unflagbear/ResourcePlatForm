@@ -10,3 +10,36 @@ export const queryOrder=async({values})=>{
     data: values,
   })
 }
+
+export const nextState=async({values})=>{
+  console.log(values);
+  return request('/api/serviceOrder/updateState', {
+    method: 'post',
+    data: values,
+  })
+}
+
+export const communiCommend=async({values})=>{
+  console.log(values);
+  return request('/api/serviceOrder/sCommuniCommend', {
+    method: 'post',
+    data: values,
+  })
+}
+
+export const comment=async({values})=>{
+  console.log(values);
+  return request('/api/serviceOrder/sComment', {
+    method: 'post',
+    data: values,
+  })
+}
+
+export const protocal = async({file})=>{
+  //console.log(values);
+  return request('/api/serviceOrder/protocal', {
+    method: 'post',
+    data: file,
+  })
+}
+

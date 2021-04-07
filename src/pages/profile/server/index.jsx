@@ -33,7 +33,7 @@ import './advanced.css';
 import { FrownOutlined, MehOutlined, SmileOutlined, UploadOutlined } from '@ant-design/icons';
 import Layout from 'antd/lib/layout/layout';
 import Sider from 'antd/lib/layout/Sider';
-import { queryOrder } from './service';
+import { queryOrder, nextState, communiCommend, comment } from './service';
 
 const { Step } = Steps;
 const { TextArea } = Input;
@@ -211,12 +211,13 @@ const customDot = (dot, { status }) => {
   return dot;
 };
 const Apply=(props)=>{
+  const {next} = props;
   return(
     <div className='title-type'>
       {props.title}
       <div className='apply-type'>
         <Button style={{float:'left',marginLeft:'42%'}}>拒绝申请</Button>
-        <Button style={{float:'right', marginRight:'42%'}} type='primary'>同意申请</Button>
+        <Button style={{float:'right', marginRight:'42%'}} onClick={next} type='primary'>同意申请</Button>
         {/* <Spin /> &nbsp;服务提供商处理申请中，请耐心等候 */}
       </div>
     </div>
@@ -230,15 +231,17 @@ const Communi=(props)=>{
     4: <SmileOutlined />,
     5: <SmileOutlined />,
   };
+  const {setRate, setCommtext, onClick} = props;
+  
   return(
     <div className='title-type'>
       {props.title}
       <div className='comment-type'>
         <p style={{fontSize:'15px',paddingTop: '20px'}}>沟通体验:</p>
-        <Rate style={{fontSize:'30px'}} defaultValue={3} character={({ index }) => customIcons[index + 1]} />
+        <Rate style={{fontSize:'30px'}} defaultValue={3} onChange={(value)=>{setRate(value)}} character={({ index }) => customIcons[index + 1]} />
         <p style={{fontSize:'15px',marginTop: '15px'}}>对本次沟通的感受和意见:</p>
-        <TextArea showCount maxLength={100} rows={8} placeholder={'请输入您的评价：'} style={{marginTop: '8px',width:'800px', margin:"0 auto"}}/>
-        <Button type="primary" style={{float:'right',marginRight:'230px'}} On>{'提交'}</Button>
+        <TextArea showCount maxLength={100} rows={8} placeholder={'请输入您的评价：'} onChange={setCommtext} style={{marginTop: '8px',width:'800px', margin:"0 auto"}}/>
+        <Button type="primary" style={{float:'right',marginRight:'230px'}} onClick={onClick}>{'提交'}</Button>
       </div>
     </div>
   )
@@ -331,6 +334,7 @@ const Trace=(props)=>{
   const [p_current, setPcurrent] = useState(0);
   const next = ()=>{
     setPcurrent(p_current+1);
+
   }
 
   const prev =()=> {
@@ -404,6 +408,7 @@ const Comment=(props)=>{
     1: <FrownOutlined />,
     2: <SmileOutlined />,
   }
+  const {setComment, setFeel, onClick} = props;
   return(
     <div className='title-type'>
       {props.title}
@@ -421,13 +426,13 @@ const Comment=(props)=>{
     <div className='protocal-type' >
         <p style={{marginTop:'20px',fontSize:'15px'}}>
           总体评价: &nbsp;
-          <Rate allowHalf defaultValue={2.5} />
+          <Rate allowHalf defaultValue={2.5} onChange={(value)=>{setComment(value)}} />
         </p>
         <p style={{fontSize:'15px'}}> 合作愉快</p>
         <div style={{marginLeft:20}}>
-        <Rate style={{fontSize:'30px'}}defaultValue={2} character={({ index }) => customIcons1[index + 1]} />
+        <Rate style={{fontSize:'30px'}}defaultValue={2} onChange={(value)=>{setFeel(value)}} character={({ index }) => customIcons1[index + 1]} />
         </div>
-        <Button type="primary" style={{float:'right',marginTop:'30px',marginRight:'240px'}}>提交</Button>
+        <Button type="primary" onClick = {onClick} style={{float:'right',marginTop:'30px',marginRight:'240px'}}>提交</Button>
         <br/>
       </div>
 
@@ -444,32 +449,26 @@ class Advanced extends Component {
     current: 0,
     order_data:{},
     id:0,
+    rate:0,
+    comm_text:'',
+    comment:0,
+    feel:0,
   };
 
  async componentDidMount() {
     const { dispatch,location,profileServer } = this.props;
-    const { order_id } = location.query;
+    const { order_id, state } = location.query;
+    console.log(state);
     this.setState({id: order_id});
+    this.setState({current: state});
     let values = order_id;
-    // dispatch({
-    //   type: 'profileServer/getOrderInfo',
-    //   payload:{
-    //     values,
-    //   }
-    // });
     try {
       await queryOrder({values}).then((res)=>{
-          //console.log(res.data[0]);
-          //order_data = res.data[0];
           this.setState({order_data: res.data[0]})
-          console.log(this.state.order_data);
+          //console.log(this.state.order_data);
       });
-     // hide();
-      
       return true;
     } catch (error) {
-      //hide();
-    
       return false;
     }
   }
@@ -481,18 +480,59 @@ class Advanced extends Component {
     });
   };
 
+  setRate=(value)=>{
+    //console.log(value);
+    this.setState({rate:value});
+  }
+
+  setCommtext=(e)=>{
+    //console.log(e.target.value);
+    this.setState({comm_text: e.target.value});
+  }
+
+  setComment = (value)=>{
+    this.setState({comment:value});
+  }
+
+  setFeel = (value) => {
+    this.setState({feel:value});
+  }
+
+  communiSubmit = async()=>{
+    let values = {order_id: this.state.id, rate: this.state.rate, text: this.state.comm_text};
+    //console.log(values);
+    try {
+      await communiCommend({values}).then((res)=>{     
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  commentSubmit = async()=>{
+    let values = {order_id: this.state.id, comment: this.state.comment, feel: this.state.feel};
+    try {
+      await comment({values}).then((res)=>{     
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   render() {
     const { current, tabActiveKey } = this.state;
     const steps = [
       {
         title: '申请服务',
         content: '处理申请',
-        component: <Apply title={'处理申请'}></Apply>
+        component: <Apply title={'处理申请'} next={next}></Apply>
       },
       {
         title: '线下沟通',
         content: '沟通完成后，请进行评价',
-        component:<Communi title={'沟通完成后，请进行评价'}></Communi>
+        component:<Communi title={'沟通完成后，请进行评价'} setRate ={this.setRate.bind(this)} setCommtext = {this.setCommtext.bind(this)} onClick = {this.communiSubmit.bind(this)}></Communi>
       },
       {
         title: '签署协议',
@@ -512,20 +552,61 @@ class Advanced extends Component {
       {
         title: '服务评价',
         content: '请提交服务评价',
-        component: <Comment title={'请提交服务评价'}></Comment>
+        component: <Comment title={'请提交服务评价'} setComment = {this.setComment.bind(this)} setFeel = {this.setFeel.bind(this)} onClick = {this.commentSubmit.bind(this)}></Comment>
       },
     ];
-    const next = () => {
+    
+    const next= async()=>{
       this.setState({
         current: current + 1,
       });
+      let values={order_id: this.state.id, state: current+1};
+      //console.log(values);
+      try {
+        await nextState({values}).then((res)=>{     
+        });
+        return true;
+      } catch (error) {
+        return false;
+      }
     };
 
-    const prev = () => {
+    const prev = async() => {
       this.setState({
         current: current - 1,
       });
+      let values={order_id: this.state.id, state: current-1};
+      //console.log(values);
+      try {
+        await nextState({values}).then((res)=>{     
+        });
+        return true;
+      } catch (error) {
+        return false;
+      }
     };
+
+    // const setRate=(value)=>{
+    //   console.log(value);
+    //   this.setState({rate:value});
+    // }
+
+    // const setCommtext=(value)=>{
+    //   console.log(value);
+    //   this.setState({comm_text: value});
+    // }
+
+    // const communiSubmit = async()=>{
+    //   let values = {rate: this.state.rate, text: this.state.comm_text};
+    //   console.log(values);
+    //   try {
+    //     await communiCommend({values}).then((res)=>{     
+    //     });
+    //     return true;
+    //   } catch (error) {
+    //     return false;
+    //   }
+    // };
     return (
       <PageContainer
         title={"资源服务单号："+this.state.id}
@@ -570,11 +651,6 @@ class Advanced extends Component {
                       {steps[current].content}
                     </div> */}
                     {steps[current].component}
-                    {/* <Communi context={steps[current].content}></Communi> */}
-                    {/* <Protocal context={steps[current].content}></Protocal> */}
-                    {/* <Trace></Trace> */}
-                    {/* <Comment></Comment> */}
-                    {/* <Check></Check> */}
                     <div className='steps-action'>
                       {current > 0 && (
                         <Button onClick={() => prev()}>
@@ -582,7 +658,7 @@ class Advanced extends Component {
                         </Button>
                       )}
                       {current < steps.length - 1 && (
-                        <Button type="primary" style={{ margin: '8px' }} onClick={() => next()}>
+                        <Button type="primary" style={{ margin: '8px' }} onClick={next}>
                           下一状态
                         </Button>
                       )}

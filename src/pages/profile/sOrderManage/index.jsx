@@ -140,7 +140,7 @@ const SOrderManage = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        const {orderId} =record
+        const {orderId, processId} =record
         return(
         <>
         {record.state==='-1'?null:
@@ -154,6 +154,7 @@ const SOrderManage = () => {
                     pathname: '/profile/server/',
                     query: {
                       order_id: orderId,
+                      state: processId,
                     },
                   });
                 // const success = await handleUpdate(record);

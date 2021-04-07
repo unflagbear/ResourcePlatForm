@@ -15,7 +15,7 @@ const options1 = [
   { value: '4' },
 ];
 
-const Search=(props)=>{
+const TrainModel=(props)=>{
     const {setDomain, setModel, onClick}=props;
 
     function onChange1(value){
@@ -53,4 +53,4 @@ const Search=(props)=>{
     )
 }
 
-export default Search;
+export default TrainModel;
