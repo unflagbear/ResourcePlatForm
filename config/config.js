@@ -433,9 +433,9 @@ export default defineConfig({
             },
             {
               path: '/dashboard',
-              name: '统计分析',
+              name: '资源池管理',
               icon: 'dashboard',
-              hideInMenu: true,
+              // hideInMenu: true,
 
               routes: [
                 {
@@ -443,7 +443,8 @@ export default defineConfig({
                   redirect: '/dashboard/analysis',
                 },
                 {
-                  name: '数据展示',
+                  hideInMenu: true,
+                  name: '统计分析',
                   icon: 'smile',
                   path: '/dashboard/analysis',
                   component: './dashboard/analysis',
