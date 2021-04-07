@@ -8,11 +8,9 @@ const options = [
   ];
 
 const options1 = [
-  { value: '0' },
   { value: '1' },
   { value: '2' },
   { value: '3' },
-  { value: '4' },
 ];
 
 const TrainModel=(props)=>{
@@ -43,7 +41,7 @@ const TrainModel=(props)=>{
             <AutoComplete
                 style={{ width: 330, marginLeft:15 }}
                 options={options1}
-                placeholder="0:所有模型;1:模型1;2:模型2;3:模型3;4:融合模型"
+                placeholder="1:模型1;2:模型2;3:模型3"
                 filterOption={(inputValue, options) =>
                 options.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
                 onChange={onChange2}
