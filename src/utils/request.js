@@ -64,11 +64,24 @@ request.interceptors.request.use(async (url, options) => {
     options.method === 'delete' ||
     options.method === 'get'
   ) {
-    const headers = {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      access_token: localStorage.getItem('token'),
-    };
+    let headers={}
+    //console.log(options.requestType)
+
+    if(options.requestType=='form'){
+      console.log(options.headers['Content-Type'])
+       headers = {
+        'Context-Type': "multipart/form-data",
+        // Accept: 'application/json',
+        access_token: localStorage.getItem('token'),
+      };
+    }else{
+      headers = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        access_token: localStorage.getItem('token'),
+      };
+    }
+    
     return {
       url,
       options: { ...options, headers },

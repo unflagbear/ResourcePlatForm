@@ -44,7 +44,7 @@ const COrderManage = () => {
   const [selectedRowsState, setSelectedRows] = useState([]);
   const linkTodetails = () => {
     <Link to={{
-        pathname:'/profile/customer',
+        pathname:'/profile/server',
         state:{
 
         }}}> 
@@ -101,29 +101,9 @@ const COrderManage = () => {
       dataIndex: 'processId',
       hideInForm: true,
       valueEnum: {
-        '0': {
-          text: '申请服务',
-          status: 'Processing',
-        },
         '1': {
-          text: '线下沟通',
-          status: 'Processing',
-        },
-        '2': {
-          text: '签署协议',
-          status: 'Processing',
-        },
-        '3':{
-          text: '服务实施',
-          status: 'Processing',
-        },
-        '4':{
-            text: '成果提交',
-            status: 'Success',
-        },
-        '5':{
-        text: '服务评价',
-        status: 'Error',
+          text: '已完成',
+          status: 'Success',
         },
         '-1':{
             text: '已取消',
@@ -147,23 +127,14 @@ const COrderManage = () => {
         <span>
           <a
               onClick={async() => {
-                // handleUpdateModalVisible(true);
-                // setStepFormValues(record);
-                //console.log("record",orderId)
                 history.push({
                     pathname: '/profile_customer/customer/',
                     query: {
                       order_id: orderId,
-                      state: processId,
-                      is_done: 0,
+                      state: 5,
+                      is_done: processId,
                     },
                   });
-                // const success = await handleUpdate(record);
-                // if (success) {
-                //   if (actionRef.current) {
-                //     actionRef.current.reload();
-                //   }
-                // }
               }}
             >
               查看
@@ -190,7 +161,6 @@ const COrderManage = () => {
     <>
       <PageContainer>
         <ProTable
-          key={1}
           headerTitle="订单管理"
           actionRef={actionRef}
           rowKey="recordId"
@@ -203,8 +173,8 @@ const COrderManage = () => {
             </Button>,
           ]}
           request={(params, sorter, filter) => {
-              let values={isDone: 0, type: 1};
-              return queryRule({ ...params, values, sorter, filter })}}
+            let values={isDone: 1, type: 1};
+            return queryRule({ ...params, values, sorter, filter })}}
           columns={columns}
           rowSelection={{
             onChange: (_, selectedRows) => setSelectedRows(selectedRows),

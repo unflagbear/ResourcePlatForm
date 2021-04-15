@@ -1,8 +1,10 @@
 import request from 'umi-request';
 
-export async function queryRule(params) {
-  return request('/api/serviceOrder/showCustOrders', {
-    params,
+export async function queryRule({values}) {
+  console.log(values);
+  return request('/api/serviceOrder/showOrders', {
+    method:'post',
+    data: values,
   });
 }
 export async function removeRule(params) {
