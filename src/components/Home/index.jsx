@@ -75,12 +75,7 @@ export default class Home extends React.Component {
         dataSource={Banner00DataSource}
         isMobile={this.state.isMobile}
       />,
-      <Feature8
-        id="Feature8_0"
-        key="Feature8_0"
-        dataSource={Feature80DataSource}
-        isMobile={this.state.isMobile}
-      />,
+      
       <Feature6
         id="Feature6_0"
         key="Feature6_0"
@@ -108,7 +103,12 @@ export default class Home extends React.Component {
         expertlist = {experts}
         dataSource={Teams20DataSource}
         isMobile={this.state.isMobile}
-      />,
+      />,<Feature8
+      id="Feature8_0"
+      key="Feature8_0"
+      dataSource={Feature80DataSource}
+      isMobile={this.state.isMobile}
+    />,
       // <Footer0
       //   id="Footer0_0"
       //   key="Footer0_0"

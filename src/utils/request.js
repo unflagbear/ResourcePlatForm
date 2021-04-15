@@ -64,6 +64,7 @@ request.interceptors.request.use(async (url, options) => {
     options.method === 'delete' ||
     options.method === 'get'
   ) {
+    
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -84,7 +85,7 @@ request.interceptors.response.use(async (response) => {
     localStorage.setItem('token', token);
   }
   const btn = (
-    <Button type="primary" size="small" onClick={() => {location.href = 'http://10.108.211.130:7456/user/login';}}>
+    <Button type="primary" size="small" onClick={() => {location.href = 'http://10.112.14.63:7456/user/login';}}>
       前往登录
     </Button>
   );

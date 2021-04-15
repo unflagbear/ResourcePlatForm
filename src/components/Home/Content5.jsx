@@ -5,7 +5,7 @@ import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import defaultImg from '@/assets/defaultImg.svg'
 
 import { getChildrenToRender } from './utils';
-
+import {history} from'umi'
 
 class Content5 extends React.PureComponent {
 
@@ -25,9 +25,16 @@ class Content5 extends React.PureComponent {
             alt={expertlist[index].title}
             src={expertlist[index].imgLink}
             fallback={defaultImg}
+           
           />
             </span>
-            <p {...item.children.content}>{expertlist[index].name}</p>
+            <p {...item.children.content}  
+            onClick={()=>{history.push({
+              pathname: '/details_resource',
+              query: {
+                productID:expertlist[index].id,
+              },
+            })}}>{expertlist[index].name}</p>
           </a>
         </Col>
       );

@@ -3,7 +3,7 @@ import {Button, Card,Descriptions,Input} from 'antd'
 import { AudioOutlined } from '@ant-design/icons';
 import {connect} from 'umi'
 const { Search } = Input;
-const KnowledgeGrapg=({dispatch,KnowledgeGraph: { infor = {} }})=>{
+const KnowledgeGrapg=({dispatch,KnowledgeGraph: { infor = {},result={} }})=>{
     useEffect(() => {
         if (dispatch) {
           dispatch({
@@ -17,7 +17,16 @@ const KnowledgeGrapg=({dispatch,KnowledgeGraph: { infor = {} }})=>{
           });
         }
       }, []);
-      const onSearch = value => console.log(value);
+      const onSearch = (value) => {
+        dispatch({
+          type: 'KnowledgeGraph/searchKnowledge',
+          payload: {
+            db: 'exp',
+            data: value,
+          },
+        });
+        console.log(value)
+      }
     return (
         <>
             <Card title="当前知识图谱信息">
@@ -46,7 +55,7 @@ const KnowledgeGrapg=({dispatch,KnowledgeGraph: { infor = {} }})=>{
               size="large"
               onSearch={onSearch}
             />
-                
+                <h1>{console.log(result)}</h1>
             </Card>
             <Button type="primary" danger> 删除图谱 </Button>
                 <Button type="primary"> 上传数据 </Button>

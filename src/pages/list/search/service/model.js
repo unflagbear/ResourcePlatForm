@@ -1,7 +1,7 @@
 import { queryFakeList, queryResouce} from './service';
 
 const Model = {
-  namespace: 'listAndsearchAndprojects',
+  namespace: 'listAndsearchAndservice',
   state: {
     list: [],
     resourceData:{},
@@ -11,7 +11,7 @@ const Model = {
     *list({payload},{call,put}){
       const response = yield call(queryResouce,payload);
       yield put ({
-          type:'getResourceList',
+          type:'getServiceList',
           payload: response
       })
   },
@@ -27,7 +27,7 @@ const Model = {
     queryList(state, action) {
       return { ...state, list: action.payload };
     },
-    getResourceList(state,{payload}){
+    getServiceList(state,{payload}){
       return {...state,list: payload.data.records,total:payload.data.total}
     }
   },

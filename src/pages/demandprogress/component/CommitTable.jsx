@@ -90,7 +90,7 @@ const CommitTable = ({setForm,select,setSelect})=>{
                 
                 </Form.Item>
                 <Form.Item>
-                <Button type="primary">Submit</Button>
+                <Button type="primary">提交</Button>
                 </Form.Item>
             </Form>
         </>

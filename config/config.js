@@ -144,18 +144,24 @@ export default defineConfig({
             {
               path: '/list',
               icon: 'table',
-              name: '服务商城',
+              name: '商城',
               routes: [
                 {
                   path: '/',
-                  redirect: '/list/projects',
+                  redirect: '/list/resource',
                 },
                 {
-                  name: '服务内容展示',
+                  name: '资源内容',
                   icon: 'smile',
-                  path: '/list/projects',
-                  component: './list/search/projects',
+                  path: '/list/resource',
+                  component: './list/search/resource',
+                },{
+                  name: '服务内容',
+                  icon: 'smile',
+                  path: '/list/service',
+                  component: './list/search/service',
                 },
+                
                 {
                   path: '/list/search',
                   name: 'search-list',
@@ -164,7 +170,7 @@ export default defineConfig({
                   routes: [
                     {
                       path: '/list/search',
-                      redirect: '/list/search/projects',
+                      redirect: '/list/search/articles',
                     },
                     {
                       name: 'articles',
@@ -172,12 +178,6 @@ export default defineConfig({
                       path: '/list/search/articles',
                       component: './list/search/articles',
                       hideInMenu: hide,
-                    },
-                    {
-                      name: 'projects',
-                      icon: 'smile',
-                      path: '/list/search/projects',
-                      component: './list/search/projects',
                     },
                     {
                       name: 'applications',
@@ -247,10 +247,17 @@ export default defineConfig({
             },
             {
               hideInMenu:true,
-              path: '/details',
-              name: '详情页',
+              path: '/details_resource',
+              name: '资源详情页面',
               icon: 'CheckCircleOutlined',
-              component: './details',
+              component: './details/resource',
+            },
+            {
+              hideInMenu:true,
+              path: '/details_service',
+              name: '服务详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/service/index.jsx',
             },
             {
               // hideInMenu:true,
@@ -316,7 +323,7 @@ export default defineConfig({
               ],
             },
             {
-              // hideInMenu:true,
+              hideInMenu:true,
 
               path: '/knowledgegraph',
               name: '知识图谱',
@@ -435,7 +442,7 @@ export default defineConfig({
               path: '/dashboard',
               name: '资源池管理',
               icon: 'dashboard',
-              // hideInMenu: true,
+              hideInMenu: true,
               authority: ['admin'],
               routes: [
                 {

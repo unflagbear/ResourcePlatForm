@@ -15,30 +15,19 @@ import {
   Button,
   Affix,
   Steps,
-  Modal,
-  Form,
-  Input, 
-  InputNumber,
   message,
-  Space
 } from 'antd';
-import {
-  EditFilled,
-  MessageOutlined
-} from '@ant-design/icons';
+
 import { FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import defaultImg from '@/assets/defaultImg.svg';
 import 'antd/dist/antd.css';
-import ChatforAccessService from '@/components/ChatForAccessService';
-import EditModal from '../chatmodel/dialogdata/components/EditModal';
+
 
 const { Title } = Typography;
 const { Step } = Steps;
-let num=0;
 
-function Details({ dispatch, resource: { resourceDetail = {} } }) {
+function ResourceDetails({ dispatch, resource: { resourceDetail = {} } }) {
   const [haveSource, setHaveSource] = useState(false);
-  const [chatLog, setChatLog] = useState(false);
   // const text = (
   //   <Affix offsetTop={70}>
   //     <div>对方服务人员</div>
@@ -60,66 +49,14 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
       });
     }
   }, []);
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
   
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
-    },
-  };
+  
+  
   const success = () => {
     setModalVisible(false);
     message.success('您的申请已提交');
   };
   
-  // const Demo = () => {
-  //   const onFinish = (values) => {
-  //     console.log(values);
-  //     console.log('11');
-  //   };
-  
-  //   return (
-  //     <div >
-  //     <Form {...layout} name="nest-messages" 
-  //     onFinish={onFinish} validateMessages={validateMessages}>
-  //       <Form.Item name={['apply', 'demand']} label="需求概述" rules={[{ required: true }]}>
-  //         <Input />
-  //       </Form.Item>
-  //       <Form.Item name={['apply', 'intro']} label="详细说明">
-  //       <Input.TextArea />
-  //       </Form.Item>
-  //       <Form.Item name={['apply', 'institution']} label="需求单位">
-  //         <Input />
-  //       </Form.Item>
-  //       <Form.Item name={['apply', 'website']} label="预算金额(万元)" rules={[{ type: 'number', min: 0, max: 999999 }]}>
-  //         <Input />
-  //       </Form.Item>
-  //       <Form.Item name={['apply', 'name']} label="联系人姓名">
-  //         <Input/>
-  //       </Form.Item>
-  //       <Form.Item name={['apply', 'phone']} label="联系电话" rules={[{ type: 'number', length:11 }]}>
-  //         <Input/>
-  //       </Form.Item>
-  //       <Form.Item name={['apply', 'email']} label="邮箱" rules={[{ type: 'email' }]}>
-  //         <Input/>
-  //       </Form.Item>
-  //       {/* <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-  //         <Button type="primary" htmlType="submit">
-  //           Submit
-  //         </Button>
-  //       </Form.Item> */}
-  //     </Form>
-  //     </div>
-  //   );
-  // };
   const Progress=(props)=>(
     <div //style={props.style}
     className='style'>
@@ -130,12 +67,12 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
   
     //title={props.title}
     current={0}>
-      <Step title="申请服务" description="This is a description." />
-      <Step title="线下沟通" /*subTitle="Left 00:00:08"*/ description="This is a description." />
-      <Step title="签署协议" description="This is a description." />
-      <Step title="服务实施" description="This is a description." />
-      <Step title="服务验收" description="This is a description." />
-      <Step title="服务评价" description="This is a description." />
+      <Step title="申请服务" />
+      <Step title="线下沟通"  />
+      <Step title="签署协议"  />
+      <Step title="服务实施"  />
+      <Step title="服务验收"  />
+      <Step title="服务评价"  />
     </Steps>
     </div>
   )
@@ -220,7 +157,7 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
       <Progress 
         //style={{marginTop: '50px'}}
         title={
-        <span style={{fontWeight:'500', fontSize:'16px'}}>
+        <span style={{fontWeight:'450', fontSize:'16px'}}>
           <Divider
             plain
             style={{ borderLeft: '2px solid rgba(0,0,0,0.5)', fontSize: '20px' }}
@@ -228,8 +165,8 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
           />
           申请流程
         </span>
-      }>       
-      </Progress>
+      }/>       
+      {/* </Progress> */}
       <ApplyModal  style={{marginBottom:40}} visible={modalVisible} closeHandler={closeHandler} onFinish={onFinish} > </ApplyModal>
       
       <Button type="primary" className='buttonMargin' onClick={clickApply}>立刻申请</Button>
@@ -305,7 +242,7 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
         </Descriptions.Item>
         <Descriptions.Item label="评价时间">2020-3-4</Descriptions.Item>
         <Descriptions.Item label="用户评价">
-          服务十分到位，设备状态良好，看着跟新的一样
+         设备很好用还会再次租借
         </Descriptions.Item>
       </Descriptions>
       <Divider />
@@ -322,7 +259,7 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
         </Descriptions.Item>
         <Descriptions.Item label="评价时间">2020-3-4</Descriptions.Item>
         <Descriptions.Item label="用户评价">
-          服务十分到位，设备状态良好，看着跟新的一样
+          服务专业，期待下次合作
         </Descriptions.Item>
       </Descriptions>
       <Divider />
@@ -335,11 +272,11 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
       >
         <Descriptions.Item label="用户姓名">付**</Descriptions.Item>
         <Descriptions.Item label="用户评分">
-          <Rate disabled allowHalf style={{ marginRight: '3px' }} defaultValue={3.5} /> 3.5分
+          <Rate disabled allowHalf style={{ marginRight: '3px' }} defaultValue={2} /> 3.5分
         </Descriptions.Item>
         <Descriptions.Item label="评价时间">2020-3-4</Descriptions.Item>
         <Descriptions.Item label="用户评价">
-          服务十分到位，设备状态良好，看着跟新的一样
+          服务态度一般，体验一般
         </Descriptions.Item>
       </Descriptions>
       {/* <Divider/> */}
@@ -356,53 +293,13 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
         </Descriptions.Item>
         <Descriptions.Item label="评价时间">2020-3-4</Descriptions.Item>
         <Descriptions.Item label="用户评价">
-          服务十分到位，设备状态良好，看着跟新的一样
+          感觉尚可
         </Descriptions.Item>
       </Descriptions>
       <Divider />
     </Card>
   );
 
-  const Recomment = () => (
-    <Card
-      style={{ width: '100%' }}
-      hoverable
-      title={
-        <span>
-          <Divider
-            plain
-            style={{ borderLeft: '2px solid rgba(0,0,0,0.5)', fontSize: '20px' }}
-            type="vertical"
-          />
-          使用评价
-        </span>
-      }
-      style={{ marginTop: 32 }}
-    >
-      <Descriptions
-        title="资源总体评分"
-        style={{
-          marginBottom: 32,
-          width: '100%',
-        }}
-        bordered
-      >
-        <Descriptions.Item label="综合评分">
-          <Rate disabled allowHalf style={{ marginRight: '3px' }} defaultValue={4.5} />
-          4.5
-        </Descriptions.Item>
-        <Descriptions.Item label="专业评分">
-          <Rate disabled allowHalf style={{ marginRight: '3px' }} defaultValue={3.5} />
-          3.5
-        </Descriptions.Item>
-        <Descriptions.Item label="服务评分">
-          <Rate disabled allowHalf style={{ marginRight: '3px' }} defaultValue={3.5} />
-          3.5
-        </Descriptions.Item>
-      </Descriptions>
-
-    </Card>
-  );
   return (
     <>
       <Row justify="center">
@@ -438,46 +335,11 @@ function Details({ dispatch, resource: { resourceDetail = {} } }) {
           <Comment />
         </Col>
       </Row>
-      
-      {/* <div
-        style={{
-          zIndex: '999999',
-          right: '38px',
-          bottom: '49px',
-          position: 'fixed',
-          display: 'block',
-        }}
-      >
-        <Card
-          style={{
-            display: chatLog ? 'block' : 'none',
-            position: 'absolute',
-            overflow: 'hidden',
-            left: '-500px',
-            bottom: '-8px',
-          }}
-        >
-          <div style={{ height: '554px', width: '460px' }}>
-            <ChatforAccessService />
-          </div>
-        </Card>
-        <Button
-          style={{ left: 30 ,
-            backgroundColor: 'black',
-            bordercolor: 'black'}}
-          type="primary"
-          onClick={() => (chatLog ? setChatLog(false) : setChatLog(true))}
-        >
-          <MessageOutlined style={{bottom:2}}/>
-          在线客服
-        </Button>
-      </div> */}
     </>
   )
 }
 
 
-export default connect(({ resource, loading }) => ({
+export default connect(({ resource }) => ({
   resource,
-  loading: loading.models.listAndsearchAndprojects,
-}))(Details);
+}))(ResourceDetails);

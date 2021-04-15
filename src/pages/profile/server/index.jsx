@@ -738,7 +738,7 @@ class Advanced extends Component {
                   <Descriptions.Item label="所属公司">XX公司 - YY部</Descriptions.Item>
                   <Descriptions.Item label="过期时间">2017-08-08</Descriptions.Item>
                   <Descriptions.Item label="描述">
-                    这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
+                   用于记录服务过程留存文件
                   </Descriptions.Item>
                 </Descriptions>
                 <Divider
@@ -758,7 +758,7 @@ class Advanced extends Component {
                   <Descriptions.Item label="所属公司">XX公司 - YY部</Descriptions.Item>
                   <Descriptions.Item label="过期时间">2017-08-08</Descriptions.Item>
                   <Descriptions.Item label="描述">
-                    这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
+                   确认订单完成文件
                   </Descriptions.Item>
                 </Descriptions>
                 <Divider
