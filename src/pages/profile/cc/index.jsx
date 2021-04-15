@@ -35,7 +35,7 @@ const handleRemove = async (selectedRows) => {
   }
 };
 
-const COrderManage = () => {
+const SOrderManage = () => {
   const [createModalVisible, handleModalVisible] = useState(false);
   // const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   // const [stepFormValues, setStepFormValues] = useState({});
@@ -44,7 +44,7 @@ const COrderManage = () => {
   const [selectedRowsState, setSelectedRows] = useState([]);
   const linkTodetails = () => {
     <Link to={{
-        pathname:'/profile/customer',
+        pathname:'/profile/server',
         state:{
 
         }}}> 
@@ -151,7 +151,7 @@ const COrderManage = () => {
                 // setStepFormValues(record);
                 //console.log("record",orderId)
                 history.push({
-                    pathname: '/profile_customer/customer/',
+                    pathname: '/profile/server/',
                     query: {
                       order_id: orderId,
                       state: processId,
@@ -203,7 +203,7 @@ const COrderManage = () => {
             </Button>,
           ]}
           request={(params, sorter, filter) => {
-              let values={isDone: 0, type: 1};
+              let values={isDone: 0, type: 0};
               return queryRule({ ...params, values, sorter, filter })}}
           columns={columns}
           rowSelection={{
@@ -306,4 +306,4 @@ const COrderManage = () => {
   );
 };
 
-export default COrderManage;
+export default SOrderManage;

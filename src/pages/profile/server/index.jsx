@@ -18,10 +18,12 @@ import {
   Tooltip,
   Empty,
   Rate,
+  Progress,
   Input,
   Upload,
   Spin,
   InputNumber,
+  
 } from 'antd';
 //import {View,Text} from "react-native";
 import { GridContent, PageContainer, RouteContext } from '@ant-design/pro-layout';
@@ -33,7 +35,7 @@ import './advanced.css';
 import { FrownOutlined, MehOutlined, SmileOutlined, UploadOutlined } from '@ant-design/icons';
 import Layout from 'antd/lib/layout/layout';
 import Sider from 'antd/lib/layout/Sider';
-import { queryOrder, nextState, communiCommend, comment } from './service';
+import { queryOrder, nextState, communiCommend, comment, upload, uploadAll, getprotocal, gettrace, getresult} from './service';
 
 const { Step } = Steps;
 const { TextArea } = Input;
@@ -57,33 +59,29 @@ const mobileMenu = (
   </Menu>
 );
 const param = {
-  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  onChange({ file, fileList }) {
-    if (file.status !== 'uploading') {
-      console.log(file, fileList);
-    }
-  },
+  // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  
   defaultFileList: [
-    {
-      uid: '1',
-      name: 'xxx.doc',
-      status: 'done',
-      response: 'Server Error 500', // custom error message to show
-      url: 'http://www.baidu.com/xxx.doc',
-    },
-    {
-      uid: '2',
-      name: 'yyy.doc',
-      status: 'done',
-      url: 'http://www.baidu.com/yyy.doc',
-    },
-    {
-      uid: '3',
-      name: 'zzz.png',
-      status: 'error',
-      response: 'Server Error 500', // custom error message to show
-      url: 'http://www.baidu.com/zzz.png',
-    },
+    // {
+    //   uid: '1',
+    //   name: 'xxx.doc',
+    //   status: 'done',
+    //   response: 'Server Error 500', // custom error message to show
+    //   url: 'http://www.baidu.com/xxx.doc',
+    // },
+    // {
+    //   uid: '2',
+    //   name: 'yyy.doc',
+    //   status: 'done',
+    //   url: 'http://www.baidu.com/yyy.doc',
+    // },
+    // {
+    //   uid: '3',
+    //   name: 'zzz.png',
+    //   status: 'error',
+    //   response: 'Server Error 500', // custom error message to show
+    //   url: 'http://www.baidu.com/zzz.png',
+    // },
   ],
 };
 const ProcessShow=()=>{
@@ -148,6 +146,30 @@ const description = (item)=>(
     )}
   </RouteContext.Consumer>:null
 );
+
+const Description1 = (props)=>{
+  const {item} = props;
+  return(
+  item?<div>
+  <Descriptions
+    style={{
+      marginBottom: 16,
+    }}
+    title={item.name}
+    column={2}
+  >
+    <Descriptions.Item label="上传方">服务提供商</Descriptions.Item>
+    <Descriptions.Item label="上传时间">{datetimeFormat(item.addTime)}</Descriptions.Item>
+    <Descriptions.Item label="描述">协议文件</Descriptions.Item>
+    <Descriptions.Item label="文件链接"><a href={"http://localhost:9870/"+item.url}> 点击下载</a></Descriptions.Item>
+  </Descriptions>
+  <Divider
+    style={{
+      margin: '16px 0',
+    }}
+  />
+  </div> :null
+)}
 const desc1 = (
   <div className={classNames(styles.textSecondary, styles.stepDescription)}>
     <Fragment>XXX公司</Fragment>
@@ -231,9 +253,10 @@ const Communi=(props)=>{
     4: <SmileOutlined />,
     5: <SmileOutlined />,
   };
-  const {setRate, setCommtext, onClick} = props;
+  const {setRate, setCommtext, onClick, done} = props;
+  //console.log(done);
   
-  return(
+  return(done==null?
     <div className='title-type'>
       {props.title}
       <div className='comment-type'>
@@ -243,12 +266,18 @@ const Communi=(props)=>{
         <TextArea showCount maxLength={100} rows={8} placeholder={'请输入您的评价：'} onChange={setCommtext} style={{marginTop: '8px',width:'800px', margin:"0 auto"}}/>
         <Button type="primary" style={{float:'right',marginRight:'230px'}} onClick={onClick}>{'提交'}</Button>
       </div>
+    </div>:
+    <div className='title-type'>
+      {"评价已提交"}
+      <div className='apply-type'>
+        <Spin /> &nbsp;客户提交评价中，请耐心等候
+      </div>
     </div>
   )
 }
 
 const Protocal=(props)=>{
-
+  const {SetFilelist, protocalSubmit} = props;
   return(
     <div className='title-type'>
       {props.title}
@@ -256,12 +285,23 @@ const Protocal=(props)=>{
         请选择需要上传的文件或图片
         <br />
         <br />
-        <Upload {...param} >
-          <Button icon={<UploadOutlined />}>Upload</Button>
+        <Upload {...param} 
+          onChange={({ file, fileList }) =>{
+            if (file.status !== 'uploading') {
+              console.log(file, fileList);
+              SetFilelist(fileList);
+            }
+          }}
+          // action = {async(file)=>{
+          //   console.log(file);
+          //   await uploadAll(file).then((res)=>{   
+          // }); }} 
+          >
+          <Button icon={<UploadOutlined />}>选择文件</Button>
         </Upload>
         <br />
         {/* <Button style={{float:'left',marginLeft:'15px'}}>{'终止服务'}</Button> */}
-        <Button type="primary" style={{float:'right',marginRight:'20px'}}>{'上传协议'}</Button>
+        <Button type="primary" style={{float:'right',marginRight:'20px'}} onClick = {protocalSubmit}>{'上传协议'}</Button>
       </div>
     </div>
   )
@@ -289,7 +329,7 @@ const Process=(props)=>{
             <br />
             <br />
             <Upload {...param} >
-              <Button icon={<UploadOutlined />}>Upload</Button>
+              <Button icon={<UploadOutlined />}>选择文件</Button>
             </Upload>
             <br />
             {/* <Button style={{float:'left',marginLeft:'15px'}}>{'终止服务'}</Button> */}
@@ -354,20 +394,20 @@ const Trace=(props)=>{
                 <Step title="测试阶段" description="Waiting" />
                 <Step title="系统交付" description="Waiting" /> */}
               </Steps>
-              <div className="button-action">
+              <div className="button-action" >
                 {p_current < steps.length - 1 && (
                   <Button type="primary" onClick={() => next()}>
-                    Next
+                    下一阶段
                   </Button>
                 )}
                 {p_current === steps.length - 1 && (
                   <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                    Done
+                    完成
                   </Button>
                 )}
                 {p_current > 0 && (
                   <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                    Previous
+                    上一阶段
                   </Button>
                 )}
               </div>
@@ -384,22 +424,37 @@ const Trace=(props)=>{
   )
 }
 
-const Submit=(props)=>{
+const ResultSubmit=(props)=>{
+  const {SetFilelist, resultSubmit, done} = props;
   return(
+    done==null?
     <div className='title-type'>
       {props.title}
       <div className='protocal-type' style={{width: '500px',margin:"0 auto",fontSize:'15px'}}>
         请选择需要上传的文件或图片
         <br />
         <br />
-        <Upload {...param} >
-          <Button icon={<UploadOutlined />}>Upload</Button>
+        <Upload {...param} 
+          onChange={({ file, fileList }) =>{
+            if (file.status !== 'uploading') {
+              console.log(file, fileList);
+              SetFilelist(fileList);
+            }
+          }}>
+          <Button icon={<UploadOutlined />}>选择文件</Button>
         </Upload>
         <br />
         {/* <Button style={{float:'left',marginLeft:'15px'}}>{'终止服务'}</Button> */}
-        <Button type="primary" style={{float:'right',marginRight:'20px'}}>{'上传文件'}</Button>
+        <Button type="primary" style={{float:'right',marginRight:'20px'}} onClick = {resultSubmit}>上传文件</Button>
       </div>
-    </div>
+    </div>:
+    <div className='title-type'>
+      {"成果已提交"}
+      <div className='apply-type'>
+          {/* <Progress type="circle" percent={100} width={70} /> &nbsp;评价已提交，订单完成 */}
+          <Spin /> &nbsp;客户验收中，请耐心等候
+      </div>
+    </div>  
   )
 }
 
@@ -408,21 +463,10 @@ const Comment=(props)=>{
     1: <FrownOutlined />,
     2: <SmileOutlined />,
   }
-  const {setComment, setFeel, onClick} = props;
-  return(
+  const {setComment, setFeel, onClick, done} = props;
+  return(done==null?
     <div className='title-type'>
       {props.title}
-    {/* <div className='protocal-type' >
-      <p style={{marginTop:'20px',fontSize:'15px'}}>
-        总体评价: &nbsp;
-        <Rate allowHalf defaultValue={2.5} />
-      </p>
-      <br />
-      <p style={{fontSize:'15px'}}> 合作愉快</p>
-      <Rate style={{fontSize:'30px',marginLeft:'130'}}defaultValue={2} character={({ index }) => customIcons1[index + 1]} />
-      {/* <TextArea showCount maxLength={100} rows={8} placeholder={'请输入对本次服务的感受和意见：'} style={{marginTop: '8px',width:'800px', marginLeft:'260px'}}/> */}
-      {/* <Button type="primary" style={{float:'right',marginTop:'10px',marginRight:'240px'}}>提交</Button>
-    </div> */} 
     <div className='protocal-type' >
         <p style={{marginTop:'20px',fontSize:'15px'}}>
           总体评价: &nbsp;
@@ -435,8 +479,14 @@ const Comment=(props)=>{
         <Button type="primary" onClick = {onClick} style={{float:'right',marginTop:'30px',marginRight:'240px'}}>提交</Button>
         <br/>
       </div>
-
-    </div>
+    </div>:
+    <div className='title-type'>
+      {"评价已提交"}
+      <div className='apply-type'>
+          {/* <Progress type="circle" percent={100} width={70} /> &nbsp;评价已提交，订单完成 */}
+          <Spin /> &nbsp;客户提交评价中，请耐心等候
+      </div>
+    </div>  
   )
 }
 
@@ -448,29 +498,45 @@ class Advanced extends Component {
     tabActiveKey: 'detail',
     current: 0,
     order_data:{},
+    protocalfileInfo:[],
+    tracefileInfo:[],
+    resultfileInfo:[],
     id:0,
     rate:0,
     comm_text:'',
     comment:0,
     feel:0,
+    communiDone:null,
+    commentDone:null,
+    resultDone:null,
+    fileList:[],
+    isDone: 0,
   };
 
  async componentDidMount() {
     const { dispatch,location,profileServer } = this.props;
-    const { order_id, state } = location.query;
-    console.log(state);
-    this.setState({id: order_id});
-    this.setState({current: state});
+    const { order_id, state, is_done } = location.query;
+    //console.log(is_done);
+    this.setState({id: order_id, current: state, isDone: is_done});
     let values = order_id;
     try {
       await queryOrder({values}).then((res)=>{
-          this.setState({order_data: res.data[0]})
-          //console.log(this.state.order_data);
+          this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone});
+      });
+      await getprotocal({values}).then((res)=>{
+        this.setState({protocalfileInfo:res.data});
+      });
+      await gettrace({values}).then((res)=>{
+        this.setState({tracefileInfo:res.data});
+      });
+      await getresult({values}).then((res)=>{
+        this.setState({resultfileInfo:res.data});
       });
       return true;
     } catch (error) {
       return false;
     }
+    
   }
 
 
@@ -499,10 +565,51 @@ class Advanced extends Component {
   }
 
   communiSubmit = async()=>{
-    let values = {order_id: this.state.id, rate: this.state.rate, text: this.state.comm_text};
+    let values = {order_id: this.state.id, state:this.state.current, rate: this.state.rate, text: this.state.comm_text};
     //console.log(values);
     try {
-      await communiCommend({values}).then((res)=>{     
+      await communiCommend({values}).then((res)=>{   
+        this.setState({
+          current: res.data.state,
+          communiDone: res.data.done,
+        }); 
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+  SetFilelist=(fileList)=>{
+    this.setState({fileList:fileList})
+  }
+
+  protocalSubmit = async()=>{
+      //console.log(this.state.fileList);
+      await uploadAll(this.state.fileList).then(async(res)=>{   
+        if(res.status='ok'){
+          message.success('文件上传成功');
+          this.setState({
+            current: this.state.current + 1,
+          });
+          let values = {order_id:this.state.id,state: this.state.current+1,type:0,data:res.data};
+          console.log(values);
+          await upload(values).then((res)=>{
+            
+          });
+        }
+      });
+  }
+
+  commentSubmit = async()=>{
+    let values = {order_id: this.state.id, state: this.state.current, comment: this.state.comment, feel: this.state.feel};
+    try {
+      await comment({values}).then((res)=>{  
+        if(res.data==true){
+          message.success("评价提交成功");
+      }   
+        this.setState({
+          commentDone: 1,
+        }); 
       });
       return true;
     } catch (error) {
@@ -510,16 +617,36 @@ class Advanced extends Component {
     }
   }
 
-  commentSubmit = async()=>{
-    let values = {order_id: this.state.id, comment: this.state.comment, feel: this.state.feel};
+  resultSubmit = async()=>{
+    //console.log(this.state.fileList);
+    await uploadAll(this.state.fileList).then(async(res)=>{   
+      if(res.status='ok'){
+        message.success('文件上传成功');
+        this.setState({
+          resultDone: 1,
+        });
+        let values = {order_id:this.state.id,state: this.state.current+1,type:2,data:res.data};
+        //console.log(values);
+        await upload(values).then((res)=>{
+          
+        });
+      }
+    });
+}
+
+  nextp= async()=>{
+    this.setState({
+      current: this.state.current + 1,
+    });
+    let values={order_id: this.state.id, state: this.state.current+1};
     try {
-      await comment({values}).then((res)=>{     
+      await nextState({values}).then((res)=>{     
       });
       return true;
     } catch (error) {
       return false;
     }
-  }
+  };
 
   render() {
     const { current, tabActiveKey } = this.state;
@@ -527,17 +654,17 @@ class Advanced extends Component {
       {
         title: '申请服务',
         content: '处理申请',
-        component: <Apply title={'处理申请'} next={next}></Apply>
+        component: <Apply title={'处理申请'} next={this.nextp.bind(this)}></Apply>
       },
       {
         title: '线下沟通',
         content: '沟通完成后，请进行评价',
-        component:<Communi title={'沟通完成后，请进行评价'} setRate ={this.setRate.bind(this)} setCommtext = {this.setCommtext.bind(this)} onClick = {this.communiSubmit.bind(this)}></Communi>
+        component:<Communi title={'沟通完成后，请进行评价'} setRate ={this.setRate.bind(this)} setCommtext = {this.setCommtext.bind(this)} onClick = {this.communiSubmit.bind(this)} done = {this.state.communiDone}></Communi>
       },
       {
         title: '签署协议',
         content: '请上传协议',
-        component: <Protocal title={'请上传协议'}></Protocal>
+        component: <Protocal title={'请上传协议'} SetFilelist = {this.SetFilelist.bind(this)} protocalSubmit = {this.protocalSubmit.bind(this)} ></Protocal>
       },
       {
         title: '服务实施',
@@ -547,12 +674,12 @@ class Advanced extends Component {
       {
         title: '成果提交',
         content: '请提交服务成果',
-        component: <Submit title={'请提交服务成果'}></Submit>
+        component: <ResultSubmit title={'请提交服务成果'} SetFilelist = {this.SetFilelist.bind(this)} resultSubmit={this.resultSubmit.bind(this)} done ={this.state.resultDone}></ResultSubmit>
       },
       {
         title: '服务评价',
         content: '请提交服务评价',
-        component: <Comment title={'请提交服务评价'} setComment = {this.setComment.bind(this)} setFeel = {this.setFeel.bind(this)} onClick = {this.commentSubmit.bind(this)}></Comment>
+        component: <Comment title={'请提交服务评价'} setComment = {this.setComment.bind(this)} setFeel = {this.setFeel.bind(this)} onClick = {this.commentSubmit.bind(this)} done = {this.state.commentDone}></Comment>
       },
     ];
     
@@ -561,7 +688,6 @@ class Advanced extends Component {
         current: current + 1,
       });
       let values={order_id: this.state.id, state: current+1};
-      //console.log(values);
       try {
         await nextState({values}).then((res)=>{     
         });
@@ -576,7 +702,6 @@ class Advanced extends Component {
         current: current - 1,
       });
       let values={order_id: this.state.id, state: current-1};
-      //console.log(values);
       try {
         await nextState({values}).then((res)=>{     
         });
@@ -586,27 +711,7 @@ class Advanced extends Component {
       }
     };
 
-    // const setRate=(value)=>{
-    //   console.log(value);
-    //   this.setState({rate:value});
-    // }
-
-    // const setCommtext=(value)=>{
-    //   console.log(value);
-    //   this.setState({comm_text: value});
-    // }
-
-    // const communiSubmit = async()=>{
-    //   let values = {rate: this.state.rate, text: this.state.comm_text};
-    //   console.log(values);
-    //   try {
-    //     await communiCommend({values}).then((res)=>{     
-    //     });
-    //     return true;
-    //   } catch (error) {
-    //     return false;
-    //   }
-    // };
+  
     return (
       <PageContainer
         title={"资源服务单号："+this.state.id}
@@ -629,6 +734,7 @@ class Advanced extends Component {
       >
         <div className={styles.main}>
           <GridContent>
+          {this.state.isDone==0?
             <Card
               title="流程进度"
               style={{
@@ -675,97 +781,41 @@ class Advanced extends Component {
                   </>
                 )}
               </RouteContext.Consumer>
-            </Card>
+            </Card>:
+            <div />}
             <Card
-              title="用户信息"
+              title="项目文件"
               style={{
                 marginBottom: 24,
               }}
               bordered={false}
             >
-              <Descriptions
-                style={{
-                  marginBottom: 24,
-                }}
-              >
-                <Descriptions.Item label="用户姓名">付小小</Descriptions.Item>
-                <Descriptions.Item label="联系方式">18112345678</Descriptions.Item>
-                <Descriptions.Item label="联系地址">
-                  曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口
-                </Descriptions.Item>
-              </Descriptions>
-              <Descriptions
-                style={{
-                  marginBottom: 24,
-                }}
-                title="沟通交流记录"
-              >
-                <Descriptions.Item
-                  label={
-                    <span>
-                      沟通数据条数
-                      <Tooltip title="包括服务方与用户方共同数据统计沟通数据条数">
-                        <InfoCircleOutlined
-                          style={{
-                            color: 'rgba(0, 0, 0, 0.43)',
-                            marginLeft: 4,
-                          }}
-                        />
-                      </Tooltip>
-                    </span>
+              <Card type="inner" title="协议文件">
+                  {
+                    this.state.protocalfileInfo!=null?
+                    this.state.protocalfileInfo.map((value)=>{
+                      console.log(value);
+                      return <Description1 item={value}/>
+                    }):<div />
                   }
-                >
-                  725
-                </Descriptions.Item>
-                <Descriptions.Item label="该数据更新时间">2017-08-08</Descriptions.Item>
-              </Descriptions>
-              <h4
-                style={{
-                  marginBottom: 16,
-                }}
-              >
-                其他附件
-              </h4>
-              <Card type="inner" title="上传文件内容">
-                <Descriptions
-                  style={{
-                    marginBottom: 16,
-                  }}
-                  title="文件名"
-                >
-                  <Descriptions.Item label="上传人">林东东</Descriptions.Item>
-                  <Descriptions.Item label="角色码">1234567</Descriptions.Item>
-                  <Descriptions.Item label="所属公司">XX公司 - YY部</Descriptions.Item>
-                  <Descriptions.Item label="过期时间">2017-08-08</Descriptions.Item>
-                  <Descriptions.Item label="描述">
-                   用于记录服务过程留存文件
-                  </Descriptions.Item>
-                </Descriptions>
-                <Divider
-                  style={{
-                    margin: '16px 0',
-                  }}
-                />
-                <Descriptions
-                  style={{
-                    marginBottom: 16,
-                  }}
-                  title="文件名"
-                  column={1}
-                >
-                  <Descriptions.Item label="上传人">林东东</Descriptions.Item>
-                  <Descriptions.Item label="角色码">1234567</Descriptions.Item>
-                  <Descriptions.Item label="所属公司">XX公司 - YY部</Descriptions.Item>
-                  <Descriptions.Item label="过期时间">2017-08-08</Descriptions.Item>
-                  <Descriptions.Item label="描述">
-                   确认订单完成文件
-                  </Descriptions.Item>
-                </Descriptions>
-                <Divider
-                  style={{
-                    margin: '16px 0',
-                  }}
-                />
+              </Card>
+              <Card type="inner" title="服务实施阶段文件">
+                  {
+                    this.state.tracefileInfo!=null?
+                    this.state.tracefileInfo.map((value)=>{
+                      console.log(value);
+                      return <Description1 item={value}/>
+                    }):<div />
+                  }
+              </Card>
+              <Card type="inner" title="成果提交阶段文件">
+                  {
+                    this.state.resultfileInfo!=null?
+                    this.state.resultfileInfo.map((value)=>{
+                      console.log(value);
+                      return <Description1 item={value}/>
+                    }):<div />
+                  }
               </Card>
             </Card>
             <Card
