@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useLocation } from 'umi';
+import ApplyModal from './components/ApplyModal';
 import {
   Typography,
   Image,
@@ -17,6 +18,7 @@ import {
 } from 'antd';
 import { FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import defaultImg from '@/assets/defaultImg.svg';
+import {apply} from './service';
 
 const { Title } = Typography;
 const { Step } = Steps;
@@ -25,6 +27,7 @@ const { Step } = Steps;
 function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
   const location = useLocation();
   const { productID } = location.query;
+  const [modalVisible,setModalVisible] = useState(false);
   const appendix = serviceDetail.serviceCategory ? serviceDetail.serviceCategory.split('/') : [];
   useEffect(() => {
     if (productID) {
@@ -35,7 +38,7 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
         },
       });
     }
-  }, []);
+  }, []); 
   const Progress=(props)=>(
     <div //style={props.style}
     className='style'>
@@ -55,6 +58,32 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
     </Steps>
     </div>
   )
+  const clickApply=()=>{
+    setModalVisible(true);
+  }
+  const closeHandler = ()=>{
+    setModalVisible(false);
+  }
+
+  const onFinish= async(value) => {
+    // console.log(value);
+    
+     const values={serviceId: serviceDetail.serviceId, ...value.apply};
+     //const values={id:num++,create_time:time,demand:value.apply.demand,intro:value.intro,institution:value.institution,budget:value.budget,contact_name:value.contact_name,contact_phone:value.contact_name,contact_email:value.contact_email};
+     console.log(values);
+    //  dispatch({
+    //    type:'details/apply',
+    //    payload:{
+    //      values,
+    //    },
+    //  });
+     await apply(values).then((res)=>{  
+      if(res.data==true){
+        message.success("申请成功");
+      }
+    }); 
+     setModalVisible(false);
+ }
   const Detail = () => (
 
     <Card
@@ -62,7 +91,7 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
       extra={
 
           <Affix offsetTop={60}>
-            <Button type="primary">申请资源</Button>
+            <Button type="primary" onClick ={clickApply}>申请服务</Button>
           </Affix>
       }
       title={
@@ -118,7 +147,8 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
           />
           申请流程
         </span>
-      }/>       
+      }/>    
+      <ApplyModal  style={{marginBottom:40}} visible={modalVisible} closeHandler={closeHandler} onFinish={onFinish} > </ApplyModal>   
       {/* </Progress> */}
       {/* <ApplyModal  style={{marginBottom:40}} 
         // visible={modalVisible} 
@@ -127,7 +157,7 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
         // onFinish={onFinish} 
       />  */}
       
-      <Button type="primary" className='buttonMargin' >立刻申请</Button>
+      {/* <Button type="primary" className='buttonMargin' >立刻申请</Button> */}
       
     </Card>
   );

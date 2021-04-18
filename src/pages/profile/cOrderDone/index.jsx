@@ -72,7 +72,7 @@ const COrderManage = () => {
       valueType: 'textarea',
     },
     {
-      title: '申请人',
+      title: '服务商',
       dataIndex: 'server',
       valueType: 'textarea',
     },

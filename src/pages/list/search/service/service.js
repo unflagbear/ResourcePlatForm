@@ -7,7 +7,7 @@ export async function queryFakeList(params) {
 }
 
 export async function queryResouce({data,...params}) {
-  // console.log(data)
+   //console.log(data)
   return request('/api/serviceTable/list',{
     params
     // data

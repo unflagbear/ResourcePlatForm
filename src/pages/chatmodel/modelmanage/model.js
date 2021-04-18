@@ -1,5 +1,5 @@
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
-import {getRemoteList, changeRule, deleteRule, addRule, testRule} from './service';
+import {queryRule,getRemoteList, changeRule, deleteRule, addRule, testRule} from './service';
 import { message } from 'antd';
 import { useState } from 'react';
 
@@ -13,58 +13,61 @@ export default{
     },
     effects: {
         *getRemote({ payload }, { call, put }) {
-            const data = yield call(getRemoteList);
-            if(data){
+            const result= yield call(getRemoteList);
+            if(result){
                 yield put({
                 type:"getList",
-                payload: data
+                payload: result.data,
                 });
             }
         },
         *change({ payload:{values}},{call, put}){
-            const data = yield call(changeRule, {values});
-            if(data.result='successful'){
-                message.success('Change Successfully');
+            const result = yield call(changeRule, {values});
+            //console.log(result);
+            if(result.state_code==0){
+                message.success('模型切换成功');
             yield put({
                 type:"getRemote",
             });
             }
             else{
-                message.error('Change Failed');
+                message.error('模型切换失败');
             }
         },
         *delete({ payload:{values}},{call, put}){
-            const data = yield call(deleteRule, {values});
-            if(data.result=='successful'){
-                message.success('Delete Successfully');
+            const result = yield call(deleteRule, {values});
+            //console.log(result);
+            if(result.state_code==0){
+                message.success('删除成功');
                 yield put({
                     type:"getRemote",
                 });
                 }
             else{
-                message.error('Delete Failed');
+                message.error('删除失败');
             }
         },
         *add({ payload:{values}},{call, put}){
-            const data = yield call(addRule, {values});
-            if(data){
-                message.success('Add Successfully');
+            const result = yield call(addRule, {values});
+            if(result.state_code==0){
+                message.success('添加成功');
+                //yield call(queryRule);
                 yield put({
                     type:"getRemote",
                 });
             }
             else{
-                message.error('Add Failed');
+                message.error('添加失败');
             }
         },
         *test({ payload:{values}},{call, put}){
-            console.log(values);
-            const data = yield call(testRule, {values});
-            console.log(data);
-            if(data){
+            //console.log(values);
+            const result = yield call(testRule, {values});
+            //console.log(result);
+            if(result){
                 yield put({
                 type:"getData",
-                payload: data
+                payload: result
                 });
             }
             
@@ -74,19 +77,23 @@ export default{
         getList(state,{payload}){
             let resData=[]
             let current_model = '';
+           // console.log(payload);
             payload.map(((context)=>{
-                if(context[5]=="running"){
-                    current_model = context[1];
+                //console.log(context);
+                if(context.model_status=="running"){
+                    current_model = context.model_name;
                   }
-                resData.push({model_id:context[0],model_name:context[1],model_desc:context[2],model_path:context[3],create_time:context[4],model_status:context[5],train_log_path:context[6]})
+                resData.push(context);
+                //console.log(resData);
                 })
             )
             resdata=resData;
             modelname=current_model;
+           // console.log(current_model);
             return {resData,current_model};
         },
         getData(state,{payload}){
-            let result = payload.intent;
+            let result = payload.data;
             let resData = resdata;
             let current_model =  modelname;
             return {result, resData, current_model};

@@ -3,11 +3,11 @@ import { Button, message, Drawer, Form, Select, Modal, Table, InputNumber, Input
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import EditModal from './components/EditModal';
+import CreateForm from './components/CreateForm';
 import {connect} from 'umi'
 import './modelmanage.css';
 
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import { queryRule, deleteRule, updateRule, addRule, removeRule, changeRule } from './service';
 import { white } from 'chalk';
 
 /**
@@ -25,9 +25,11 @@ const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
   const [ID,setID] = useState(-1);
   const [selectModelId,setSelectModelId] = useState();
   const [text,setText] = useState();
-  const [result,setResult] = useState('');
+  const [createModalVisible, handleModalVisible] = useState(false);
+  //const [data,setData] = useState();
   let modeldata = modelmanage.resData;
   let modelname = modelmanage.current_model;
+  //setData((params, sorter, filter) => queryRule({ ...params, sorter, filter }));
   // let modelData = modelmanage.resData;
   // console.log(modelData);
   // for(let i=0;i<modelData.length();i++){
@@ -117,7 +119,13 @@ const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
       render: (_, record) => (
         <>
           {/* <a onClick={() => {editHandler(record);}}>修改</a>&nbsp;&nbsp; */}
-          <a onClick={() => {deleteHandler(record);}}>删除</a>
+          <a onClick={async() => {
+            const success = await deleteHandler(record);
+            if (success) {
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
+            }}}>删除</a>
         </>
       ),
     },
@@ -126,15 +134,38 @@ const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
     setModalVisible(false);
   };
  
-  const deleteHandler=(record)=>{
+  const deleteHandler=async(record)=>{
+    const hide = message.loading('正在删除');
     const values = {model_id:record.model_id};
-    dispatch({
-      type:'modelmanage/delete',
-      payload:{
-        values,
-      },
-    });
+    try {
+      await deleteRule(values);
+      hide();
+        message.success('删除成功');
+        return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败请重试！');
+      return false;
+    }
   }
+  /**
+ * 添加节点
+ * @param fields
+ */
+  const handleAdd = async (fields) => {
+    const hide = message.loading('正在添加');
+    console.log(fields);
+    try {
+      await addRule(fields);
+      hide();
+      message.success('添加成功');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('添加失败请重试！');
+      return false;
+    }
+  };
   const batchDelete=(selectedRows)=>{
     const hide = message.loading('正在删除');
     if (!selectedRows) return true;
@@ -180,16 +211,20 @@ const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
       });
     }
     setModalVisible(false);
+    //this.forceUpdate();
   };
 
-  const changeHandler=()=>{
+  const changeHandler=async()=>{
     const values = {model_id:selectModelId}; 
+    await changeRule(values);
       dispatch({
-        type:'modelmanage/change',
+        type:'modelmanage/getRemote',
         payload:{
-          values,
         },
       });
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
   };
 
   const addHandler=()=>{
@@ -252,12 +287,13 @@ const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
             labelWidth: 120,
           }}
           toolBarRender={() => [
-            <Button type="primary" onClick={addHandler}>
+            <Button type="primary" onClick={() => handleModalVisible(true)}>
               <PlusOutlined /> 新建
             </Button>,
           ]}
           columns={columns}
-          dataSource={modeldata}
+          request={(params, sorter, filter) => queryRule({ ...params, sorter, filter })}
+          //dataSource={modeldata}
           loading={userListLoading}
           rowSelection={{
             onChange: (_, selectedRows) => setSelectedRows(selectedRows),
@@ -291,7 +327,25 @@ const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
             <Button type="primary">批量审批</Button>
           </FooterToolbar>
         )}
-        <EditModal visible={modalVisible} closeHandler={closeHandler} record={record} id={ID} onFinsh={onFinsh} name={name}> </EditModal>
+        {/* <EditModal visible={modalVisible} closeHandler={closeHandler} record={record} id={ID} onFinsh={onFinsh} name={name}> </EditModal> */}
+        <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
+          <ProTable
+            onSubmit={async (value) => {
+              const success = await handleAdd(value);
+
+              if (success) {
+                handleModalVisible(false);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
+              }
+            }}
+            rowKey="recordId"
+            type="form"
+            columns={columns.slice(1,3)}
+          />
+        </CreateForm>
+        
         {/* {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm
             onSubmit={async (value) => {

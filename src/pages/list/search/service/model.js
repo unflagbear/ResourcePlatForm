@@ -9,6 +9,7 @@ const Model = {
   },
   effects: {
     *list({payload},{call,put}){
+      //console.log("111111");
       const response = yield call(queryResouce,payload);
       yield put ({
           type:'getServiceList',

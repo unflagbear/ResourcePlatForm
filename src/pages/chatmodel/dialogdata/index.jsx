@@ -3,10 +3,12 @@ import { Button, message, Drawer } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
+import EditForm from './components/EditForm';
+import CreateForm from './components/CreateForm';
 import EditModal from './components/EditModal';
 import {connect} from 'umi'
 
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import { queryRule, updateRule, addRule, deleteRule, editRule } from './service';
 
 /**
  * 添加节点
@@ -14,7 +16,8 @@ import { queryRule, updateRule, addRule, removeRule } from './service';
  */
 
 const DialogData = ({dialogdata, dispatch, userListLoading}) => {
-  const [createModalVisible, handleModalVisible] = useState(false);
+  const [createModalVisible, CreateModalVisible] = useState(false);
+  const [editModalVisible, EditModalVisible] = useState(false);
   const actionRef = useRef();
   const [row, setRow] = useState();
   const [selectedRowsState, setSelectedRows] = useState([]);
@@ -27,7 +30,7 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
   const columns = [
     {
       title: '语料ID',
-      dataIndex: 'id',
+      dataIndex: 'example_id',
       formItemProps: {
         rules: [
           {
@@ -42,7 +45,7 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
     },
     {
       title: '语句内容',
-      dataIndex: 'context',
+      dataIndex: 'content',
       valueType: 'textarea',
     },
     {
@@ -86,8 +89,17 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <a onClick={() => {editHandler(record);}}>修改</a>&nbsp;&nbsp;
-          <a onClick={() => {deleteHandler(record);}}>删除</a>
+          <a onClick={() => {editHandler(record);
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }}}>修改</a>&nbsp;&nbsp;
+          <a onClick={async() => {
+            const success = await deleteHandler(record);
+            if (success) {
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
+            }}}>删除</a>
         </>
       ),
     },
@@ -96,20 +108,52 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
     setModalVisible(false);
   };
   const editHandler = (record)=>{
-    setName('修改');
+    setName('修改语料');
     setModalVisible(true);
     setRecord(record);
     setID(record.id);
   };
-  const deleteHandler=(record)=>{
-    const values = {tgt_example:record.context,tgt_intent:record.intent};
-    dispatch({
-      type:'dialogdata/delete',
-      payload:{
-        values,
-      },
-    });
+  // const deleteHandler=(record)=>{
+  //   const values = {tgt_example:record.context,tgt_intent:record.intent};
+  //   dispatch({
+  //     type:'dialogdata/delete',
+  //     payload:{
+  //       values,
+  //     },
+  //   });
+  // }
+  const deleteHandler=async(record)=>{
+    const hide = message.loading('正在删除');
+    const values = {example_id:record.example_id};
+    try {
+      await deleteRule(values);
+       hide();
+        message.success('删除成功');
+        return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败请重试！');
+      return false;
+    }
   }
+  /**
+ * 添加节点
+ * @param fields
+ */
+  const handleAdd = async (fields) => {
+    const hide = message.loading('正在添加');
+    console.log(fields);
+    try {
+      await addRule(fields);
+      hide();
+      message.success('添加成功');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('添加失败请重试！');
+      return false;
+    }
+  };
   const batchDelete=(selectedRows)=>{
     const hide = message.loading('正在删除');
     if (!selectedRows) return true;
@@ -129,35 +173,67 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
       return false;
     }
   }
-  const onFinsh=(value)=>{
+  const onFinsh=async(value)=>{
     let id=0;
+    console.log(value);
     if(record){
-      id = record.id;
+      id = record.example_id;
     }
-    console.log(id);
-    if(id){
-      const values = {new_example:value.context,tgt_example:record.context,tgt_intent:record.intent}; 
-      dispatch({
-        type:'dialogdata/edit',
-        payload:{
-          values,
-        },
-      });
+    //console.log(id);
+    if(id>0){
+      const values = {example_id:record.example_id,content:value.content,intent:record.intent}; 
+      //console.log(values);
+      const hide = message.loading('正在修改');
+      try {
+        await editRule(values);
+        hide();
+        message.success('修改成功');
+        setModalVisible(false);
+        return true;
+      } catch (error) {
+        hide();
+        message.error('修改失败请重试！');
+        setModalVisible(false);
+        return false;
+      }
+      // dispatch({
+      //   type:'dialogdata/edit',
+      //   payload:{
+      //     values,
+      //   },
+      // });
     }
     else{
-      const values = {new_example:value.context,tgt_intent:value.intent};
-      dispatch({
-        type:'dialogdata/add',
-        payload:{
-          values,
-        },
-      });
+      //const values = {intent:value.intent,content:value.content};
+      const hide = message.loading('正在添加');
+      try {
+        await addRule(value);
+        hide();
+        message.success('添加成功');
+        setModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+        return true;
+      } catch (error) {
+        hide();
+        message.error('添加失败请重试！');
+        setModalVisible(false);
+        return false;
+      }
     }
-    setModalVisible(false);
+    //   dispatch({
+    //     type:'dialogdata/add',
+    //     payload:{
+    //       values,
+    //     },
+    //   });
+    // }
+    //setModalVisible(false);
   };
 
   const addHandler=()=>{
-    setName('添加');
+    setName('添加语料');
     setRecord(undefined);
     setModalVisible(true);
   };
@@ -176,8 +252,9 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
               <PlusOutlined /> 新建
             </Button>,
           ]}
+          request={(params, sorter, filter) => queryRule({ ...params, sorter, filter })}
           columns={columns}
-          dataSource={dialogdata.resData}
+          //dataSource={dialogdata.resData}
           loading={userListLoading}
           rowSelection={{
             onChange: (_, selectedRows) => setSelectedRows(selectedRows),
@@ -230,6 +307,38 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
           />
         </CreateForm> */}
         <EditModal visible={modalVisible} closeHandler={closeHandler} record={record} id={ID} onFinsh={onFinsh} name={name}> </EditModal>
+        <CreateForm onCancel={() => CreateModalVisible(false)} modalVisible={createModalVisible}>
+          <ProTable
+            onSubmit={async (value) => {
+              const success = await handleAdd(value);
+              if (success) {
+                CreateModalVisible(false);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
+              }
+            }}
+            rowKey="recordId"
+            type="form"
+            columns={columns.slice(1,3)}
+          />
+        </CreateForm>
+        <EditForm onCancel={() => EditModalVisible(false)} modalVisible={editModalVisible}>
+          <ProTable
+            onSubmit={async (value) => {
+              const success = await handleEdit(value);
+              if (success) {
+                EditModalVisible(false);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
+              }
+            }}
+            rowKey="recordId"
+            type="form"
+            columns={columns.slice(1,3)}
+          />
+        </EditForm>
         {/* {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm
             onSubmit={async (value) => {
@@ -253,7 +362,7 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
           />
         ) : null} */}
 
-        {/* <Drawer
+        <Drawer
           width={600}
           visible={!!row}
           onClose={() => {
@@ -274,7 +383,7 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
               columns={columns}
             />
           )}
-        </Drawer> */}
+        </Drawer>
       </PageContainer>
     </>
   );

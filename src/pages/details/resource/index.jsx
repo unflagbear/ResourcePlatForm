@@ -77,9 +77,7 @@ function ResourceDetails({ dispatch, resource: { resourceDetail = {} } }) {
     </div>
   )
   const clickApply=()=>{
-   // debugger
     setModalVisible(true);
-    //console.log(modalVisible);
   }
   const closeHandler = ()=>{
     setModalVisible(false);
@@ -105,11 +103,11 @@ function ResourceDetails({ dispatch, resource: { resourceDetail = {} } }) {
     <Card
       hoverable
       extra={
-        haveSource ? (
+        // haveSource ? (
           <Affix offsetTop={top}>
-            <Button type="primary">申请资源</Button>
+            <Button type="primary" onClick = {clickApply}>申请资源</Button>
           </Affix>
-        ) : null
+        // ) : null
       }
       title={
         <span>
@@ -169,7 +167,7 @@ function ResourceDetails({ dispatch, resource: { resourceDetail = {} } }) {
       {/* </Progress> */}
       <ApplyModal  style={{marginBottom:40}} visible={modalVisible} closeHandler={closeHandler} onFinish={onFinish} > </ApplyModal>
       
-      <Button type="primary" className='buttonMargin' onClick={clickApply}>立刻申请</Button>
+      {/* <Button type="primary" className='buttonMargin' >立刻申请</Button> */}
       
     </Card>
   );
