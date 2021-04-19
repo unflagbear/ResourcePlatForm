@@ -1,6 +1,7 @@
 import request from 'umi-request';
 
 export async function queryRule(params) {
+  //console.log(params);
   return request('/api/faqManagementModel/list', {
     params,
   });

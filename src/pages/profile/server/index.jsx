@@ -521,7 +521,7 @@ class Advanced extends Component {
     let values = order_id;
     try {
       await queryOrder({values}).then((res)=>{
-          this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone});
+          this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone, resultDone: res.data[0].resultDone});
       });
       await getprotocal({values}).then((res)=>{
         this.setState({protocalfileInfo:res.data});

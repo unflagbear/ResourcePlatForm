@@ -12,7 +12,7 @@ const Model = {
         *getRemote({ payload }, { call, put }) {
             //console.log('failed');
             const data = yield call(getRemoteList);
-            //console.log(data);
+            console.log(data);
             if(data){
                 yield put({
                 type:"getList",

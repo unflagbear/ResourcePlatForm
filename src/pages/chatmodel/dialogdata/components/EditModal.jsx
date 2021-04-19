@@ -43,7 +43,7 @@ const EditModal = props =>{
       <Modal title={name} visible={visible} onOk={onOk} onCancel={closeHandler} forceRender>
         <Form name="basic" form={form} onFinish={onFinsh} onFinishFailed={onFinishFailed}>
           <h3  >ID: {id}</h3>
-          <Form.Item {...formItemLayout} style={{marginTop:'20px'}} label='语句内容' name='context' >
+          <Form.Item {...formItemLayout} style={{marginTop:'20px'}} label='语句内容' name='content' >
             <input />
           </Form.Item>
           <Form.Item {...formItemLayout} label='相似语料组' name='intent' >

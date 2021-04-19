@@ -25,6 +25,7 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
   };
   const [currentPageSize, setCurrentPageSize] = useState(8);
   useEffect(() => {
+    console.log("00000000");
     dispatch({
       type: 'listAndsearchAndservice/list',
       payload: {
