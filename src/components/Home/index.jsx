@@ -80,7 +80,7 @@ export default class Home extends React.Component {
         id="Feature6_0"
         key="Feature6_0"
         dataSource={Feature60DataSource}
-        numData= {[companyNum,equipmentNum,expertNum]}
+        numData= {[107081,25160,57095,158,683]}
         isMobile={this.state.isMobile}
       />,
       <Content5

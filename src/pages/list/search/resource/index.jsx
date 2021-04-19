@@ -13,8 +13,9 @@ const FormItem = Form.Item;
 const { Paragraph } = Typography;
 
 
-const Resource = ({ dispatch, listAndsearchAndResource: { list = [], total = 0 }, loading }) => {
+const Resource = ({ dispatch, listAndsearchAndResource: { list = [], total = 0,data={} }, loading }) => {
   const [chatLog, setChatLog] = useState(false);
+  const {equipmentList,companies,experts,patentInfors} = data
   const goToDetail = (productID) => {
     history.push({
       pathname: '/details_resource',

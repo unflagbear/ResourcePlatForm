@@ -155,6 +155,12 @@ export default defineConfig({
                   icon: 'smile',
                   path: '/list/resource',
                   component: './list/search/resource',
+                }, {
+                  hideInMenu:true,
+                  name: '资源内容_新',
+                  icon: 'smile',
+                  path: '/list/resource_new',
+                  component: './list/search/resource_new',
                 },{
                   name: '服务内容',
                   icon: 'smile',

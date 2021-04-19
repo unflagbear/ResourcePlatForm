@@ -1,7 +1,7 @@
 import { queryFakeList, queryResouce,queryMultiResouce} from './service';
 
 const Model = {
-  namespace: 'listAndsearchAndResource',
+  namespace: 'listAndsearchAndResourceNew',
   state: {
     list: [],
     resourceData:{},
