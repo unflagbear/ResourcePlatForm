@@ -47,7 +47,7 @@ const ChatForAccessService = () => {
       });
 
       setTyping(true);
-      let url = `http://10.112.205.250:8452/dialog_api/`
+      let url = `http://10.112.205.250:8453/dialog_api/`
       let conversation_id = 55555555
       let user_utterance = val
 
@@ -61,7 +61,7 @@ const ChatForAccessService = () => {
           'Accept-Language': 'en,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,zh-CN;q=0.6',
           'Cache-Control': 'max-age=0',
           'Connection': 'keep-alive',
-          'Host': '10.108.209.238:8452',
+          'Host': '10.108.209.238:8453',
           'Upgrade-Insecure-Requests': 1,
           'Accept': "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'

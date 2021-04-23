@@ -12,9 +12,10 @@
 }
 
 .button-action {
-    margin-bottom: 20px;
-    /* clear: both; */
-    margin-right: 150px;
+    margin-top: 5px;
+
+    
+    /* margin-right: 150px; */
 }
 .title-type{
     min-height: 200px;
@@ -38,6 +39,7 @@
     min-height: 200px;
     padding-top: 50px;
     font-size: 17px;
+    text-align: center;
 }
 .protocal-type{
     min-height: 200px;

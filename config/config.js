@@ -150,18 +150,30 @@ export default defineConfig({
             {
               path: '/list',
               icon: 'table',
-              name: '服务商城',
+              name: '商城',
               routes: [
                 {
                   path: '/',
-                  redirect: '/list/projects',
+                  redirect: '/list/resource',
                 },
                 {
-                  name: '服务内容展示',
+                  name: '资源内容',
                   icon: 'smile',
-                  path: '/list/projects',
-                  component: './list/search/projects',
+                  path: '/list/resource',
+                  component: './list/search/resource',
+                }, {
+                  hideInMenu:true,
+                  name: '资源内容_新',
+                  icon: 'smile',
+                  path: '/list/resource_new',
+                  component: './list/search/resource_new',
+                },{
+                  name: '服务内容',
+                  icon: 'smile',
+                  path: '/list/service',
+                  component: './list/search/service',
                 },
+                
                 {
                   name: '服务平台展示',
                   icon: 'smile',
@@ -202,7 +214,7 @@ export default defineConfig({
                   routes: [
                     {
                       path: '/list/search',
-                      redirect: '/list/search/projects',
+                      redirect: '/list/search/articles',
                     },
                     {
                       name: 'articles',
@@ -210,12 +222,6 @@ export default defineConfig({
                       path: '/list/search/articles',
                       component: './list/search/articles',
                       hideInMenu: hide,
-                    },
-                    {
-                      name: 'projects',
-                      icon: 'smile',
-                      path: '/list/search/projects',
-                      component: './list/search/projects',
                     },
                     {
                       name: 'applications',
@@ -254,41 +260,69 @@ export default defineConfig({
               ],
             },
             {
-              path: '/profile/sOrderManage',
+              path: '/profile_server/',
               name: '订单管理',
               icon: 'profile',
               authority: ['admin','server'],
-              component: './profile/sOrderManage',
+              routes:[{
+                path: '/profile_server/sOrderDone',
+                name: '已完成',
+                icon: 'smile',
+                component: './profile/sOrderDone',
+              },
+              {
+                path: '/profile_server/sOrderManage',
+                name: '未完成',
+                icon: 'smile',
+                component: './profile/sOrderManage',
+              },
+              {
+                path: '/profile_server/server',
+                icon: 'profile',
+                hideInMenu: true,
+                component: './profile/server',
+              },
+            ],
             },
             {
-              path: '/profile/cOrderManage',
+              path: '/profile_customer/',
               name: '订单管理',
               icon: 'profile',
               authority: ['customer'],
-              component: './profile/cOrderManage',
+              routes:[{
+                path: '/profile_customer/cOrderDone',
+                name: '已完成',
+                icon: 'smile',
+                component: './profile/cOrderDone',
+              },
+              {
+                path: '/profile_customer/cOrderManage',
+                name: '未完成',
+                icon: 'smile',
+                component: './profile/cOrderManage',
+              },
+              {
+                path: '/profile_customer/customer',
+                icon: 'profile',
+                hideInMenu: true,
+                component: './profile/customer',
+              },
+            ],
             },
+    
             {
-              path: '/profile/server',
-              name: '订单详情',
-              icon: 'profile',
-              authority: ['admin','server'],
-              hideInMenu: true,
-              component: './profile/server',
-            },
-            {
-              path: '/profile/customer',
-              name: '订单详情',
-              icon: 'profile',
-              authority: ['customer'],
-              hideInMenu: true,
-              component: './profile/customer',
+              hideInMenu:true,
+              path: '/details_resource',
+              name: '资源详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/resource',
             },
             {
               hideInMenu:true,
-              path: '/details',
-              name: '详情页',
+              path: '/details_service',
+              name: '服务详情页面',
               icon: 'CheckCircleOutlined',
-              component: './details',
+              component: './details/service/index.jsx',
             },
             {
               // hideInMenu:true,
@@ -354,7 +388,7 @@ export default defineConfig({
               ],
             },
             {
-              // hideInMenu:true,
+              hideInMenu:true,
 
               path: '/knowledgegraph',
               name: '知识图谱',
@@ -479,7 +513,7 @@ export default defineConfig({
               path: '/dashboard',
               name: '资源池管理',
               icon: 'dashboard',
-              // hideInMenu: true,
+              hideInMenu: true,
               authority: ['admin'],
               routes: [
                 {

@@ -43,10 +43,33 @@ export const comment=async({values})=>{
   })
 }
 
-export const protocal = async({file})=>{
+export const getprotocal = async(values)=>{
+  values={...values, type:0};
   //console.log(values);
-  return request('/api/serviceOrder/protocal', {
+  return request('/api/serviceOrder/getfile', {
     method: 'post',
-    data: file,
+    data: values,
   })
 }
+
+export const gettrace = async(values)=>{
+  values={...values, type:1};
+  //console.log(values);
+  return request('/api/serviceOrder/getfile', {
+    method: 'post',
+    data: values,
+  })
+}
+
+export const getresult = async(values)=>{
+  values={...values, type:2};
+  //console.log(values);
+  return request('/api/serviceOrder/getfile', {
+    method: 'post',
+    data: values,
+  })
+}
+
+
+
+

@@ -64,11 +64,24 @@ request.interceptors.request.use(async (url, options) => {
     options.method === 'delete' ||
     options.method === 'get'
   ) {
-    const headers = {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      access_token: localStorage.getItem('token'),
-    };
+    let headers={}
+    //console.log(options.requestType)
+
+    if(options.requestType=='form'){
+      console.log(options.headers['Content-Type'])
+       headers = {
+        'Context-Type': "multipart/form-data",
+        // Accept: 'application/json',
+        access_token: localStorage.getItem('token'),
+      };
+    }else{
+      headers = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        access_token: localStorage.getItem('token'),
+      };
+    }
+    
     return {
       url,
       options: { ...options, headers },
@@ -84,7 +97,7 @@ request.interceptors.response.use(async (response) => {
     localStorage.setItem('token', token);
   }
   const btn = (
-    <Button type="primary" size="small" onClick={() => {location.href = 'http://10.108.211.130:7456/user/login';}}>
+    <Button type="primary" size="small" onClick={() => {location.href = 'http://10.112.14.63:7456/user/login';}}>
       前往登录
     </Button>
   );

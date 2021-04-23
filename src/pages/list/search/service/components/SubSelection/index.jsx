@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import { Form } from 'antd';
 
 
-import data from '@/utils/classify/classify.json'
+import data from '@/utils/classify/service.json'
 import {modify} from '@/utils/classify/modify'
 
 import TagSelect from '../TagSelect'
@@ -11,7 +11,7 @@ import StandardFormRow from '../StandardFormRow';
 const FormItem = Form.Item;
 export default function SubSelection(){
     const [selectKey,setSelectKey] = useState([])
-    const classifyData = modify(data.科技服务资源)
+    const classifyData = modify(data)
     const components = [];
     
     Object.keys(classifyData).forEach(key => {
@@ -32,9 +32,10 @@ export default function SubSelection(){
                 style={{
                   paddingBottom: 11,
                 }}
+                key={i}
               >
                 <FormItem name="category">
-                  <TagSelect expandable>
+                  <TagSelect hideCheckAll={true} expandable>
                     {subOption}
                   </TagSelect>
                 </FormItem>

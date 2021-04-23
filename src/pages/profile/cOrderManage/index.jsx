@@ -35,7 +35,7 @@ const handleRemove = async (selectedRows) => {
   }
 };
 
-const SOrderManage = () => {
+const COrderManage = () => {
   const [createModalVisible, handleModalVisible] = useState(false);
   // const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   // const [stepFormValues, setStepFormValues] = useState({});
@@ -140,7 +140,7 @@ const SOrderManage = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        const {orderId} =record
+        const {orderId, processId} =record
         return(
         <>
         {record.state==='-1'?null:
@@ -151,9 +151,11 @@ const SOrderManage = () => {
                 // setStepFormValues(record);
                 //console.log("record",orderId)
                 history.push({
-                    pathname: '/profile/customer/',
+                    pathname: '/profile_customer/customer/',
                     query: {
                       order_id: orderId,
+                      state: processId,
+                      is_done: 0,
                     },
                   });
                 // const success = await handleUpdate(record);
@@ -188,6 +190,7 @@ const SOrderManage = () => {
     <>
       <PageContainer>
         <ProTable
+          key={1}
           headerTitle="订单管理"
           actionRef={actionRef}
           rowKey="recordId"
@@ -199,7 +202,9 @@ const SOrderManage = () => {
               <PlusOutlined /> 新建
             </Button>,
           ]}
-          request={(params, sorter, filter) => queryRule({ ...params, sorter, filter })}
+          request={(params, sorter, filter) => {
+              let values={isDone: 0, type: 1};
+              return queryRule({ ...params, values, sorter, filter })}}
           columns={columns}
           rowSelection={{
             onChange: (_, selectedRows) => setSelectedRows(selectedRows),
@@ -301,4 +306,4 @@ const SOrderManage = () => {
   );
 };
 
-export default SOrderManage;
+export default COrderManage;

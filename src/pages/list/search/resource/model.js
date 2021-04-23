@@ -1,11 +1,12 @@
-import { queryFakeList, queryResouce} from './service';
+import { queryFakeList, queryResouce,queryMultiResouce} from './service';
 
 const Model = {
-  namespace: 'listAndsearchAndprojects',
+  namespace: 'listAndsearchAndResource',
   state: {
     list: [],
     resourceData:{},
-    total:0
+    total:0,
+    data:{}
   },
   effects: {
     *list({payload},{call,put}){
@@ -14,6 +15,13 @@ const Model = {
           type:'getResourceList',
           payload: response
       })
+  },
+  *multiList({payload},{call,put}){
+    const response = yield call(queryMultiResouce,payload);
+    yield put ({
+        type:'getMultiResource',
+        payload: response
+    })
   },
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryFakeList, payload);
@@ -29,6 +37,9 @@ const Model = {
     },
     getResourceList(state,{payload}){
       return {...state,list: payload.data.records,total:payload.data.total}
+    },
+    getMultiResource(state,{payload}){
+      return {...state,data:payload.data}
     }
   },
 };
