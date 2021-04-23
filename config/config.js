@@ -91,6 +91,12 @@ export default defineConfig({
               component: './user/platform-register',
             },
             {
+              name: '供应商注册',
+              icon: 'smile',
+              path: '/user/company_register',
+              component: './user/company-register',
+            },
+            {
               component: '404',
             },
           ],
@@ -155,6 +161,38 @@ export default defineConfig({
                   icon: 'smile',
                   path: '/list/projects',
                   component: './list/search/projects',
+                },
+                {
+                  name: '服务平台展示',
+                  icon: 'smile',
+                  path: '/list/platform_list',
+                  component: './platform_list',
+                },
+                {
+                  name: '平台细节',
+                  icon: 'smile',
+                  path: '/list/platform_list/detail',
+                  component: './platform_list/detail',
+                  hideInMenu: hide,
+                },
+                {
+                  name: '发布服务',
+                  icon: 'smile',
+                  path: '/list/serviceprogress',
+                  component: './serviceprogress',
+                },
+                {
+                  name: '服务展示',
+                  icon: 'smile',
+                  path: '/list/service_list',
+                  component: './service_list',
+                },
+                {
+                  name: '服务细节',
+                  icon: 'smile',
+                  path: '/list/service_list/detail',
+                  component: './service_list/detail',
+                  hideInMenu: hide,
                 },
                 {
                   path: '/list/search',
@@ -349,8 +387,14 @@ export default defineConfig({
                 {
                   name: '发布需求',
                   icon: 'smile',
-                  path: '/demand/index',
+                  path: '/demand/index/progress',
                   component: './demandprogress/',
+                },
+                {
+                  name: '需求展示',
+                  icon: 'smile',
+                  path: '/demand/index/list',
+                  component: './demand_list/',
                 }
               ],
             },

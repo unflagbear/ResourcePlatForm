@@ -1,8 +1,7 @@
-import {Form, Button, Col, Input, Popover, Progress, Row, Select, message, InputNumber} from 'antd';
+import { Form, Button, Col, Input, Popover, Progress, Row, Select, message ,InputNumber} from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Link, connect, history } from 'umi';
 import styles from './style.less';
-import {CURRENT} from "@/components/Authorized/renderAuthorize";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -18,23 +17,24 @@ const passwordProgressMap = {
   poor: 'exception',
 };
 
-const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
+const CompanyRegister = ({ submitting, dispatch, companyAndregister }) => {
   const [count, setcount] = useState(0);
   const [visible, setvisible] = useState(false);
   const [prefix, setprefix] = useState('86');
   const [popover, setpopover] = useState(false);
+  const [usertype, settype] = useState(1);
+  const [userid, setid]=useState(null);
   const confirmDirty = false;
   let interval;
   const [form] = Form.useForm();
   useEffect(() => {
-    if (!platformAndregister) {
+    if (!companyAndregister) {
       return;
     }
 
-    console.log(platformAndregister.status);
     const account = form.getFieldValue('mail');
 
-    if (platformAndregister.status === 'ok') {
+    if (companyAndregister.status === 'ok') {
       message.success('注册成功！');
       history.push({
         pathname: '/user/register-result',
@@ -43,7 +43,7 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
         },
       });
     }
-  }, [platformAndregister]);
+  }, [companyAndregister]);
   useEffect(
     () => () => {
       clearInterval(interval);
@@ -64,55 +64,27 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
     }, 1000);
   };
 
-  const getPasswordStatus = () => {
-    const value = form.getFieldValue('password');
 
-    if (value && value.length > 9) {
-      return 'ok';
-    }
-
-    if (value && value.length > 5) {
-      return 'pass';
-    }
-
-    return 'poor';
-  };
 
   const onFinish = (values) => {
+    console.log(values)
     dispatch({
-      type: 'platformAndregister/submit',
-      payload: { ...values ,},
+      type: 'companyAndregister/submit',
+      payload: { ...values, telephone:prefix+values.telephone, },
     });
   };
 
 
 
-
-
-
-
-
-
-  const renderPasswordProgress = () => {
-    const value = form.getFieldValue('password');
-    const passwordStatus = getPasswordStatus();
-    return value && value.length ? (
-      <div className={styles[`progress-${passwordStatus}`]}>
-        <Progress
-          status={passwordProgressMap[passwordStatus]}
-          className={styles.progress}
-          strokeWidth={6}
-          percent={value.length * 10 > 100 ? 100 : value.length * 10}
-          showInfo={false}
-        />
-      </div>
-    ) : null;
+  const changePrefix = (value) => {
+    setprefix(value);
   };
+
   return (
     <>
       <div className={styles.main}>
-        <h3>平台注册</h3>
-        <Form form={form} name="UserRegister" onFinish={onFinish}>
+        <h3>供应商注册</h3>
+        <Form form={form} name="CompanyRegister" onFinish={onFinish}>
           <FormItem
             name="mail"
             rules={[
@@ -133,22 +105,22 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
             rules={[
               {
                 required: true,
-                message: '请输入平台名称！',
+                message: '请输入供应商名称！',
               },
               {
                 type: 'string',
-                message: '请输入平台名称！！',
+                message: '请输入供应商名称！！',
               },
             ]}
           >
-            <Input size="large" placeholder="平台名称" />
+            <Input size="large" placeholder="供应商名称" />
           </FormItem>
           <FormItem
-            name="url"
+            name="website"
             rules={[
               {
-                required: true,
-                message: '请输入平台URL！',
+                required: false,
+                message: '请输入供应商URL！',
               },
               {
                 type: 'url',
@@ -156,7 +128,7 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               },
             ]}
           >
-            <Input size="large" placeholder="平台URL" />
+            <Input size="large" placeholder="供应商URL" />
           </FormItem>
           <FormItem
             name="address"
@@ -167,29 +139,62 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               },
             ]}
           >
-            <Input size="large" placeholder="平台联系地址" />
+            <Input size="large" placeholder="供应商联系地址" />
           </FormItem>
           <FormItem
-            name="serviceType"
+            name="establishmentDate"
             rules={[
               {
-                type: 'string',
-                message: '请输入服务类型！',
+                type: 'date',
+                message: '日期格式错误！',
               },
             ]}
           >
-            <Input size="large" placeholder="平台服务类型" />
+            <Input size="large" placeholder="供应商成立时间" />
           </FormItem>
           <FormItem
-            name="registrationAddress"
+            name="registeredAddress"
             rules={[
               {
                 type: 'string',
-                message: '请输入平台注册地址！',
+                message: '请输入供应商注册地址！',
               },
             ]}
           >
-            <Input size="large" placeholder="平台注册地址" />
+            <Input size="large" placeholder="供应商注册地址" />
+          </FormItem>
+          <FormItem
+            name="registerCapital"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入供应商注册资本！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="供应商注册资本" />
+          </FormItem>
+          <FormItem
+            name="state"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入供应商状态！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="供应商状态" />
+          </FormItem>
+          <FormItem
+            name="type"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入供应商公司类型！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="供应商公司类型" />
           </FormItem>
           <FormItem
             name="staffSize"
@@ -211,28 +216,38 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
             />
           </FormItem>
           <FormItem
-            name="legalRepresentative"
+            name="industry"
             rules={[
               {
                 type: 'string',
-                message: '请输入平台法人代表！',
+                message: '请输入供应商服务类型！',
               },
             ]}
           >
-            <Input size="large" placeholder="平台法人代表" />
+            <Input size="large" placeholder="服务类型" />
           </FormItem>
           <FormItem
-            name="professionDomain"
+            name="registrationAuthority"
             rules={[
               {
                 type: 'string',
-                message: '请输入平台专业领域！',
+                message: '请输入供应商注册机构！',
               },
             ]}
           >
-            <Input size="large" placeholder="专业领域" />
+            <Input size="large" placeholder="供应商注册机构" />
           </FormItem>
-
+          <FormItem
+            name="usedName"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入供应商曾用名！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="供应商曾用名" />
+          </FormItem>
           <Row gutter={8}>
             <Col span={16}>
               <FormItem
@@ -278,7 +293,7 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
   );
 };
 
-export default connect(({ platformAndregister, loading }) => ({
-  platformAndregister,
-  submitting: loading.effects['platformAndregister/submit'],
-}))(PlatformRegister);
+export default connect(({ companyAndregister, loading }) => ({
+  companyAndregister,
+  submitting: loading.effects['companyAndregister/submit'],
+}))(CompanyRegister);
