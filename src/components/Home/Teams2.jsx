@@ -4,7 +4,9 @@ import { Row, Col,Image,Typography } from 'antd';
 import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import expert from '@/assets/expert.svg'
 import { getChildrenToRender } from './utils';
+import {history} from 'umi'
 const { Paragraph } = Typography;
+
 class Teams2 extends React.PureComponent {
   getBlockChildren = (data,expertlist) =>
     data.map((item, i) => {
@@ -15,9 +17,15 @@ class Teams2 extends React.PureComponent {
       const company = expertlist?expertlist[i].workUnit:"加载中"
       const position = expertlist?expertlist[i].position:"加载中"
       return (
-        <Col key={i.toString()} {...$item}>
+        <Col key={i.toString()} {...$item} onClick={()=>{history.push({
+          pathname: '/details_experts',
+          query: {
+            productID:expertlist[i].id,
+          },
+        });}}>
           <Row>
-            <Col span={7}>
+            <Col span={7} 
+            >
               <div {...image}>
               <Image
             height="100%"

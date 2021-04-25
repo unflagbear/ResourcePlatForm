@@ -281,74 +281,98 @@ export default defineConfig({
             },
             {
               hideInMenu:true,
+              path: '/details_company',
+              name: '企业详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/company',
+            },
+            {
+              hideInMenu:true,
               path: '/details_service',
               name: '服务详情页面',
               icon: 'CheckCircleOutlined',
               component: './details/service/index.jsx',
+            },{
+              hideInMenu:true,
+              path: '/details_experts',
+              name: '专家详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/experts/index.jsx',
             },
             {
               // hideInMenu:true,
 
-              path: '/recommend',
-              name: '推荐模型管理',
+              path: '/manage',
+              name: '模型管理工具',
               authority: ['admin'],
               icon: 'CheckCircleOutlined',
-              component: './recommend',
-            },
-            {
-              // hideInMenu:true,
-
-              path: '/chatmodel',
-              name: '对话模型管理',
-              authority: ['admin'],
-
-              icon: 'CheckCircleOutlined',
-              routes: [
+              routes:[
                 {
-                  path: '/',
-                  redirect: '/chatmodel/modelmanage',
+                  // hideInMenu:true,
+    
+                  path: '/manage/recommend',
+                  name: '推荐模型管理',
+                  authority: ['admin'],
+                  icon: 'CheckCircleOutlined',
+                  component: './recommend',
                 },
                 {
-                  name: '自然语言理解数据管理',
-                  icon: 'smile',
-                  path: '/chatmodel/datamanage',
-                  component: './chatmodel/dialogdata',
+                  // hideInMenu:true,
+    
+                  path: '/manage/chatmodel',
+                  name: '对话模型管理',
+                  authority: ['admin'],
+    
+                  icon: 'CheckCircleOutlined',
+                  routes: [
+                    {
+                      path: '/',
+                      redirect: '/manage/chatmodel/modelmanage',
+                    },
+                    {
+                      name: '自然语言理解数据管理',
+                      icon: 'smile',
+                      path: '/manage/chatmodel/datamanage',
+                      component: './chatmodel/dialogdata',
+                    },
+                    {
+                      name: '模型管理',
+                      icon: 'smile',
+                      path: '/manage/chatmodel/modelmanage',
+                      component: './chatmodel/modelmanage',
+                    },
+                  ],
                 },
                 {
-                  name: '模型管理',
-                  icon: 'smile',
-                  path: '/chatmodel/modelmanage',
-                  component: './chatmodel/modelmanage',
+                  // hideInMenu:true,
+    
+                  path: '/manage/faqmanage',
+                  name: '问答模型',
+                  authority: ['admin'],
+    
+                  icon: 'CheckCircleOutlined',
+                  routes: [
+                    {
+                      path: '/',
+                      redirect: '/manage/faqmodel/datamanage',
+                    },
+                    {
+                      name: '问答模型管理',
+                      icon: 'smile',
+                      path: '/manage/faqmanage/datamanage',
+                      component: './faqmanage/datamanage',
+                    },
+                    {
+                      name: '问答数据管理',
+                      icon: 'smile',
+                      path: '/manage/faqmanage/modelmanage',
+                      component: './faqmanage/modelmanage',
+                    },
+                  ],
                 },
               ],
             },
-            {
-              // hideInMenu:true,
-
-              path: '/faqmanage',
-              name: '问答模型',
-              authority: ['admin'],
-
-              icon: 'CheckCircleOutlined',
-              routes: [
-                {
-                  path: '/',
-                  redirect: '/faqmodel/datamanage',
-                },
-                {
-                  name: '问答模型管理',
-                  icon: 'smile',
-                  path: '/faqmanage/datamanage',
-                  component: './faqmanage/datamanage',
-                },
-                {
-                  name: '问答数据管理',
-                  icon: 'smile',
-                  path: '/faqmanage/modelmanage',
-                  component: './faqmanage/modelmanage',
-                },
-              ],
-            },
+            
             {
               hideInMenu:true,
 
@@ -464,6 +488,12 @@ export default defineConfig({
                   component: './account/settings',
                 },
               ],
+            },
+            {
+              path: 'http://10.112.14.63:7457/',
+              name: '资源池管理平台',
+              target: '_blank', // 点击新窗口打开
+              authority: ['admin'],
             },
             {
               path: '/dashboard',
