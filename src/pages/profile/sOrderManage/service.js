@@ -8,7 +8,8 @@ export async function queryRule({values}) {
   });
 }
 export async function removeRule(params) {
-  return request('/faq_api/delete', {
+    console.log(params);
+  return request('/api/serviceOrder/deleteOrder', {
     method: 'POST',
     data: { ...params },
   });

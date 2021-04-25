@@ -13,6 +13,14 @@ export const queryOrder=async({values})=>{
   })
 }
 
+export const cancleOrder=async({values})=>{
+  //console.log(values);
+  return request('/api/serviceOrder/cancleOrder', {
+    method: 'post',
+    data: values,
+  })
+}
+
 export const nextState=async({values})=>{
   //console.log(values);
   return request('/api/serviceOrder/updateState', {
@@ -32,6 +40,14 @@ export const communiCommend=async({values})=>{
 export const comment=async({values})=>{
   //console.log(values);
   return request('/api/serviceOrder/sComment', {
+    method: 'post',
+    data: values,
+  })
+}
+
+export const trace=async(values)=>{
+  console.log(values);
+  return request('/api/serviceOrder/trace', {
     method: 'post',
     data: values,
   })

@@ -4,6 +4,7 @@ import { FormattedMessage, formatMessage } from 'umi';
 import React, { Fragment } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import styles from './index.less';
+
 const { Step } = Steps;
 const desc1 = (
   <div className={styles.title}>

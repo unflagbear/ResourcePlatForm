@@ -70,6 +70,14 @@ export const getresult = async(values)=>{
   })
 }
 
+export const getorder = async(values)=>{
+  console.log(values);
+  return request('/api/serviceOrder/getOrder', {
+    method: 'post',
+    data: values,
+  })
+}
+
 
 
 

@@ -1,6 +1,7 @@
 import { FormattedMessage, formatMessage } from 'umi';
 import React, { Component } from 'react';
 import { List } from 'antd';
+
 const passwordStrength = {
   strong: <span className="strong">强</span>,
   medium: <span className="medium">中</span>,

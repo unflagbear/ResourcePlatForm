@@ -1,6 +1,7 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect,useState, useRef } from 'react'
 import {connect,history,useLocation} from 'umi'
-import { Layout, Menu, Table,Button, Space, AutoComplete, Card, message,Spin, Progress } from 'antd'
+import { Layout, Menu, Table,Button, Space, AutoComplete, Card, message,Spin, Progress} from 'antd'
+import ProTable from '@ant-design/pro-table';
 import { SyncOutlined , SearchOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import './components/layout.css'
@@ -9,12 +10,14 @@ import TrainModel from './components/TrainModel'
 import SetModal from './components/SetModal';
 import styles from './style.less';
 import RecommendResult from './components/RecommendResult';
-import {showProgress} from './service'
+import {showProgress, resultRule, showRule} from './service'
+import { PlusOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 
-const Recommend = ({ dispatch, recommend })=>{
+const Recommend = ({ dispatch, recommend, userListLoading,})=>{
+  const actionRef = useRef();
   const [domain,setDomain] = useState();
   const [uid,setUid] = useState();
   const [mid,setMid] = useState();
@@ -25,7 +28,9 @@ const Recommend = ({ dispatch, recommend })=>{
   const [selected,setSelected] = useState(1);
   const [load, setLoad] = useState(false);
   const [progress, setProgress] = useState(0);
-  // const [timer, setTimer] = useState(null);
+  const [selectedRowsState, setSelectedRows] = useState([]);
+  const [showID,setShowID] = useState(null);
+  const [showdata,setShowData] = useState(null);
 
   const columns = [
     {
@@ -55,12 +60,45 @@ const Recommend = ({ dispatch, recommend })=>{
       },
     ];
 
-  const columns1 = [
-    {
-        title: '推荐结果id',
-        dataIndex: 'result',
-    },
-  ]
+    const columns1 = [
+      {
+        title: '专家id',
+        dataIndex: 'id',
+        formItemProps: {
+          rules: [
+            {
+              required: true,
+              message: 'id为必填项',
+            },
+          ],
+        },
+        render: (dom, entity) => {
+          return <a onClick={() => setRow(entity)}>{dom}</a>;
+        },
+      },
+      {
+        title: '专家姓名',
+        dataIndex: '姓名',
+        valueType: 'textarea',
+      },
+      {
+        title: '操作',
+        dataIndex: 'option',
+        valueType: 'option',
+        render: (_, record) => (
+          <>
+            {/* <a onClick={() => {editHandler(record);}}>修改</a>&nbsp;&nbsp; */}
+            <a onClick={async() => {
+              const success = await deleteHandler(record);
+              if (success) {
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
+              }}}>删除</a>
+          </>
+        ),
+      },
+    ];
 
   const manage=()=>{
       setSelected(1);
@@ -108,14 +146,17 @@ const Recommend = ({ dispatch, recommend })=>{
     setUid(record.uid);
   }
 
-  const showHandler=()=>{
+  const showHandler=async()=>{
     const values={domain:domain,uid:uid,last:last,cpy:cpy};
-    //console.log(values);
-    dispatch({
-      type:'recommend/show',
-      payload:{
-        values,
-      },
+  
+    await showRule(values).then((res)=>{
+      //console.log(res);
+      setShowID(res.result);
+      console.log(showID);
+    });
+    await resultRule(showID).then((res)=>{
+      console.log(res);
+      setShowData(res.data);
     });
   }
   // useEffect(()=>{
@@ -259,7 +300,56 @@ const Recommend = ({ dispatch, recommend })=>{
                   <RecommendResult setDomain={setdomain} setUid={setuid} setLast={setlast} setCpy={setcpy} onClick={showHandler}/>
                   <div className="site-layout-background" style={{ paddingTop: 0,paddingLeft:60, paddingRight:60,minHeight: 230 }}>
                     <Space style={{ marginBottom: 16 }}></Space>
-                    <Table columns={columns1} dataSource={recommend.id} />
+                    <Table columns={columns1} dataSource={showdata} />
+                    {/* <ProTable
+                      style={{marginTop:40}}
+                      headerTitle="推荐结果"
+                      actionRef={actionRef}
+                      rowKey="id"
+                      search={{
+                        labelWidth: 120,
+                      }}
+                      // toolBarRender={() => [
+                      //   <Button type="primary" onClick={() => handleModalVisible(true)}>
+                      //     <PlusOutlined /> 新建
+                      //   </Button>,
+                      // ]}
+                      columns={columns1}
+                      request={(params, sorter, filter) => resultRule({ ...params, sorter, filter })}
+                      //dataSource={modeldata}
+                      loading={userListLoading}
+                      rowSelection={{
+                        onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+                      }}
+                    />
+                    {selectedRowsState?.length > 0 && (
+                      <FooterToolbar
+                        extra={
+                          <div>
+                            已选择{' '}
+                            <a
+                              style={{
+                                fontWeight: 600,
+                              }}
+                            >
+                              {selectedRowsState.length}
+                            </a>{' '}
+                            项
+                          </div>
+                        }
+                      >
+                        <Button
+                          onClick={async () => {
+                            await batchDelete(selectedRowsState);
+                            setSelectedRows([]);
+                            actionRef.current?.reloadAndRest?.();
+                          }}
+                        >
+                          批量删除
+                        </Button>
+                        <Button type="primary">批量审批</Button>
+                      </FooterToolbar>
+                    )} */}
                     <SetModal visible={modalVisible} closeHandler={closeHandler} record={record} uid={uid} onFinsh={onFinsh}> </SetModal>
                   </div> 
                 </Card>
@@ -270,6 +360,7 @@ const Recommend = ({ dispatch, recommend })=>{
     )
 }
 
-export default connect(({ recommend }) => ({
-  recommend
+export default connect(({ recommend, loading}) => ({
+  recommend,
+  userListLoading: loading.models.users,
 }))(Recommend);

@@ -4,6 +4,7 @@ import { FormattedMessage, formatMessage } from 'umi';
 import React, { Fragment } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import styles from './index.less';
+
 const Content = (
   <Fragment>
     <div className={styles.title}>您提交的内容有如下错误：</div>

@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import GeographicView from './GeographicView';
 import PhoneView from './PhoneView';
 import styles from './BaseView.less';
+
 const { Option } = Select; // 头像组件 方便以后独立，增加裁剪之类的功能
 
 const AvatarView = ({ avatar }) => (
@@ -73,6 +74,7 @@ class BaseView extends Component {
   getViewDom = (ref) => {
     this.view = ref;
   };
+
   handleFinish = () => {
     message.success('更新基本信息成功');
   };

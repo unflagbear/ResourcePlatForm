@@ -21,7 +21,8 @@ import {
     Input,
     Upload,
     Spin,
-    Progress
+    Progress,
+    Alert
   } from 'antd';
   import { GridContent, PageContainer, RouteContext } from '@ant-design/pro-layout';
   import React, { Component, Fragment } from 'react';
@@ -30,7 +31,7 @@ import {
   import styles from './style.less';
   import './advanced.css';
   import { FrownOutlined, MehOutlined, SmileOutlined, UploadOutlined } from '@ant-design/icons';
-  import { queryOrder, nextState, communiCommend, check, comment, getprotocal, getresult, gettrace} from './service';
+  import { queryOrder, nextState, communiCommend, check, comment, getprotocal, getresult, getorder} from './service';
   
   const { Step } = Steps;
   const { TextArea } = Input;
@@ -120,10 +121,7 @@ import {
       <Statistic title="订单金额" value={568.08} prefix="¥" />
     </div>
   );
-  function datetimeFormat(longTypeDate){  
   
-    return new Date(parseInt(longTypeDate) ).toLocaleString().replace(/:\d{1,2}$/,' ');     
-   } 
   const description = (item)=>(
     <RouteContext.Consumer>
       {({ isMobile }) => (
@@ -293,22 +291,48 @@ import {
     )
   }
   
+function datetimeFormat(longTypeDate){  
+    return new Date(parseInt(longTypeDate) ).toLocaleString().replace(/:\d{1,2}$/,' ');     
+} 
   // const [buttonSize,setButtonSize]=useState('large');
   const Trace=(props)=>{
     //const { size } = this.state;
-  
+
+    const {item} = props;
     return(
       <div className='title-type'>
         {props.title}
-      <div className='protocal-type' style={{width: '500px',marginLeft: '100px',fontSize:'15px'}}>
-        <Steps direction="vertical" current={2}>
-          <Step title="需求阶段" description="Finished." />
-          <Step title="设计阶段" description="Finished" />
-          <Step title="开发阶段" description={<span>In progress<Download /></span>}/>
-          <Step title="测试阶段" description="Waiting" />
-          <Step title="系统交付" description="Waiting" />
-        </Steps>
-        
+      <div className='protocal-type' style={{fontSize:'15px'}}>
+        <Card
+            style={{
+              width: '80%',
+              marginLeft: '8%',
+            }}
+            headStyle={{textAlign: 'left'}}
+            type="inner"
+            bordered={true}
+            title={'服务实施任务'}
+          >
+          <Descriptions
+            style={{
+            marginBottom: 16,
+            }}
+            title={'服务名称'+name}
+            column={2}
+            >
+            {/* <Descriptions.Item label="服务名称">服务提供商</Descriptions.Item> */}
+            <Descriptions.Item label="开始时间">{datetimeFormat(item.start)}</Descriptions.Item>
+            <Descriptions.Item label="预计完成时间">{datetimeFormat(item.end)}</Descriptions.Item>
+            <Descriptions.Item label="工作目标" span={2} style={{textAlign: 'left'}}>{item.goal}</Descriptions.Item>
+            <Descriptions.Item label="预计成果" span={2}>{item.result}</Descriptions.Item>
+          </Descriptions>
+          <Alert
+            closable
+            showIcon
+            message="服务提供商提交服务成果后，可进入服务验收阶段。"
+            style={{ marginBottom: 4 , width:'50%'}}
+            />
+        </Card>
       </div>
       </div>
     )
@@ -401,6 +425,7 @@ import {
       communiDone:null,
       commentDone:null,
       isDone: 0,
+      task:{},
     };
   
     async componentDidMount() {
@@ -411,17 +436,23 @@ import {
         try {
           await queryOrder({values}).then((res)=>{
               this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone});
-              //console.log(this.state.communiDone);
           });
           await getprotocal({values}).then((res)=>{
             this.setState({protocalfileInfo:res.data});
           });
-          await gettrace({values}).then((res)=>{
-            this.setState({tracefileInfo:res.data});
-          });
-          await getresult({values}).then((res)=>{
-            this.setState({resultfileInfo:res.data});
-          });
+          //console.log('dwef');
+        //   await gettrace({values}).then((res)=>{
+        //       console.log('dwef');
+        //     this.setState({tracefileInfo:res.data});
+        //   });
+        //   console.log('swef');
+        //   await getresult({values}).then((res)=>{
+        //     this.setState({resultfileInfo:res.data});
+        //   });
+          await getorder(values).then((res)=>{
+            this.setState({task:{name:res.data.taskName, start:res.data.startDate, end:res.data.endDate, goal:res.data.taskGoal, result:res.data.taskResult}});
+            //console.log(this.state.task);
+        });
           return true;
         } catch (error) {
           //hide();
@@ -541,7 +572,7 @@ import {
         {
           title: '服务实施',
           content: '服务实施追踪中',
-          component: <Trace title={'服务实施追踪中'}></Trace>
+          component: <Trace title={'服务实施追踪中'} item={this.state.task}></Trace>
         },
         {
           title: '服务验收',
