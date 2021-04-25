@@ -151,7 +151,7 @@ const COrderManage = () => {
                 // setStepFormValues(record);
                 //console.log("record",orderId)
                 history.push({
-                    pathname: '/profile_customer/customer/',
+                    pathname: '/profile_customer/multiServer/',
                     query: {
                       order_id: orderId,
                       state: processId,

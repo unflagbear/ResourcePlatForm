@@ -2,6 +2,7 @@ import { Form, Button, Col, Input, Popover, Progress, Row, Select, message } fro
 import React, { useState, useEffect } from 'react';
 import { Link, connect, history, FormattedMessage, formatMessage } from 'umi';
 import styles from './style.less';
+
 const FormItem = Form.Item;
 const { Option } = Select;
 const InputGroup = Input.Group;

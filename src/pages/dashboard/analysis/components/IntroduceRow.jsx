@@ -7,6 +7,7 @@ import { ChartCard, MiniArea, MiniBar, MiniProgress, Field } from './Charts';
 import Trend from './Trend';
 import Yuan from '../utils/Yuan';
 import styles from '../style.less';
+
 const topColResponsiveProps = {
   xs: 24,
   sm: 12,

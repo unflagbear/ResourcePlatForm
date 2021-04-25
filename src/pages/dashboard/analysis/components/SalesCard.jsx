@@ -4,6 +4,7 @@ import React from 'react';
 import numeral from 'numeral';
 import { Bar } from './Charts';
 import styles from '../style.less';
+
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
 const rankingListData = [];

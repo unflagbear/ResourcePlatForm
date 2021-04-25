@@ -2,15 +2,15 @@ import React from 'react';
 import { AutoComplete ,Input, Button} from 'antd';
 
 const options = [
-    { value: '0' },
-    { value: '1' },
-    { value: '2' },
+    { value: '0',label:'专家' },
+    { value: '1',label:'仪器'},
+    { value: '2',label:'专利' },
   ];
 
 const options1 = [
-  { value: '1' },
-  { value: '2' },
-  { value: '3' },
+  { value: '1' ,label: '模型1：基于隐语义相似度的推荐模型' },
+  { value: '2' ,label: '模型2：基于协同过滤算法的推荐模型' },
+  { value: '3' ,label: '模型3：基于科技资源知识图谱的深度模型' },
 ];
 
 const TrainModel=(props)=>{
@@ -41,7 +41,7 @@ const TrainModel=(props)=>{
             <AutoComplete
                 style={{ width: 330, marginLeft:15 }}
                 options={options1}
-                placeholder="1:模型1;2:模型2;3:模型3"
+                placeholder="请选择需要训练的模型"
                 filterOption={(inputValue, options) =>
                 options.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
                 onChange={onChange2}

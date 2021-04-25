@@ -280,7 +280,7 @@ const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
         </div>
         <ProTable
           style={{marginTop:40}}
-          headerTitle="查询表格"
+          headerTitle="模型列表"
           actionRef={actionRef}
           rowKey="id"
           search={{

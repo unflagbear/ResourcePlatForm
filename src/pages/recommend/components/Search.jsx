@@ -2,9 +2,9 @@ import React ,{ useState, useRef }from 'react';
 import { AutoComplete ,Input, Button} from 'antd';
 
 const options = [
-  { value: '0' },
-  { value: '1' },
-  { value: '2' },
+    { value: '0',label:'专家' },
+    { value: '1',label:'仪器'},
+    { value: '2',label:'专利' },
 ];
 
 
