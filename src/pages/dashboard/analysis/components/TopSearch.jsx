@@ -7,6 +7,7 @@ import { MiniArea } from './Charts';
 import NumberInfo from './NumberInfo';
 import Trend from './Trend';
 import styles from '../style.less';
+
 const columns = [
   {
     title: '排名',

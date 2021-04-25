@@ -1,4 +1,4 @@
-import { queryFakeList, queryResouce,queryMultiResouce} from './service';
+import { queryFakeList, queryResouce,queryMultiResouce,queryExpert,queryCompany,queryPatent} from './service';
 
 const Model = {
   namespace: 'listAndsearchAndResourceNew',
@@ -9,13 +9,34 @@ const Model = {
     data:{}
   },
   effects: {
-    *list({payload},{call,put}){
+    *equipment({payload},{call,put}){
       const response = yield call(queryResouce,payload);
       yield put ({
           type:'getResourceList',
           payload: response
       })
   },
+  *expert({payload},{call,put}){
+    const response = yield call(queryExpert,payload);
+    yield put ({
+        type:'getExpertList',
+        payload: response
+    })
+},
+*company({payload},{call,put}){
+  const response = yield call(queryCompany,payload);
+  yield put ({
+      type:'getCompanyList',
+      payload: response
+  })
+},
+*patent({payload},{call,put}){
+  const response = yield call(queryPatent,payload);
+  yield put ({
+      type:'getPatnetInforList',
+      payload: response
+  })
+},
   *multiList({payload},{call,put}){
     const response = yield call(queryMultiResouce,payload);
     yield put ({
@@ -36,7 +57,16 @@ const Model = {
       return { ...state, list: action.payload };
     },
     getResourceList(state,{payload}){
-      return {...state,list: payload.data.records,total:payload.data.total}
+      return {...state,data: {equipmentList:payload.data.records},total:payload.data.total}
+    },
+    getExpertList(state,{payload}){
+      return {...state,data: {experts:payload.data.records},total:payload.data.total}
+    },
+    getCompanyList(state,{payload}){
+      return {...state,data: {companies:payload.data.records},total:payload.data.total}
+    },
+    getPatnetInforList(state,{payload}){
+      return {...state,data: {patentInfors:payload.data.records},total:payload.data.total}
     },
     getMultiResource(state,{payload}){
       return {...state,data:payload.data}

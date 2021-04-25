@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import QueueAnim from 'rc-queue-anim';
 import { Row, Col,Card,Skeleton,Avatar,Typography,Popover   } from 'antd';
-
+import{history} from 'umi'
 import company from '@/assets/company.svg'
 import { getChildrenToRender } from './utils';
 
@@ -24,7 +24,12 @@ function Feature7(props) {
     const title = isLoading?"加载中":companylist[i].name
     const context = isLoading?"Loading":companylist[i].businessscope
     return(
-      <Col {...item} key={i.toString()}>
+      <Col {...item} key={i.toString()} onClick={()=>{history.push({
+        pathname: '/details_company',
+        query: {
+          productID:companylist[i].id,
+        },
+      });}}>
         <Popover content={data} title={title} style={{width:"200px"}}>
           <a {...item.children}>
             

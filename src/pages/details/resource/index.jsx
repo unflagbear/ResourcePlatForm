@@ -27,18 +27,13 @@ const { Title } = Typography;
 const { Step } = Steps;
 
 function ResourceDetails({ dispatch, resource: { resourceDetail = {} } }) {
-  const [haveSource, setHaveSource] = useState(false);
-  // const text = (
-  //   <Affix offsetTop={70}>
-  //     <div>对方服务人员</div>
-  //   </Affix>
-  // );
+
   const [top,setTop] = useState(60);
   const [modalVisible,setModalVisible] = useState(false);
   const location = useLocation();
   const { productID } = location.query;
   // const content =<Affix offsetTop={80}><div style={{width: 500,height:600}}> <ChatforAccessService /></div></Affix>
-  const appendix = resourceDetail.appendix ? resourceDetail.appendix.split('、') : [];
+  const appendix = resourceDetail ?(resourceDetail.appendix? resourceDetail.appendix.split('、') : []):[];
   useEffect(() => {
     if (productID) {
       dispatch({
