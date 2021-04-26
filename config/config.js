@@ -156,7 +156,7 @@ export default defineConfig({
                   path: '/list/resource',
                   component: './list/search/resource',
                 }, {
-                  hideInMenu:true,
+                  // hideInMenu:true,
                   name: '资源内容_新',
                   icon: 'smile',
                   path: '/list/resource_new',
@@ -490,10 +490,43 @@ export default defineConfig({
               ],
             },
             {
-              path: 'http://10.112.14.63:7457/',
-              name: '资源池管理平台',
-              target: '_blank', // 点击新窗口打开
+              path:"/construct",
+              name:"资源构建",
               authority: ['admin'],
+              routes:[
+                {
+                  path: 'http://10.112.14.63:7457/',
+                  name: '资源池管理平台',
+                  target: '_blank', // 点击新窗口打开
+                  authority: ['admin'],
+                },
+                {
+                  path: '/knowlage',
+                  name: '知识图谱构建结果',
+                  target: '_blank', // 点击新窗口打开
+                  authority: ['admin'],
+                  routes:[
+                    {
+                      path: 'http://10.112.205.250:12134/browser/',
+                      name: '专利图谱',
+                      target: '_blank', // 点击新窗口打开
+                      authority: ['admin'],
+                    },
+                    {
+                      path: 'http://10.112.205.250:12234/browser/',
+                      name: '专家图谱',
+                      target: '_blank', // 点击新窗口打开
+                      authority: ['admin'],
+                    },
+                    {
+                      path: 'http://10.112.205.250:12334/browser/',
+                      name: '设备图谱',
+                      target: '_blank', // 点击新窗口打开
+                      authority: ['admin'],
+                    },
+                  ]
+                },
+              ]
             },
             {
               path: '/dashboard',
