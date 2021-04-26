@@ -17,11 +17,12 @@ const passwordProgressMap = {
   poor: 'exception',
 };
 
-const Register = ({ submitting, dispatch, userAndregister }) => {
+const Register = ({ submitting, dispatch, userAndregister ,}) => {
   const [count, setcount] = useState(0);
   const [visible, setvisible] = useState(false);
   const [prefix, setprefix] = useState('86');
   const [popover, setpopover] = useState(false);
+  const [usertype, settype] = useState(undefined);
   const confirmDirty = false;
   let interval;
   const [form] = Form.useForm();
@@ -32,10 +33,28 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
 
     const account = form.getFieldValue('mail');
 
-    if (userAndregister.status === 'ok') {
+    if (userAndregister.status === 'ok'&& userAndregister.type==='0') {
       message.success('注册成功！');
       history.push({
         pathname: '/user/register-result',
+        state: {
+          account,
+        },
+      });
+    }
+    if (userAndregister.status === 'ok'&& userAndregister.type=== '1') {
+      message.success('用户注册成功！请登录供应商信息！');
+      history.push({
+        pathname: '/user/company_register',
+        state: {
+          account,
+        },
+      });
+    }
+    if (userAndregister.status === 'ok'&& userAndregister.type=== '2') {
+      message.success('用户注册成功！请登录平台信息！');
+      history.push({
+        pathname: '/user/platform_register',
         state: {
           account,
         },
@@ -77,9 +96,10 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
   };
 
   const onFinish = (values) => {
+    console.log(values);
     dispatch({
       type: 'userAndregister/submit',
-      payload: { ...values, prefix },
+      payload: { ...values, phone:prefix+values.phone, userType:parseInt(usertype,3)},
     });
   };
 
@@ -122,6 +142,10 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
     setprefix(value);
   };
 
+  const changeType = (value) => {
+    settype(value);
+  };
+
   const renderPasswordProgress = () => {
     const value = form.getFieldValue('password');
     const passwordStatus = getPasswordStatus();
@@ -156,6 +180,17 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
           ]}
         >
           <Input size="large" placeholder="邮箱" />
+        </FormItem>
+        <FormItem
+          name="account"
+          rules={[
+            {
+              required: true,
+              message: '请输入账号名称！',
+            },
+          ]}
+        >
+          <Input size="large" placeholder="账号名称" />
         </FormItem>
         <Popover
           getPopupContainer={(node) => {
@@ -203,7 +238,7 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
               },
             ]}
           >
-            <Input size="large" type="password" placeholder="至少6位密码，区分大小写" />
+            <Input.Password size="large" placeholder="至少6位密码，区分大小写"/>
           </FormItem>
         </Popover>
         <FormItem
@@ -218,7 +253,23 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
             },
           ]}
         >
-          <Input size="large" type="password" placeholder="确认密码" />
+          <Input.Password size="large" placeholder="请确认密码"/>
+        </FormItem>
+        <FormItem>
+          <Select
+            size="large"
+            placeholder={"用户类型"}
+            value={usertype}
+            onChange={changeType}
+            style={{
+              width: '100%',
+            }}
+
+          >
+            <Option value="0">普通用户</Option>
+            <Option value="1">供应商</Option>
+            <Option value="2">第三方平台</Option>
+          </Select>
         </FormItem>
         <InputGroup compact>
           <Select
@@ -236,7 +287,7 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
             style={{
               width: '80%',
             }}
-            name="mobile"
+            name="phone"
             rules={[
               {
                 required: true,

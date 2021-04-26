@@ -20,23 +20,23 @@ const CommitTable = ({setForm,select,setSelect})=>{
     Object.keys(classifyData).forEach(key => {
         const befor = []
         Object.keys(classifyData[key]).forEach((num,item)=>{
-            
+
             const child=[]
             if(typeof classifyData[key][num] === "object"){
                 Object.keys(classifyData[key][num]).forEach(subitem=>{
                     child.push({value:subitem,label:subitem})
                 })
             }
-            befor.push({value:num,label:num,children:child})           
+            befor.push({value:num,label:num,children:child})
              // console.log(classifyData[key][num])
         })
-        options.push({value:key,label:key,children:befor}) 
+        options.push({value:key,label:key,children:befor})
         // console.log(items)
     })
 
       function onChange(value) {
         setSelect(value);
-        // console.log(seletct)
+        console.log(select)
       }
     return(
         <>
@@ -46,7 +46,7 @@ const CommitTable = ({setForm,select,setSelect})=>{
                 initialValues={{
                 requiredMark,
                 }}
-                
+
                 style={{width:"500px", margin: '10px auto'}}
                 onValuesChange={onRequiredTypeChange}
                 requiredMark={requiredMark}
@@ -57,8 +57,8 @@ const CommitTable = ({setForm,select,setSelect})=>{
                 <Form.Item label="请填写您的需求名称：" name="name" required tooltip="必须填写内容">
                 <Input placeholder="需求名称" />
                 </Form.Item>
-                <Form.Item label="请简单描述一下您的具体需求"name="desc" required tooltip="必须填写内容">
-                <TextArea rows={5} placeholder="具体需求" />
+                <Form.Item label="请描述一下需求的具体描述"name="desc" required tooltip="必须填写内容">
+                <TextArea rows={5} placeholder="具体描述" />
                 </Form.Item>
                 <Form.Item label="请选择交易模式：" name="mode">
                 <Radio.Group>
@@ -70,24 +70,16 @@ const CommitTable = ({setForm,select,setSelect})=>{
                 <Form.Item
                 label="联系方式"
                 name="phone"
-                tooltip={{
-                    title: 'Tooltip with customize icon',
-                    icon: <InfoCircleOutlined />,
-                }}
                 >
                 <Input placeholder="请输入手机号" />
-                
+
                 </Form.Item>
                 <Form.Item
                 label="电子邮箱"
                 name="email"
-                tooltip={{
-                    title: 'Tooltip with customize icon',
-                    icon: <InfoCircleOutlined />,
-                }}
                 >
                 <Input placeholder="请输入电子邮箱" />
-                
+
                 </Form.Item>
                 <Form.Item>
                 <Button type="primary">提交</Button>

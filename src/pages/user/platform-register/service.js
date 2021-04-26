@@ -1,7 +1,7 @@
 import request from 'umi-request';
 
 export async function fakeRegister(params) {
-  return request('/api/user/register', {
+  return request('/api/platformInformation/register', {
     method: 'POST',
     data: params,
   });
