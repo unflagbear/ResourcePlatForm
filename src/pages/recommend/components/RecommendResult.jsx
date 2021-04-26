@@ -31,30 +31,30 @@ const RecommendResult=(props)=>{
       
     return(
         <div style={{ paddingTop: 10, minHeight: 70, marginBottom:80}}>
-            <a style={{ color:'black', marginLeft:200 }}>领域</a>
+            <a style={{ color:'black', marginLeft:'20%' }}>领域</a>
             <AutoComplete
-                style={{ width: 170, marginLeft:15 }}
+                style={{ width: '10%', marginLeft:'1%' }}
                 options={options}
                 placeholder="0:专家;1:仪器;2:专利"
                 filterOption={(inputValue, options) =>
                 options.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
                 onChange={onChange}
             />
-            <a style={{ color:'black', marginLeft:150 }}>用户ID</a>
+            <a style={{ color:'black', marginLeft:'15%' }}>用户ID</a>
             <Input
-                style={{ width: 170, marginLeft:15 }}
+                style={{ width: '10%', marginLeft:'1%' }}
                 onChange={testOnChange1}
             />
             <p/>
             <br/>
-            <a style={{ color:'black', marginLeft:130 }}>上次点击物品ID</a>
+            <a style={{ color:'black', marginLeft:'16%' }}>上次点击物品ID</a>
             <Input
-                style={{ width: 170, marginLeft:15 }}
+                style={{ width: '10%', marginLeft:'1%' }}
                 onChange={testOnChange2}
             />
-             <a style={{ color:'black', marginLeft:110 }}>用户所属公司</a>
+             <a style={{ color:'black', marginLeft:'12.5%' }}>用户所属公司</a>
             <Input
-                style={{ width: 170, marginLeft:15 }}
+                style={{ width: '10%', marginLeft:'1.1%' }}
                 onChange={testOnChange3}
             />
             <Button type="primary" style={{marginLeft:200}} onClick={onClick}>提交</Button>

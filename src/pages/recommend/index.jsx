@@ -10,7 +10,7 @@ import TrainModel from './components/TrainModel'
 import SetModal from './components/SetModal';
 import styles from './style.less';
 import RecommendResult from './components/RecommendResult';
-import {showProgress, resultRule, showRule} from './service'
+import {showProgress, expertRule, equipmentRule, patentRule, showRule} from './service'
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -31,6 +31,9 @@ const Recommend = ({ dispatch, recommend, userListLoading,})=>{
   const [selectedRowsState, setSelectedRows] = useState([]);
   const [showID,setShowID] = useState(null);
   const [showdata,setShowData] = useState(null);
+  const [recommendDomain, setrecommendDomain] = useState();
+  const [param,setParam] = useState({id:'id', name_t:'名称',name_d:'名称'});
+ 
 
   const columns = [
     {
@@ -60,9 +63,9 @@ const Recommend = ({ dispatch, recommend, userListLoading,})=>{
       },
     ];
 
-    const columns1 = [
+    const columns1 =(item)=> ([
       {
-        title: '专家id',
+        title: item.id,
         dataIndex: 'id',
         formItemProps: {
           rules: [
@@ -77,8 +80,13 @@ const Recommend = ({ dispatch, recommend, userListLoading,})=>{
         },
       },
       {
-        title: '专家姓名',
-        dataIndex: '姓名',
+        title: item.name_t,
+        dataIndex: item.name_d,
+        valueType: 'textarea',
+      },
+      {
+        title: '所属类型',
+        dataIndex: '所属类型',
         valueType: 'textarea',
       },
       {
@@ -98,7 +106,7 @@ const Recommend = ({ dispatch, recommend, userListLoading,})=>{
           </>
         ),
       },
-    ];
+    ]);
 
   const manage=()=>{
       setSelected(1);
@@ -148,16 +156,34 @@ const Recommend = ({ dispatch, recommend, userListLoading,})=>{
 
   const showHandler=async()=>{
     const values={domain:domain,uid:uid,last:last,cpy:cpy};
-  
+    let value={};
     await showRule(values).then((res)=>{
       //console.log(res);
-      setShowID(res.result);
-      console.log(showID);
+      //setShowID(res.result);
+      value = {id: res.result};
+      //console.log(value);
     });
-    await resultRule(showID).then((res)=>{
-      console.log(res);
-      setShowData(res.data);
-    });
+    if(domain==0){
+      setParam({id:'专家id', name_t:'专家姓名',name_d:'姓名'});
+      await expertRule(value).then((res)=>{
+        console.log(res);
+        setShowData(res.data);
+      });
+    }
+    else if(domain==1){
+      setParam({id:'设备id', name_t:'仪器名称',name_d:'仪器名称'});
+      await equipmentRule(value).then((res)=>{
+        console.log(res);
+        setShowData(res.data);
+      });
+    }
+    else if(domain==2){
+      setParam({id:'专利id', name_t:'专利名称',name_d:'专利名称'});
+      await patentRule(value).then((res)=>{
+        console.log(res);
+        setShowData(res.data);
+      });
+    }
   }
   // useEffect(()=>{
   //   clearInterval(timer);
@@ -256,14 +282,12 @@ const Recommend = ({ dispatch, recommend, userListLoading,})=>{
         </Sider>
         <Layout style={{ marginLeft: 200,background:'#fff' }}>
           {selected==1? 
-          <div className={styles.main}>
+          <div className={styles.main} style={{
+            background:'#f0f2f5'
+          }}>
                 <GridContent>
                   <Card
                     title="推荐策略状态查询"
-                    style={{
-                      marginBottom: 24,
-                      marginLeft:24,
-                    }}
                   >
                   <Search setDomain={setdomain} setUid={setuid} onClick={queryHandler}/>
                   <div className="site-layout-background" style={{ paddingTop: 70,paddingLeft:18, minHeight: 270 }}>
@@ -277,8 +301,7 @@ const Recommend = ({ dispatch, recommend, userListLoading,})=>{
                     <Card
                       title="模型训练"
                       style={{
-                        marginBottom: 24,
-                        marginLeft:24,
+                        marginTop:'2%',
                       }}
                     >
                     <TrainModel setDomain={setdomain} setModel={setmodel} onClick={trainHandler} />
@@ -292,15 +315,11 @@ const Recommend = ({ dispatch, recommend, userListLoading,})=>{
                 <GridContent>
                   <Card
                     title="推荐结果查询"
-                    style={{
-                      marginBottom: 24,
-                      marginLeft:24,
-                    }}
                   >
                   <RecommendResult setDomain={setdomain} setUid={setuid} setLast={setlast} setCpy={setcpy} onClick={showHandler}/>
                   <div className="site-layout-background" style={{ paddingTop: 0,paddingLeft:60, paddingRight:60,minHeight: 230 }}>
                     <Space style={{ marginBottom: 16 }}></Space>
-                    <Table columns={columns1} dataSource={showdata} />
+                    <Table columns={columns1(param)} dataSource={showdata} />
                     {/* <ProTable
                       style={{marginTop:40}}
                       headerTitle="推荐结果"

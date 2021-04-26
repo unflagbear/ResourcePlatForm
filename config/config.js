@@ -269,6 +269,12 @@ export default defineConfig({
                 hideInMenu: true,
                 component: './profile/multiServer',
               },
+              {
+                path: '/profile_customer/customer',
+                icon: 'profile',
+                hideInMenu: true,
+                component: './profile/customer',
+              },
             ],
             },
     

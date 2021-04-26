@@ -557,7 +557,19 @@ const Trace = (props) => {
                   rows={4}
                 />
               </FormItem>
-              <FormItem
+              <Button style={{
+                  marginTop: 22,
+                  float: 'right',
+                  marginRight: '10%',
+                }}
+                  type="primary"
+                  onClick={() => {
+                    form.submit();
+                  }}
+                >
+                  提交
+                </Button>
+              {/* <FormItem
                 {...submitFormLayout}
                 style={{
                   marginTop: 22,
@@ -573,7 +585,7 @@ const Trace = (props) => {
                 >
                   提交
                 </Button>
-              </FormItem>
+              </FormItem> */}
             </Form>
           </Card>
         </div>

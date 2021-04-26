@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Drawer, Form, Select, Modal, Table, InputNumber, Input} from 'antd';
+import { Button, message, Drawer, Form, Select, Card, Modal, Table, InputNumber, Input} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
@@ -257,27 +257,38 @@ const ModelManage = ({modelmanage, trainmodel, dispatch, userListLoading}) => {
   return (
     <>
       <PageContainer>
-      <div className='test-type'>
-        <h4>模型测试</h4>
-              <p style={{marginLeft:330, marginTop:18, fontSize: 16}}>当前模型:&nbsp;&nbsp;&nbsp;{modelname}
-              <a style={{ color:'black', marginLeft:260 }}>测试语料:</a><Input style={{ width: 170, marginLeft:15 }} maxLength={100} onChange={testOnChange}/>
+        <Card style={{
+              width: '100%',
+              marginLeft: '0%',
+            }}
+            headStyle={{textAlign: 'left'}}
+            
+            bordered={true}
+            title={'模型测试'}>
+             <p style={{marginLeft:'22%', marginTop:18, fontSize: 16}}>当前模型:&nbsp;&nbsp;&nbsp;{modelname}
+              <a style={{ color:'black', marginLeft:'20%' }}>测试语料:</a><Input style={{ width: '15%', marginLeft:'1%' }}placeholder={'请输入10个字以内文本'} maxLength={100} onChange={testOnChange}/>
            </p>
-            <Button style={{marginBottom:20, marginLeft:1200}} type="primary" onClick={testHandler}>提交</Button>
+            <Button style={{marginBottom:20, marginLeft:'65%'}} type="primary" onClick={testHandler}>提交</Button>
             <div>
-            <p style={{marginLeft:330, marginTop:0, fontSize: 16}}>测试结果:
+            <p style={{marginLeft:'22%', marginTop:'0%', fontSize: 16}}>测试结果:
               <p className='tt-type'> {modelmanage.result}</p>
             </p>
             </div>
-    
-      </div>
-      <div className='title-type'>
-        <h4>模型切换</h4>
-              <p style={{marginLeft:330, marginTop:18, fontSize: 16}}>当前模型:&nbsp;&nbsp;&nbsp;{modelname}
-              <a style={{ color:'black', marginLeft:260 }}>模型id:</a><InputNumber style={{ width: 170, marginLeft:15 }} onChange={onChange}/>
+        </Card>
+        <Card style={{
+              width: '100%',
+              marginLeft: '0%',
+              marginTop:'1.5%',
+            }}
+            headStyle={{textAlign: 'left'}}
+            bordered={true}
+            title={'模型切换'}>
+              <p style={{marginLeft:'22%', marginTop:18, fontSize: 16}}>当前模型:&nbsp;&nbsp;&nbsp;{modelname}
+              <a style={{ color:'black', marginLeft:'20%' }}>模型id:</a><InputNumber style={{ width: '15%', marginLeft:'1%' }} onChange={onChange}/>
            </p>
-            <Button style={{marginBottom:20, marginLeft:1200}} type="primary" onClick={changeHandler}>切换</Button>
-    
-        </div>
+            <Button style={{marginBottom:20, marginLeft:'65%'}} type="primary" onClick={changeHandler}>切换</Button>
+        </Card>    
+      
         <ProTable
           style={{marginTop:40}}
           headerTitle="模型列表"

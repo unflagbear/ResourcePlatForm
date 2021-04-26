@@ -27,9 +27,9 @@ const TrainModel=(props)=>{
       
     return(
         <div style={{ paddingTop: 45, minHeight: 70, marginBottom:150}}>
-            <a style={{ color:'black', marginLeft:30 }}>领域</a>
+            <a style={{ color:'black', marginLeft:'15%'}}>领域</a>
             <AutoComplete
-                style={{ width: 170, marginLeft:15 }}
+                style={{ width: '10%', marginLeft:'1%' }}
                 options={options}
                 placeholder="0:专家;1:仪器;2:专利"
                 filterOption={(inputValue, options) =>
@@ -37,16 +37,16 @@ const TrainModel=(props)=>{
                 onChange={onChange1}
                 
             />
-            <a style={{ color:'black', marginLeft:150 }}>模型选择</a>
+            <a style={{ color:'black', marginLeft:'15%' }}>模型选择</a>
             <AutoComplete
-                style={{ width: 330, marginLeft:15 }}
+                style={{ width: '17%', marginLeft:'1%'}}
                 options={options1}
                 placeholder="请选择需要训练的模型"
                 filterOption={(inputValue, options) =>
                 options.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
                 onChange={onChange2}
             />
-            <Button type="primary" style={{marginLeft:200 }} onClick={onClick}>训练</Button>
+            <Button type="primary" style={{marginLeft:'10%' }} onClick={onClick}>训练</Button>
         </div>
     )
 }
