@@ -82,15 +82,6 @@ const Login = (props) => {
             注册账户
           </Link>
         </div>
-        <div className={styles.other}>
-          <Link
-            className={styles.register}
-            style={{ marginLeft: '20px' }}
-            to="/user/platform_register"
-          >
-            注册平台用户
-          </Link>
-        </div>
       </LoginFrom>
     </div>
   );

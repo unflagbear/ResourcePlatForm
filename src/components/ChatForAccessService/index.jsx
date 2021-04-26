@@ -1,17 +1,20 @@
-import React from 'react';
+import React,{useState} from 'react';
 import '@chatui/core/es/styles/index.less';
+import './index.css'
 // 引入组件
-import Chat, { Bubble, useMessages } from '@chatui/core';
+import Chat, { Bubble, useMessages,Card,  CardText,List, ListItem } from '@chatui/core';
 // 引入样式
 import '@chatui/core/dist/index.css';
 // import button from './components/Button'
 // import { Avatar } from '@chatui/core'
+import logo from '../../assets/031-perseus.svg';
+import {history} from 'umi'
 
 const initialMessages = [
   {
     type: 'text',
     content: { text: '您好~我是您的贴心小助手，我能帮您查专利、专家、仪器设备' },
-    user: { avatar: '//gw.alicdn.com/tfs/TB1DYHLwMHqK1RjSZFEXXcGMXXa-56-62.svg' },
+    user: { avatar: logo },
   }
 ];
 
@@ -37,7 +40,8 @@ const defaultQuickReplies = [
 
 const ChatForAccessService = () => {
   const { messages, appendMsg, setTyping } = useMessages(initialMessages);
-
+  const [hover,setHover] = useState(false)
+  const [conversationId,setConversationId] = useState(-1)
   function handleSend(type, val) {
     if (type === 'text' && val.trim()) {
       appendMsg({
@@ -47,11 +51,16 @@ const ChatForAccessService = () => {
       });
 
       setTyping(true);
-      let url = `http://10.112.205.250:8453/dialog_api/`
-      let conversation_id = 55555555
+      let url = `http://10.112.205.250:8453/dialog_api/v3/`
+      // let conversation_id = 55555555
       let user_utterance = val
-
-      fetch(url+'?conversation_id='+conversation_id+'&user_utterance='+user_utterance,{
+      let requesUrl=""
+      if(conversationId != -1){
+        requesUrl =  url+'?conversation_id='+conversationId+'&user_utterance='+user_utterance
+      }else{
+         requesUrl =  url+'?user_utterance='+user_utterance
+      }
+      fetch(requesUrl,{
         method:'GET',
         mode: 'cors',
         referrerPolicy: 'unsafe-url',
@@ -67,18 +76,53 @@ const ChatForAccessService = () => {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
         },
       })
-      .then(res => res.json())
-      .then(data => data.response)
-      .then(bot_utterance => {
-        for (let x in bot_utterance)
-        {
+      .then(res =>res.json())
+     .then((data) => {
+       console.log(data)
+       const puleData =  data.result.response_content
+       if(conversationId == -1){
+         setConversationId(data.result.conversation_id)
+       }
+       switch(data.result.response_type){
+         case "plain_text":{
+           data.result.response_content.map((item)=>
+              appendMsg({
+                type: 'text',
+                content: { text: item },
+                user: { avatar: logo }
+              })
+           )
+           break
+         }
+         case "options":{
           appendMsg({
-          type: 'text',
-          content: { text: bot_utterance[x] },
+            type: 'text',
+            content: { text: puleData.heading },
+            user: { avatar: logo }
           })
-          // console.log(bot_utterance[x])
+          appendMsg({
+            type: 'options',
+            content: { text: puleData.options },
+            user: { avatar: logo }
+          })
+           break
+         }case "resource_item":{
+          appendMsg({
+            type: 'text',
+            content: { text: puleData.heading },
+            user: { avatar: logo }
+          })
+          appendMsg({
+            type: 'resource_item',
+            content: { text: puleData.resource_items },
+            user: { avatar: logo }
+          })
+          break
         }
-        // console.log(bot_utterance)
+         default:{
+           console.log("default")
+         }
+       }
       })
       .catch(function(e) {
         console.log('fetch fail', JSON.stringify(e));
@@ -89,10 +133,57 @@ const ChatForAccessService = () => {
   function handleQuickReplyClick(item) {
     handleSend('text', item.name);
   }
-
+  function handlePush(item){
+    console.log(item)
+    // history.push({
+    //   pathname: '/details_patent',
+    //   query: {
+    //     id:item,
+    //   },
+    // })
+  }
   function renderMessageContent(msg) {
-    const { content } = msg;
-    return <Bubble content={content.text} />;
+    const { content,type } = msg;
+    switch(type){
+      case "text":{
+        return <Bubble content={content.text} />
+      }
+      case "options":{
+        let linkStyle;
+        if (hover) {
+          linkStyle = {color: 'red'}
+        } else {
+          linkStyle = {color: 'blue'}
+        }
+
+        return (
+            <List bordered={true} className="useClick"  >
+              {
+                content.text.map((item)=>
+                  <ListItem   content={item}  onClick={()=>{handleSend("text",item)}} />
+                )
+              }
+
+            </List>
+        )
+      }
+      case "resource_item":{
+        return(
+          <List bordered={true} className="useClick"  >
+              {
+                content.text.map((item)=>
+                  <ListItem  key={item.id}  content={item.id + item.resource_name}  onClick={()=>{handlePush(item)}} />
+                )
+              }
+
+            </List>
+        )
+      }
+      default:{
+        return <Bubble content="请重新输入" />
+      }
+    }
+
   }
 
   return (

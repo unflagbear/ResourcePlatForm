@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Steps, Button, message,Card,Layout } from 'antd';
 import SelectFilter from './component/SelectFilter.jsx'
 import CommitTable from './component/CommitTable.jsx'
@@ -11,9 +11,15 @@ const { Step } = Steps;
 const DemandProgress = () =>{
   const [current, setCurrent] = React.useState(0);
   const [form, setForm] = React.useState({});
-  const [select,setSelect] = React.useState();
+  const [select,setSelect] = React.useState(null);
+  const [result,setResult] = React.useState({});
   const next = () => {
-    setCurrent(current + 1);
+    if (select != null){
+      setCurrent(current + 1);
+    }
+    else{
+      message.error("请选择")
+    }
     console.log(form)
     console.log(select)
   };
@@ -24,11 +30,11 @@ const DemandProgress = () =>{
     },
     {
       title: '描述您的需求',
-      content: <CommitTable setForm={setForm} next={next}setSelect={setSelect}select={select} />,
+      content: <CommitTable setForm={setForm} next={next}setSelect={setSelect}select={select} setResult={setResult} current={current} setCurrent={setCurrent}/>,
     },
     {
       title: '确认需求发布',
-      content: <ConfirmList form={form}/>,
+      content: <ConfirmList form={form} result={result}/>,
     },
   ];
   const prev = () => {
@@ -62,7 +68,7 @@ const DemandProgress = () =>{
               ))}
             </Steps>
             <div className="steps-content" style={{height:"500px",marginTop:"10px"}}>{steps[current].content}</div>
-            
+
           </Card>
         </>
     )

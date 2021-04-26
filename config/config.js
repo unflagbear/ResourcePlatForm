@@ -91,6 +91,12 @@ export default defineConfig({
               component: './user/platform-register',
             },
             {
+              name: '供应商注册',
+              icon: 'smile',
+              path: '/user/company_register',
+              component: './user/company-register',
+            },
+            {
               component: '404',
             },
           ],
@@ -156,7 +162,7 @@ export default defineConfig({
                   path: '/list/resource',
                   component: './list/search/resource',
                 }, {
-                  hideInMenu:true,
+                  // hideInMenu:true,
                   name: '资源内容_新',
                   icon: 'smile',
                   path: '/list/resource_new',
@@ -167,7 +173,33 @@ export default defineConfig({
                   path: '/list/service',
                   component: './list/search/service',
                 },
-                
+
+                {
+                  name: '服务平台展示',
+                  icon: 'smile',
+                  path: '/list/platform_list',
+                  component: './platform_list',
+                },
+                {
+                  name: '平台细节',
+                  icon: 'smile',
+                  path: '/list/platform_list/detail',
+                  component: './platform_list/detail',
+                  hideInMenu: hide,
+                },
+                {
+                  name: '发布服务',
+                  icon: 'smile',
+                  path: '/list/serviceprogress',
+                  component: './serviceprogress',
+                },
+                {
+                  name: '服务细节',
+                  icon: 'smile',
+                  path: '/list/service_list/detail',
+                  component: './service_list/detail',
+                  hideInMenu: hide,
+                },
                 {
                   path: '/list/search',
                   name: 'search-list',
@@ -277,7 +309,7 @@ export default defineConfig({
               },
             ],
             },
-    
+
             {
               hideInMenu:true,
               path: '/details_resource',
@@ -287,74 +319,112 @@ export default defineConfig({
             },
             {
               hideInMenu:true,
+              path: '/details_patent',
+              name: '专利详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/patent',
+            },
+            {
+              hideInMenu:true,
+              path: '/details_company',
+              name: '企业详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/company',
+            },
+            {
+              hideInMenu:true,
               path: '/details_service',
               name: '服务详情页面',
               icon: 'CheckCircleOutlined',
               component: './details/service/index.jsx',
+            },{
+              hideInMenu:true,
+              path: '/details_experts',
+              name: '专家详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/experts/index.jsx',
+            },
+            {
+              hideInMenu:true,
+              path: '/details_platform',
+              name: '平台详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/platform/index.jsx',
             },
             {
               // hideInMenu:true,
 
-              path: '/recommend',
-              name: '推荐模型管理',
+              path: '/manage',
+              name: '模型管理工具',
               authority: ['admin'],
               icon: 'CheckCircleOutlined',
-              component: './recommend',
-            },
-            {
-              // hideInMenu:true,
-
-              path: '/chatmodel',
-              name: '对话模型管理',
-              authority: ['admin'],
-
-              icon: 'CheckCircleOutlined',
-              routes: [
+              routes:[
                 {
-                  path: '/',
-                  redirect: '/chatmodel/modelmanage',
+                  // hideInMenu:true,
+
+                  path: '/manage/recommend',
+                  name: '推荐模型管理',
+                  authority: ['admin'],
+                  icon: 'CheckCircleOutlined',
+                  component: './recommend',
                 },
                 {
-                  name: '自然语言理解数据管理',
-                  icon: 'smile',
-                  path: '/chatmodel/datamanage',
-                  component: './chatmodel/dialogdata',
+                  // hideInMenu:true,
+
+                  path: '/manage/chatmodel',
+                  name: '对话模型管理',
+                  authority: ['admin'],
+
+                  icon: 'CheckCircleOutlined',
+                  routes: [
+                    {
+                      path: '/',
+                      redirect: '/manage/chatmodel/modelmanage',
+                    },
+                    {
+                      name: '自然语言理解数据管理',
+                      icon: 'smile',
+                      path: '/manage/chatmodel/datamanage',
+                      component: './chatmodel/dialogdata',
+                    },
+                    {
+                      name: '模型管理',
+                      icon: 'smile',
+                      path: '/manage/chatmodel/modelmanage',
+                      component: './chatmodel/modelmanage',
+                    },
+                  ],
                 },
                 {
-                  name: '模型管理',
-                  icon: 'smile',
-                  path: '/chatmodel/modelmanage',
-                  component: './chatmodel/modelmanage',
+                  // hideInMenu:true,
+
+                  path: '/manage/faqmanage',
+                  name: '问答模型',
+                  authority: ['admin'],
+
+                  icon: 'CheckCircleOutlined',
+                  routes: [
+                    {
+                      path: '/',
+                      redirect: '/manage/faqmodel/datamanage',
+                    },
+                    {
+                      name: '问答模型管理',
+                      icon: 'smile',
+                      path: '/manage/faqmanage/datamanage',
+                      component: './faqmanage/datamanage',
+                    },
+                    {
+                      name: '问答数据管理',
+                      icon: 'smile',
+                      path: '/manage/faqmanage/modelmanage',
+                      component: './faqmanage/modelmanage',
+                    },
+                  ],
                 },
               ],
             },
-            {
-              // hideInMenu:true,
 
-              path: '/faqmanage',
-              name: '问答模型',
-              authority: ['admin'],
-
-              icon: 'CheckCircleOutlined',
-              routes: [
-                {
-                  path: '/',
-                  redirect: '/faqmodel/datamanage',
-                },
-                {
-                  name: '问答模型管理',
-                  icon: 'smile',
-                  path: '/faqmanage/datamanage',
-                  component: './faqmanage/datamanage',
-                },
-                {
-                  name: '问答数据管理',
-                  icon: 'smile',
-                  path: '/faqmanage/modelmanage',
-                  component: './faqmanage/modelmanage',
-                },
-              ],
-            },
             {
               hideInMenu:true,
 
@@ -389,8 +459,14 @@ export default defineConfig({
                 {
                   name: '发布需求',
                   icon: 'smile',
-                  path: '/demand/index',
+                  path: '/demand/index/progress',
                   component: './demandprogress/',
+                },
+                {
+                  name: '需求展示',
+                  icon: 'smile',
+                  path: '/demand/index/list',
+                  component: './demand_list/',
                 }
               ],
             },
@@ -470,6 +546,45 @@ export default defineConfig({
                   component: './account/settings',
                 },
               ],
+            },
+            {
+              path:"/construct",
+              name:"资源构建",
+              authority: ['admin'],
+              routes:[
+                {
+                  path: 'http://10.112.14.63:7457/',
+                  name: '资源池管理平台',
+                  target: '_blank', // 点击新窗口打开
+                  authority: ['admin'],
+                },
+                {
+                  path: '/knowlage',
+                  name: '知识图谱构建结果',
+                  target: '_blank', // 点击新窗口打开
+                  authority: ['admin'],
+                  routes:[
+                    {
+                      path: 'http://10.112.205.250:12134/browser/',
+                      name: '专利图谱',
+                      target: '_blank', // 点击新窗口打开
+                      authority: ['admin'],
+                    },
+                    {
+                      path: 'http://10.112.205.250:12234/browser/',
+                      name: '专家图谱',
+                      target: '_blank', // 点击新窗口打开
+                      authority: ['admin'],
+                    },
+                    {
+                      path: 'http://10.112.205.250:12334/browser/',
+                      name: '设备图谱',
+                      target: '_blank', // 点击新窗口打开
+                      authority: ['admin'],
+                    },
+                  ]
+                },
+              ]
             },
             {
               path: '/dashboard',

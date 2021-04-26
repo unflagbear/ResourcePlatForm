@@ -1,7 +1,8 @@
-import { Form, Button, Col, Input, Popover, Progress, Row, Select, message } from 'antd';
+import {Form, Button, Col, Input, Popover, Progress, Row, Select, message, InputNumber} from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Link, connect, history } from 'umi';
 import styles from './style.less';
+import {CURRENT} from "@/components/Authorized/renderAuthorize";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -17,7 +18,7 @@ const passwordProgressMap = {
   poor: 'exception',
 };
 
-const PlatformRegister = ({ submitting, dispatch, userAndregister }) => {
+const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
   const [count, setcount] = useState(0);
   const [visible, setvisible] = useState(false);
   const [prefix, setprefix] = useState('86');
@@ -26,13 +27,14 @@ const PlatformRegister = ({ submitting, dispatch, userAndregister }) => {
   let interval;
   const [form] = Form.useForm();
   useEffect(() => {
-    if (!userAndregister) {
+    if (!platformAndregister) {
       return;
     }
 
+    console.log(platformAndregister.status);
     const account = form.getFieldValue('mail');
 
-    if (userAndregister.status === 'ok') {
+    if (platformAndregister.status === 'ok') {
       message.success('注册成功！');
       history.push({
         pathname: '/user/register-result',
@@ -41,7 +43,7 @@ const PlatformRegister = ({ submitting, dispatch, userAndregister }) => {
         },
       });
     }
-  }, [userAndregister]);
+  }, [platformAndregister]);
   useEffect(
     () => () => {
       clearInterval(interval);
@@ -78,49 +80,18 @@ const PlatformRegister = ({ submitting, dispatch, userAndregister }) => {
 
   const onFinish = (values) => {
     dispatch({
-      type: 'userAndregister/submit',
-      payload: { ...values, prefix },
+      type: 'platformAndregister/submit',
+      payload: { ...values ,},
     });
   };
 
-  const checkConfirm = (_, value) => {
-    const promise = Promise;
 
-    if (value && value !== form.getFieldValue('password')) {
-      return promise.reject('两次输入的密码不匹配!');
-    }
 
-    return promise.resolve();
-  };
 
-  const checkPassword = (_, value) => {
-    const promise = Promise; // 没有值的情况
 
-    if (!value) {
-      setvisible(!!value);
-      return promise.reject('请输入密码！');
-    } // 有值的情况
 
-    if (!visible) {
-      setvisible(!!value);
-    }
 
-    setpopover(!popover);
 
-    if (value.length < 6) {
-      return promise.reject('');
-    }
-
-    if (value && confirmDirty) {
-      form.validateFields(['confirm']);
-    }
-
-    return promise.resolve();
-  };
-
-  const changePrefix = (value) => {
-    setprefix(value);
-  };
 
   const renderPasswordProgress = () => {
     const value = form.getFieldValue('password');
@@ -157,100 +128,111 @@ const PlatformRegister = ({ submitting, dispatch, userAndregister }) => {
           >
             <Input size="large" placeholder="邮箱" />
           </FormItem>
-          <Popover
-            getPopupContainer={(node) => {
-              if (node && node.parentNode) {
-                return node.parentNode;
-              }
-
-              return node;
-            }}
-            content={
-              visible && (
-                <div
-                  style={{
-                    padding: '4px 0',
-                  }}
-                >
-                  {passwordStatusMap[getPasswordStatus()]}
-                  {renderPasswordProgress()}
-                  <div
-                    style={{
-                      marginTop: 10,
-                    }}
-                  >
-                    请至少输入 6 个字符。请不要使用容易被猜到的密码。
-                  </div>
-                </div>
-              )
-            }
-            overlayStyle={{
-              width: 240,
-            }}
-            placement="right"
-            visible={visible}
-          >
-            <FormItem
-              name="password"
-              className={
-                form.getFieldValue('password') &&
-                form.getFieldValue('password').length > 0 &&
-                styles.password
-              }
-              rules={[
-                {
-                  validator: checkPassword,
-                },
-              ]}
-            >
-              <Input size="large" type="password" placeholder="至少6位密码，区分大小写" />
-            </FormItem>
-          </Popover>
           <FormItem
-            name="confirm"
+            name="name"
             rules={[
               {
                 required: true,
-                message: '请确认密码！',
+                message: '请输入平台名称！',
               },
               {
-                validator: checkConfirm,
+                type: 'string',
+                message: '请输入平台名称！！',
               },
             ]}
           >
-            <Input size="large" type="password" placeholder="确认密码" />
+            <Input size="large" placeholder="平台名称" />
           </FormItem>
-          <InputGroup compact>
-            <Select
+          <FormItem
+            name="url"
+            rules={[
+              {
+                required: true,
+                message: '请输入平台URL！',
+              },
+              {
+                type: 'url',
+                message: 'URL格式错误！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="平台URL" />
+          </FormItem>
+          <FormItem
+            name="address"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入合法地址！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="平台联系地址" />
+          </FormItem>
+          <FormItem
+            name="serviceType"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入服务类型！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="平台服务类型" />
+          </FormItem>
+          <FormItem
+            name="registrationAddress"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入平台注册地址！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="平台注册地址" />
+          </FormItem>
+          <FormItem
+            name="staffSize"
+            rules={[
+              {
+                type: 'integer',
+                message: '请输入数值！',
+              },
+            ]}
+          >
+            <InputNumber
+              style={{
+                width: '100%',
+              }}
+              min={1}
+              max={10000}
+              placeholder="人员规模，请输入数值"
               size="large"
-              value={prefix}
-              onChange={changePrefix}
-              style={{
-                width: '20%',
-              }}
-            >
-              <Option value="86">+86</Option>
-              <Option value="87">+87</Option>
-            </Select>
-            <FormItem
-              style={{
-                width: '80%',
-              }}
-              name="mobile"
-              rules={[
-                {
-                  required: true,
-                  message: '请输入手机号！',
-                },
-                {
-                  pattern: /^\d{11}$/,
-                  message: '手机号格式错误！',
-                },
-              ]}
-            >
-              <Input size="large" placeholder="手机号" />
-            </FormItem>
-          </InputGroup>
+            />
+          </FormItem>
+          <FormItem
+            name="legalRepresentative"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入平台法人代表！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="平台法人代表" />
+          </FormItem>
+          <FormItem
+            name="professionDomain"
+            rules={[
+              {
+                type: 'string',
+                message: '请输入平台专业领域！',
+              },
+            ]}
+          >
+            <Input size="large" placeholder="专业领域" />
+          </FormItem>
+
           <Row gutter={8}>
             <Col span={16}>
               <FormItem
@@ -296,7 +278,7 @@ const PlatformRegister = ({ submitting, dispatch, userAndregister }) => {
   );
 };
 
-export default connect(({ userAndregister, loading }) => ({
-  userAndregister,
-  submitting: loading.effects['userAndregister/submit'],
+export default connect(({ platformAndregister, loading }) => ({
+  platformAndregister,
+  submitting: loading.effects['platformAndregister/submit'],
 }))(PlatformRegister);
