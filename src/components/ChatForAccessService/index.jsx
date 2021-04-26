@@ -122,7 +122,7 @@ const ChatForAccessService = () => {
          default:{
            console.log("default")
          }
-       }  
+       }
       })
       .catch(function(e) {
         console.log('fetch fail', JSON.stringify(e));
@@ -136,9 +136,9 @@ const ChatForAccessService = () => {
   function handlePush(item){
     console.log(item)
     // history.push({
-    //   pathname: '/details_resource',
+    //   pathname: '/details_patent',
     //   query: {
-    //     productID:item,
+    //     id:item,
     //   },
     // })
   }
@@ -163,7 +163,7 @@ const ChatForAccessService = () => {
                   <ListItem   content={item}  onClick={()=>{handleSend("text",item)}} />
                 )
               }
-              
+
             </List>
         )
       }
@@ -172,10 +172,10 @@ const ChatForAccessService = () => {
           <List bordered={true} className="useClick"  >
               {
                 content.text.map((item)=>
-                  <ListItem  key={item.id}  content={item.id + item.resource_name}  onClick={()=>{handlePush(item.id)}} />
+                  <ListItem  key={item.id}  content={item.id + item.resource_name}  onClick={()=>{handlePush(item)}} />
                 )
               }
-              
+
             </List>
         )
       }
@@ -183,7 +183,7 @@ const ChatForAccessService = () => {
         return <Bubble content="请重新输入" />
       }
     }
-    
+
   }
 
   return (

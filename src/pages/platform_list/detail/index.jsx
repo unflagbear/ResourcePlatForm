@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import { Descriptions, Badge } from 'antd';
 import {connect, useLocation} from "umi";
+import moment from "moment";
 
 const PlatformDetail=({loading,detailAndplatform: {data = {},status},dispatch})=>{
-  const [data1,setData]=useState("01")
   const location = useLocation();
   const { id } = location.query;
   useEffect(() => {
@@ -12,40 +12,28 @@ const PlatformDetail=({loading,detailAndplatform: {data = {},status},dispatch})=
       payload:{id},
     });
     console.log(id);
-    console.log(data);
-    console.log(status);
-  }, []);
 
+  }, []);
+  const statu=()=>{
+
+  }
   return(
 
     <div>
-    <Descriptions title="User Info" bordered>
-      <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
-      <Descriptions.Item label="Billing Mode">Prepaid</Descriptions.Item>
-      <Descriptions.Item label="Automatic Renewal">YES</Descriptions.Item>
-      <Descriptions.Item label="Order time">2018-04-24 18:00:00</Descriptions.Item>
-      <Descriptions.Item label="Usage Time" span={2}>
-        2019-04-24 18:00:00
+    <Descriptions title="平台信息" bordered>
+      <Descriptions.Item label="平台名称">{data.name}</Descriptions.Item>
+      <Descriptions.Item label="联系地址">{data.address}</Descriptions.Item>
+      <Descriptions.Item label="联系电话">{data.phone}</Descriptions.Item>
+      <Descriptions.Item label="注册地址">{data.registrationAddress}</Descriptions.Item>
+      <Descriptions.Item label="注册时间" span={2}>
+        {moment(data.registrationTime).format('LL')}
       </Descriptions.Item>
-      <Descriptions.Item label="Status" span={3}>
-        <Badge status="processing" text="Running" />
+      <Descriptions.Item label="状态" span={3}>
+        <Badge status="processing" text="运行中" />
       </Descriptions.Item>
-      <Descriptions.Item label="Negotiated Amount">$80.00</Descriptions.Item>
-      <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-      <Descriptions.Item label="Official Receipts">$60.00</Descriptions.Item>
-      <Descriptions.Item label="Config Info">
-        Data disk type: MongoDB
-        <br />
-        Database version: 3.4
-        <br />
-        Package: dds.mongo.mid
-        <br />
-        Storage space: 10 GB
-        <br />
-        Replication factor: 3
-        <br />
-        Region: East China 1<br />
-      </Descriptions.Item>
+      <Descriptions.Item label="人员规模">{data.Staffsize}</Descriptions.Item>
+      <Descriptions.Item label="网址">{data.url}</Descriptions.Item>
+      <Descriptions.Item label="法人代表">{data.legalRepresentative}</Descriptions.Item>
     </Descriptions>
     </div>
   )

@@ -12,8 +12,8 @@ const { Step } = Steps;
 const ServiceProgress = ({submitting,dispatch}) =>{
   const [current, setCurrent] = React.useState(0);
   const [form, setForm] = React.useState({});
-  const [select,setSelect] = React.useState(null);
-  const [result,setResult] = React.useState({});
+  const [select,setSelect] = React.useState(["科学研究与试验发展服务", "自然科学、工程、农业和医学研究"]);
+  const [result,setResult] = React.useState();
   const next = () => {
     if (select != null){
       setCurrent(current + 1);
@@ -21,8 +21,6 @@ const ServiceProgress = ({submitting,dispatch}) =>{
     else{
       message.error("请选择")
     }
-    console.log(form)
-    console.log(select)
   };
   const steps = [
     {
