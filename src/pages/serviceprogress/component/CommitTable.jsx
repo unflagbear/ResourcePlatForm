@@ -60,26 +60,64 @@ const CommitTable = ({setForm,select,setSelect,setResult,current,setCurrent})=>{
                 <Form.Item label="您所选择的服务分类" name="classify" required  tooltip="必须填写内容" initialValue={select}>
                 <Cascader options={options}   placeholder="服务内容" />
                 </Form.Item>
-                <Form.Item label="请填写您的服务名称：" name="serviceName" required tooltip="必须填写内容">
+                <Form.Item label="请填写您的服务名称：" name="serviceName"
+                           rules={[
+                             {
+                               required: true,
+                               message: '请输入服务名称！',
+                             },]}
+                           tooltip="必须填写内容">
                 <Input placeholder="服务名称" />
                 </Form.Item>
-              <Form.Item label="请填写您的服务价格：" name="servicePrice" required tooltip="必须填写内容">
+              <Form.Item label="请填写您的服务价格：" name="servicePrice"
+                         rules={[
+                           {
+                             required: true,
+                             message: '请输入邮箱地址！',
+                           },]}
+                         tooltip="必须填写内容">
                 <Input placeholder="服务名称" />
               </Form.Item>
-                <Form.Item label="请简单描述一下服务的具体细节"name="serviceDesc" required tooltip="必须填写内容">
+                <Form.Item label="请简单描述一下服务的具体细节"name="serviceDesc"
+                           rules={[
+                             {
+                               required: true,
+                               message: '请输入服务的具体细节！',
+                             },]}
+                           tooltip="必须填写内容">
                 <TextArea rows={5} placeholder="具体细节" />
                 </Form.Item>
-                <Form.Item label="请选择交易模式：" name="mode">
+                <Form.Item label="请选择付款方式：" name="serviceMeansOfPayment">
                 <Radio.Group>
-                    <Radio.Button value="报价">报价</Radio.Button>
-                    <Radio.Button value="比选">比选</Radio.Button>
-                    <Radio.Button value="招标">招标</Radio.Button>
+                    <Radio.Button value="一次性支付">一次性支付</Radio.Button>
+                    <Radio.Button value="分期付款">分期付款</Radio.Button>
+                    <Radio.Button value="其他">其他</Radio.Button>
                 </Radio.Group>
                 </Form.Item>
               <Form.Item
+                label="服务周期"
+                name="servicePeriod"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入服务周期！',
+                  },]}
+                tooltip={{
+                  title: '必须填写内容',
+                  icon: <InfoCircleOutlined />,
+                }}
+              >
+                <Input placeholder="请输入服务周期" />
+
+              </Form.Item>
+              <Form.Item
                 label="服务价格"
                 name="price"
-                required
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入服务价格！',
+                  },]}
                 tooltip={{
                   title: "必须填写内容",
                   icon: <InfoCircleOutlined />,
@@ -91,7 +129,7 @@ const CommitTable = ({setForm,select,setSelect,setResult,current,setCurrent})=>{
                 label="联系方式"
                 name="phone"
                 tooltip={{
-                    title: 'Tooltip with customize icon',
+                    title: '可选',
                     icon: <InfoCircleOutlined />,
                 }}
                 >
@@ -102,7 +140,7 @@ const CommitTable = ({setForm,select,setSelect,setResult,current,setCurrent})=>{
                 label="电子邮箱"
                 name="mail"
                 tooltip={{
-                    title: 'Tooltip with customize icon',
+                    title: '可选',
                     icon: <InfoCircleOutlined />,
                 }}
                 >

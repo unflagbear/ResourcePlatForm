@@ -15,11 +15,11 @@ const { Paragraph } = Typography;
 
 const PlatformList = ({ dispatch, listAndplatform: { list = [], total = 0 }, loading }) => {
   const [chatLog, setChatLog] = useState(false);
-  const goToDetail = (id) => {
+  const goToDetail = (productID) => {
     history.push({
-      pathname: 'platform_list/detail',
+      pathname: '/details_platform',
       query: {
-        id,
+        productID,
       },
     });
   };

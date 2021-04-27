@@ -24,21 +24,21 @@ const Search=(props)=>{
       
     return(
         <div >
-            <a style={{ color:'black', marginLeft:30 }}>领域</a>
+            <a style={{ color:'black', marginLeft:'15%'}}>领域</a>
             <AutoComplete
-                style={{ width: 170, marginLeft:15 }}
+                style={{ width: '10%', marginLeft:'1%' }}
                 options={options}
                 placeholder="0:专家;1:仪器;2:专利"
                 filterOption={(inputValue, options) =>
                 options.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
                 onChange={onChange}
             />
-            <a style={{ color:'black', marginLeft:150 }}>用户ID</a>
+            <a style={{ color:'black', marginLeft:'15%' }}>用户ID</a>
             <Input
-                style={{ width: 170, marginLeft:15 }}
+                style={{ width: '10%', marginLeft:'1%' }}
                 onChange={testOnChange}
             />
-            <Button type="primary" style={{marginLeft:300}} onClick={onClick}>查询</Button>
+            <Button type="primary" style={{marginLeft:'17%'}} onClick={onClick}>查询</Button>
         </div>
     )
 }

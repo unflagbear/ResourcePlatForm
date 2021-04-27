@@ -51,7 +51,7 @@ import {history} from 'umi';
         //     </Dropdown.Button>
         //   );
         // }
-  
+
         return (
           <Fragment>
             <ButtonGroup>
@@ -76,7 +76,7 @@ import {history} from 'umi';
       <Statistic title="订单金额" value={568.08} prefix="¥" />
     </div>
   );
-  
+
   const description = (item)=>(
     <RouteContext.Consumer>
       {({ isMobile }) => (
@@ -91,20 +91,25 @@ import {history} from 'umi';
       )}
     </RouteContext.Consumer>
   );
-  function datetimeFormat(longTypeDate){  
-    return new Date(parseInt(longTypeDate) ).toLocaleString().replace(/:\d{1,2}$/,' ');     
-} 
+  function datetimeFormat(longTypeDate){
+    return new Date(parseInt(longTypeDate) ).toLocaleString().replace(/:\d{1,2}$/,' ');
+}
 
   class Advanced extends Component {
-   
+
     state = {
       tabActiveKey: 'detail',
       current: 0,
       order_data:{},
       id:0,
       rate:0,
+      allData:{},
     };
-  
+
+    orderdata={
+      order_data:{},
+    }
+
     async componentDidMount() {
         const { dispatch,location} = this.props;
         const { order_id, state, is_done } = location.query;
@@ -117,10 +122,11 @@ import {history} from 'umi';
           },
         });
         try {
-          
+
           await queryOrder({values}).then((res)=>{
-              this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone});
+              this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone,allData:res.data});
           });
+
           return true;
         } catch (error) {
           return false;
@@ -132,14 +138,16 @@ import {history} from 'umi';
         tabActiveKey,
       });
     };
-    
+
     render() {
       const {
         multiServer: { list },
         loading,
       } = this.props;
       const { current, tabActiveKey } = this.state;
+      const { allData } = this.state;
       const nullData = {};
+      console.log(allData);
       return (
         <PageContainer
           title={"资源服务单号："+this.state.id}
@@ -228,7 +236,7 @@ import {history} from 'umi';
                 // );
               }}
             />
-               
+
         </div>
             </GridContent>
           </div>
@@ -236,7 +244,7 @@ import {history} from 'umi';
       );
     }
   }
-  
+
   export default connect(({ multiServer, loading }) => ({
     multiServer,
     loading: loading.effects['profileAndadvanced/fetchAdvanced'],

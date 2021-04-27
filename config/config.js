@@ -174,7 +174,7 @@ export default defineConfig({
                   path: '/list/service',
                   component: './list/search/service',
                 },
-                
+
                 {
                   authority:['admin'],
                   name: '服务平台展示',
@@ -191,11 +191,10 @@ export default defineConfig({
                 },
                 
                 {
-                  hideInMenu:true,
-                  name: '服务展示',
+                  name: '发布服务',
                   icon: 'smile',
-                  path: '/list/service_list',
-                  component: './service_list',
+                  path: '/list/serviceprogress',
+                  component: './serviceprogress',
                 },
                 {
                   name: '服务细节',
@@ -310,15 +309,28 @@ export default defineConfig({
                 hideInMenu: true,
                 component: './profile/customer',
               },
+              {
+                path: '/profile_customer/customer',
+                icon: 'profile',
+                hideInMenu: true,
+                component: './profile/customer',
+              },
             ],
             },
-    
+
             {
               hideInMenu:true,
               path: '/details_resource',
               name: '资源详情页面',
               icon: 'CheckCircleOutlined',
               component: './details/resource',
+            },
+            {
+              hideInMenu:true,
+              path: '/details_patent',
+              name: '专利详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/patent',
             },
             {
               hideInMenu:true,
@@ -341,6 +353,13 @@ export default defineConfig({
               component: './details/experts/index.jsx',
             },
             {
+              hideInMenu:true,
+              path: '/details_platform',
+              name: '平台详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/platform/index.jsx',
+            },
+            {
               // hideInMenu:true,
 
               path: '/manage',
@@ -350,7 +369,7 @@ export default defineConfig({
               routes:[
                 {
                   // hideInMenu:true,
-    
+
                   path: '/manage/recommend',
                   name: '推荐模型管理',
                   authority: ['admin'],
@@ -359,11 +378,11 @@ export default defineConfig({
                 },
                 {
                   // hideInMenu:true,
-    
+
                   path: '/manage/chatmodel',
                   name: '对话模型管理',
                   authority: ['admin'],
-    
+
                   icon: 'CheckCircleOutlined',
                   routes: [
                     {
@@ -386,11 +405,11 @@ export default defineConfig({
                 },
                 {
                   // hideInMenu:true,
-    
+
                   path: '/manage/faqmanage',
                   name: '问答模型',
                   authority: ['admin'],
-    
+
                   icon: 'CheckCircleOutlined',
                   routes: [
                     {
@@ -413,7 +432,7 @@ export default defineConfig({
                 },
               ],
             },
-            
+
             {
               hideInMenu:true,
 

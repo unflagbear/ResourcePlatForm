@@ -2,15 +2,15 @@ import React, { useState,useEffect } from 'react';
 import { Form, Input, Button, Radio ,Cascader  } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
-import data from '@/utils/classify/classify.json'
+import data from '@/utils/classify/classifyNew.json'
 import {modify} from '@/utils/classify/modify'
 
 const { TextArea } = Input;
-const CommitTable = ({setForm,select,setSelect})=>{
+const CommitTable = ({setForm,select,setSelect,setResult,current,setCurrent})=>{
     const [form] = Form.useForm();
     const options =[]
     const classifyData = modify(data.科技服务资源)
-    const [requiredMark, setRequiredMarkType] = useState('optional');
+    const [requiredMark, setRequiredMarkType] = useState();
     const onRequiredTypeChange = ({ requiredMarkValue }) => {
         setRequiredMarkType(requiredMarkValue);
     };
@@ -38,6 +38,10 @@ const CommitTable = ({setForm,select,setSelect})=>{
         setSelect(value);
         console.log(select)
       }
+      const onFinish = (values) => {
+        setResult(values);
+        setCurrent(current+1)
+      };
     return(
         <>
             <Form
@@ -50,6 +54,7 @@ const CommitTable = ({setForm,select,setSelect})=>{
                 style={{width:"500px", margin: '10px auto'}}
                 onValuesChange={onRequiredTypeChange}
                 requiredMark={requiredMark}
+                onFinish={onFinish}
             >
                 <Form.Item label="您所选择的服务分类" name="classify" required tooltip="必须填写内容" initialValue={select}>
                     <Cascader options={options}   placeholder="服务内容" />
@@ -81,9 +86,11 @@ const CommitTable = ({setForm,select,setSelect})=>{
                 <Input placeholder="请输入电子邮箱" />
 
                 </Form.Item>
-                <Form.Item>
-                <Button type="primary">提交</Button>
-                </Form.Item>
+              <Form.Item>
+                <Button size="large"
+                        type="primary"
+                        htmlType="submit">提交</Button>
+              </Form.Item>
             </Form>
         </>
     )

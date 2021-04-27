@@ -36,7 +36,7 @@ const SetModal = props =>{
         <Form name="basic" form={form} onFinish={onFinsh} onFinishFailed={onFinishFailed}>
           <h3  >用户id: {uid}</h3>
           <Form.Item {...formItemLayout} style={{marginTop:'20px'}} label='模型偏好值' name='preference' >
-            <input style={{width: 340}}/>
+            <input style={{width: '148%'}}/>
           </Form.Item>
           
         </Form>
