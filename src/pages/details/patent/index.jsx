@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useLocation } from 'umi';
-import ApplyModal from './components/ApplyModal';
-import './index.css';
 import {
   Typography,
   Image,
