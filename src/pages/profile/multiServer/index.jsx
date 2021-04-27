@@ -22,6 +22,8 @@ import {
   import styles from './CardList.less';
   import { FrownOutlined, MehOutlined, SmileOutlined, PlusOutlined  } from '@ant-design/icons';
   import { queryOrder, } from './service';
+import {history} from 'umi';
+
   //import Ellipsis from '@/components/Ellipsis';
   const ButtonGroup = Button.Group;
   const { Paragraph } = Typography;
@@ -182,11 +184,21 @@ import {
                         hoverable
                         title={"服务方"}
                         className={styles.card}
-                        actions={[<a key="option1">企业详情</a>, <a key="option2">进度查看</a>]}
+                        actions={[ <a key="option2" onClick={()=>{
+                          history.push(
+                             {
+                                pathname: '/profile_customer/customer/',
+                                query: {
+                                order_id: this.state.id,
+                                state: this.state.current,
+                                is_done: this.state.isDone,
+                             }}
+                          )
+                        }}>进度查看</a>]}
                       >
                         <Card.Meta
                           // avatar={<img alt="" className={styles.cardAvatar} src={item.avatar} />}
-                          title={<a>{item.institution}</a>}
+                          title={item.institution}
                           description={
                             <Paragraph
                               className={styles.item}

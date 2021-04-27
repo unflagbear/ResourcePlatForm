@@ -114,7 +114,7 @@ export default defineConfig({
             {
               path: '/homepage',
               name: '首页',
-              icon: 'dashboard',
+              icon: 'BankOutlined',
               component: './home/homepage',
             },
             {
@@ -149,7 +149,7 @@ export default defineConfig({
             },
             {
               path: '/list',
-              icon: 'table',
+              icon: 'DollarCircleOutlined',
               name: '商城',
               routes: [
                 {
@@ -157,13 +157,14 @@ export default defineConfig({
                   redirect: '/list/resource',
                 },
                 {
-                  name: '资源内容',
+                  hideInMenu:true,
+                  name: '资源内容_旧',
                   icon: 'smile',
                   path: '/list/resource',
                   component: './list/search/resource',
                 }, {
                   // hideInMenu:true,
-                  name: '资源内容_新',
+                  name: '资源内容',
                   icon: 'smile',
                   path: '/list/resource_new',
                   component: './list/search/resource_new',
@@ -175,6 +176,7 @@ export default defineConfig({
                 },
                 
                 {
+                  authority:['admin'],
                   name: '服务平台展示',
                   icon: 'smile',
                   path: '/list/platform_list',
@@ -187,13 +189,9 @@ export default defineConfig({
                   component: './platform_list/detail',
                   hideInMenu: hide,
                 },
+                
                 {
-                  name: '发布服务',
-                  icon: 'smile',
-                  path: '/list/serviceprogress',
-                  component: './serviceprogress',
-                },
-                {
+                  hideInMenu:true,
                   name: '服务展示',
                   icon: 'smile',
                   path: '/list/service_list',
@@ -306,6 +304,11 @@ export default defineConfig({
                 icon: 'profile',
                 hideInMenu: true,
                 component: './profile/multiServer',
+              },{
+                path: '/profile_customer/customer',
+                icon: 'profile',
+                hideInMenu: true,
+                component: './profile/customer',
               },
             ],
             },
@@ -343,7 +346,7 @@ export default defineConfig({
               path: '/manage',
               name: '模型管理工具',
               authority: ['admin'],
-              icon: 'CheckCircleOutlined',
+              icon: 'DesktopOutlined',
               routes:[
                 {
                   // hideInMenu:true,
@@ -443,17 +446,26 @@ export default defineConfig({
                   redirect: '/demand/index',
                 },
                 {
+                  authority:['customer'],
                   name: '发布需求',
                   icon: 'smile',
                   path: '/demand/index/progress',
                   component: './demandprogress/',
                 },
                 {
+                  authority:['admin'],
                   name: '需求展示',
                   icon: 'smile',
                   path: '/demand/index/list',
                   component: './demand_list/',
-                }
+                },
+                {
+                  authority:['server'],
+                  name: '发布服务',
+                  icon: 'smile',
+                  path: '/demand/serviceprogress',
+                  component: './serviceprogress',
+                },
               ],
             },
             {
@@ -533,19 +545,19 @@ export default defineConfig({
                 },
               ],
             },
+            
             {
-              path:"/construct",
               name:"资源构建",
               authority: ['admin'],
+              icon:'AreaChartOutlined',
               routes:[
                 {
-                  path: 'http://10.112.14.63:7457/',
+                  path: 'http://10.112.14.63:7457',
                   name: '资源池管理平台',
                   target: '_blank', // 点击新窗口打开
                   authority: ['admin'],
                 },
                 {
-                  path: '/knowlage',
                   name: '知识图谱构建结果',
                   target: '_blank', // 点击新窗口打开
                   authority: ['admin'],

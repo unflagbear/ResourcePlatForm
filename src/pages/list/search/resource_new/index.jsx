@@ -202,14 +202,9 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
             <Card.Meta
               title={item.name}
               description={
-                <Paragraph
-                  className={styles.item}
-                  ellipsis={{
-                    rows: 1,
-                  }}
-                >
+                
                   <span>职位：{item.position} </span>
-                </Paragraph>
+               
               }
             />
             <div className={styles.cardItemContent}>
@@ -352,7 +347,7 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
           <TabPane tab="设备" key="equipment">
           {cardList}
           </TabPane>
-          <TabPane tab="公司" key="company">
+          <TabPane tab="企业" key="company">
           {companyList}
           </TabPane>
           <TabPane tab="专家" key="expert">

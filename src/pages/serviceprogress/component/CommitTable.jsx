@@ -57,8 +57,8 @@ const CommitTable = ({setForm,select,setSelect,setResult,current,setCurrent})=>{
                 requiredMark={requiredMark}
                 onFinish={onFinish}
             >
-                <Form.Item label="您所选择的服务分类" name="classify" required  tooltip="必须填写内容" initialValue={select[0]+"/"+select[1]}>
-                  <Input  disabled={true} />
+                <Form.Item label="您所选择的服务分类" name="classify" required  tooltip="必须填写内容" initialValue={select}>
+                <Cascader options={options}   placeholder="服务内容" />
                 </Form.Item>
                 <Form.Item label="请填写您的服务名称：" name="serviceName" required tooltip="必须填写内容">
                 <Input placeholder="服务名称" />

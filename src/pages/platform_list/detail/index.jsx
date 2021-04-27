@@ -9,7 +9,7 @@ const PlatformDetail=({loading,detailAndplatform: {data = {},status},dispatch})=
   useEffect(() => {
     dispatch({
       type:'detailAndplatform/list',
-      payload:{id},
+      payload:{productID:id},
     });
     console.log(id);
     console.log(data);

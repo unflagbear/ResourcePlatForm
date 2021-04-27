@@ -51,8 +51,8 @@ const CommitTable = ({setForm,select,setSelect})=>{
                 onValuesChange={onRequiredTypeChange}
                 requiredMark={requiredMark}
             >
-                <Form.Item label="您所选择的服务分类" name="classify" required tooltip="必须填写内容">
-                    <Cascader options={options} value={select} onChange={onChange}  placeholder="服务内容" />
+                <Form.Item label="您所选择的服务分类" name="classify" required tooltip="必须填写内容" initialValue={select}>
+                    <Cascader options={options}   placeholder="服务内容" />
                 </Form.Item>
                 <Form.Item label="请填写您的需求名称：" name="name" required tooltip="必须填写内容">
                 <Input placeholder="需求名称" />

@@ -7,7 +7,7 @@ export const queryOrder=async({values})=>{
   })
 }
 export const queryServer=async()=>{
-  return request('/api/serviceTable/server_list', {
+  return request('/api/serviceTable/order_server_list', {
     method: 'get',
     // data: values,
   })
