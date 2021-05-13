@@ -81,7 +81,7 @@ import {history} from 'umi';
     <RouteContext.Consumer>
       {({ isMobile }) => (
         <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
-          <Descriptions.Item label="服务商">{item.name}</Descriptions.Item>
+          {/* <Descriptions.Item label="服务商">{item.name}</Descriptions.Item> */}
           <Descriptions.Item label="订购产品">{item.service}</Descriptions.Item>
           <Descriptions.Item label="创建时间">{datetimeFormat(item.createTime)}</Descriptions.Item>
           <Descriptions.Item label="联系电话">{item.phone}</Descriptions.Item>

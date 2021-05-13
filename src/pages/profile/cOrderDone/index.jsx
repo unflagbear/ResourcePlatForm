@@ -128,7 +128,7 @@ const COrderManage = () => {
           <a
               onClick={async() => {
                 history.push({
-                    pathname: '/profile_customer/customer/',
+                    pathname: '/profile_customer/multiServer/',
                     query: {
                       order_id: orderId,
                       state: 5,

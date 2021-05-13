@@ -70,64 +70,9 @@ const mobileMenu = (
   </Menu>
 );
 const param = {
-  // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
   defaultFileList: [
-    // {
-    //   uid: '1',
-    //   name: 'xxx.doc',
-    //   status: 'done',
-    //   response: 'Server Error 500', // custom error message to show
-    //   url: 'http://www.baidu.com/xxx.doc',
-    // },
-    // {
-    //   uid: '2',
-    //   name: 'yyy.doc',
-    //   status: 'done',
-    //   url: 'http://www.baidu.com/yyy.doc',
-    // },
-    // {
-    //   uid: '3',
-    //   name: 'zzz.png',
-    //   status: 'error',
-    //   response: 'Server Error 500', // custom error message to show
-    //   url: 'http://www.baidu.com/zzz.png',
-    // },
   ],
-}; // const ProcessShow=()=>{
-//   setHideProcess(true);
-// }
-// const action=(
-//   <RouteContext.Consumer>
-//     {({ isMobile }) => {
-//       if (isMobile) {
-//         return (
-//           <Dropdown.Button
-//             type="primary"
-//             icon={<DownOutlined />}
-//             overlay={mobileMenu}
-//             placement="bottomRight"
-//           >
-//             主操作
-//           </Dropdown.Button>
-//         );
-//       }
-//       return (
-//         <Fragment>
-//           <ButtonGroup>
-//             <Button onClick={next}>通过请求</Button>
-//             <Button onClick={cancle}>拒绝请求</Button>
-//             <Dropdown overlay={menu} placement="bottomRight">
-//               <Button>
-//                 <EllipsisOutlined />
-//               </Button>
-//             </Dropdown>
-//           </ButtonGroup>
-//           <Button type="primary">主操作</Button>
-//         </Fragment>
-//       );
-//     }}
-//   </RouteContext.Consumer>
-// );
+}; 
 
 const extra = (
   <div className={styles.moreInfo}>
@@ -183,20 +128,6 @@ const Description1 = (props) => {
   ) : null;
 };
 
-const desc1 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    <Fragment>XXX公司</Fragment>
-    <div>2016-12-12 12:32</div>
-  </div>
-);
-const desc2 = (
-  <div className={styles.stepDescription}>
-    <Fragment>XXX公司负责中</Fragment>
-    <div>
-      <a href="">催一下</a>
-    </div>
-  </div>
-);
 const popoverContent = (
   <div
     style={{
@@ -698,7 +629,7 @@ const Comment = (props) => {
         </div>
         <Button
           type="primary"
-          onClick={onClick}
+          onClick={()=>this.communiSubmit}
           style={{
             float: 'right',
             marginTop: '30px',
@@ -712,7 +643,7 @@ const Comment = (props) => {
     </div>
   ) : (
     <div className="title-type">
-      {'评价已提交'}
+      评价已提交
       <div className="apply-type">
         {/* <Progress type="circle" percent={100} width={70} /> &nbsp;评价已提交，订单完成 */}
         <Spin /> &nbsp;客户提交评价中，请耐心等候
@@ -747,7 +678,7 @@ class Advanced extends Component {
   async componentDidMount() {
     const { dispatch, location, profileServer } = this.props;
     const { order_id, state, is_done } = location.query; // console.log(is_done);
-
+    // console.log(componentDidMount)
     this.setState({
       id: order_id,
       current: state,
@@ -947,7 +878,9 @@ class Advanced extends Component {
     }
   }; 
   render() {
+
     const { current, tabActiveKey } = this.state;
+
     const steps = [
       {
         title: '申请服务',
@@ -962,7 +895,7 @@ class Advanced extends Component {
             title={'沟通完成后，请进行评价'}
             setRate={this.setRate.bind(this)}
             setCommtext={this.setCommtext.bind(this)}
-            onClick={this.communiSubmit.bind(this)}
+            // onClick={this.communiSubmit.bind(this)}
             done={this.state.communiDone}
           ></Communi>
         ),
@@ -1016,6 +949,7 @@ class Advanced extends Component {
         hideProcess: true,
         isMobile: true,
       });
+
       const values = {
         order_id: this.state.id,
         state: current + 1,
@@ -1243,7 +1177,7 @@ class Advanced extends Component {
   }
 }
 
-export default connect(({ profileServer, loading }) => ({
+export default connect(({ profileServer }) => ({
   profileServer,
-  loading: loading.effects['profileServer/getOrderInfo'],
+
 }))(Advanced);
