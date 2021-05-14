@@ -6,8 +6,9 @@ const Model = {
       list: [],
     },
     effects: {
-      *fetchAdvanced(_, { call, put }) {
-        const response = yield call(queryServer);
+      *fetchAdvanced({payload:{values}}, { call, put }) {
+        console.log(values);
+        const response = yield call(queryServer({values}));
         console.log(response)
         yield put({
           type: 'show',

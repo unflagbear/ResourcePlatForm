@@ -21,7 +21,7 @@ import {
   import './advanced.css';
   import styles from './CardList.less';
   import { FrownOutlined, MehOutlined, SmileOutlined, PlusOutlined  } from '@ant-design/icons';
-  import { queryOrder, } from './service';
+  import { queryOrder,queryServer } from './service';
 import {history} from 'umi';
 
   //import Ellipsis from '@/components/Ellipsis';
@@ -104,6 +104,7 @@ import {history} from 'umi';
       id:0,
       rate:0,
       allData:{},
+      list:[],
     };
 
     orderdata={
@@ -112,15 +113,34 @@ import {history} from 'umi';
 
     async componentDidMount() {
         const { dispatch,location} = this.props;
-        const { order_id, state, is_done } = location.query;
+        const { order_id,  state, is_done } = location.query;
         this.setState({id: order_id, current: state, isDone: is_done});
         let values = order_id;
-        dispatch({
-          type: 'multiServer/fetchAdvanced',
-          payload: {
-            count: 8,
-          },
-        });
+        //console.log(values);
+        await queryServer({values}).then((res)=>{
+          if(res.data==1){
+              history.push(
+                 {
+                    pathname: '/profile_customer/customer/',
+                    query: {
+                    order_id: this.state.id,
+                    state: this.state.current,
+                    is_done: this.state.isDone,
+                 }}
+              )
+          }
+          else{
+            this.setState({list: res.data});
+          }
+      });
+        // dispatch({
+        //   type: 'multiServer/fetchAdvanced',
+        //   payload: {
+        //     //count: 8,
+        //     values,
+        //   },
+        // });
+        
         try {
 
           await queryOrder({values}).then((res)=>{
@@ -140,10 +160,10 @@ import {history} from 'umi';
     };
 
     render() {
-      const {
-        multiServer: { list },
-        loading,
-      } = this.props;
+      // const {
+      //   multiServer: { list },
+      //   loading,
+      // } = this.props;
       const { current, tabActiveKey } = this.state;
       const { allData } = this.state;
       const nullData = {};
@@ -183,7 +203,8 @@ import {history} from 'umi';
               xl: 4,
               xxl: 4,
             }}
-            dataSource={list}
+            
+            dataSource={this.state.list}
             renderItem={(item) => {
                 if (item && item.id) {
                   return (

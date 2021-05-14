@@ -6,9 +6,10 @@ export const queryOrder=async({values})=>{
     data: values,
   })
 }
-export const queryServer=async()=>{
+export const queryServer=async({values})=>{
+  console.log(values);
   return request('/api/serviceTable/order_server_list', {
-    method: 'get',
-    // data: values,
+    method: 'post',
+    data: values,
   })
 }
