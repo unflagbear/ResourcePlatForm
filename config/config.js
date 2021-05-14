@@ -274,7 +274,7 @@ export default defineConfig({
                 component: './profile/sOrderManage',
               },
               {
-                path: '/profile_server/server',
+                path: '/profile_server/server/',
                 icon: 'profile',
                 hideInMenu: true,
                 component: './profile/server',
@@ -564,7 +564,13 @@ export default defineConfig({
                 },
               ],
             },
-            
+            {
+              name:"服务集成工具",
+              authority: ['admin'],
+              icon:'AreaChartOutlined',
+              target: '_blank', // 点击新窗口打开
+              path:'http://182.92.217.156:8200'
+            },
             {
               name:"资源构建",
               authority: ['admin'],

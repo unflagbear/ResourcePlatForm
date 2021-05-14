@@ -57,16 +57,17 @@ const Model = {
       return { ...state, list: action.payload };
     },
     getResourceList(state,{payload}){
-      return {...state,data: {equipmentList:payload.data.records},total:payload.data.total}
+      console.log(payload.data.records)
+      return {...state,data: {equipmentList:payload.data.records},list:payload.data.records,total:payload.data.total}
     },
     getExpertList(state,{payload}){
-      return {...state,data: {experts:payload.data.records},total:payload.data.total}
+      return {...state,data: {experts:payload.data.records},list:payload.data.records,total:payload.data.total}
     },
     getCompanyList(state,{payload}){
-      return {...state,data: {companies:payload.data.records},total:payload.data.total}
+      return {...state,data: {companies:payload.data.records},list:payload.data.records,total:payload.data.total}
     },
     getPatnetInforList(state,{payload}){
-      return {...state,data: {patentInfors:payload.data.records},total:payload.data.total}
+      return {...state,data: {patentInfors:payload.data.records},list:payload.data.records,total:payload.data.total}
     },
     getMultiResource(state,{payload}){
       return {...state,data:payload.data}

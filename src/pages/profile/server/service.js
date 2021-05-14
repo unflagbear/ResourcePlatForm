@@ -6,7 +6,7 @@ export async function queryAdvancedProfile() {
 }
 
 export const queryOrder=async({values})=>{
-  //console.log(values);
+  console.log(values);
   return request('/api/serviceDetails/query', {
     method: 'post',
     data: values,
@@ -14,7 +14,7 @@ export const queryOrder=async({values})=>{
 }
 
 export const cancleOrder=async({values})=>{
-  //console.log(values);
+  console.log(values);
   return request('/api/serviceOrder/cancleOrder', {
     method: 'post',
     data: values,
