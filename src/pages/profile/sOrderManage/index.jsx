@@ -67,6 +67,11 @@ const SOrderManage = () => {
       },
     },
     {
+      title: '服务id',
+      dataIndex: 'serviceId',
+      valueType: 'textarea',
+    },
+    {
       title: '服务名称',
       dataIndex: 'serviceName',
       valueType: 'textarea',
@@ -140,7 +145,7 @@ const SOrderManage = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        const {orderId, processId} =record
+        const {orderId, processId, serviceId} =record
         return(
         <>
         {record.state==='-1'?null:
@@ -154,6 +159,7 @@ const SOrderManage = () => {
                     pathname: '/profile_server/server/',
                     query: {
                       order_id: orderId,
+                      service_id: serviceId,
                       state: processId,
                       is_done: 0,
                     },

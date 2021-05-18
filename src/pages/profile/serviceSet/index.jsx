@@ -72,7 +72,7 @@ const COrderManage = () => {
       valueType: 'textarea',
     },
     {
-      title: '服务商',
+      title: '所属领域',
       dataIndex: 'server',
       valueType: 'textarea',
     },
@@ -102,28 +102,12 @@ const COrderManage = () => {
       hideInForm: true,
       valueEnum: {
         '0': {
-          text: '申请服务',
+          text: '未完成',
           status: 'Processing',
         },
         '1': {
-          text: '线下沟通',
+          text: '已完成',
           status: 'Processing',
-        },
-        '2': {
-          text: '签署协议',
-          status: 'Processing',
-        },
-        '3':{
-          text: '服务实施',
-          status: 'Processing',
-        },
-        '4':{
-            text: '成果提交',
-            status: 'Success',
-        },
-        '5':{
-        text: '服务评价',
-        status: 'Error',
         },
         '-1':{
             text: '已取消',
@@ -151,10 +135,9 @@ const COrderManage = () => {
                 // setStepFormValues(record);
                 //console.log("record",orderId)
                 history.push({
-                    pathname: '/profile_customer/customer/',
+                    pathname: '/profile_customer/multiServer',
                     query: {
                       order_id: orderId,
-                      service_id: 0,
                       state: processId,
                       is_done: 0,
                     },
@@ -204,7 +187,7 @@ const COrderManage = () => {
             </Button>,
           ]}
           request={(params, sorter, filter) => {
-              let values={isDone: 0, type: 1};
+              let values={isDone: 0, type: 2};
               return queryRule({ ...params, values, sorter, filter })}}
           columns={columns}
           rowSelection={{

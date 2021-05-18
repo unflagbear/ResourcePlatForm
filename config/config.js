@@ -287,27 +287,35 @@ export default defineConfig({
               icon: 'profile',
               authority: ['customer'],
               routes:[{
-                path: '/profile_customer/cOrderDone',
-                name: '已完成',
+                path: '/profile_customer/serviceSet',
+                name: '集成服务',
                 icon: 'smile',
-                component: './profile/cOrderDone',
-              },
-              {
-                path: '/profile_customer/cOrderManage',
-                name: '未完成',
-                icon: 'smile',
-                component: './profile/cOrderManage',
+                component: './profile/serviceSet',
               },
               {
                 path: '/profile_customer/multiServer',
-                icon: 'profile',
+                icon: 'smile',
                 hideInMenu: true,
                 component: './profile/multiServer',
-              },{
-                path: '/profile_customer/customer',
-                icon: 'profile',
-                hideInMenu: true,
-                component: './profile/customer',
+              },
+              {
+                path: '/profile_customer/oneService',
+                name: '单个服务',
+                icon: 'smile',
+                //component: './profile',
+                routes:[
+                {
+                  path: '/profile_customer/oneService/cOrderDone',
+                  name: '已完成',
+                  icon: 'smile',
+                  component: './profile/cOrderDone',
+                },
+                {
+                  path: '/profile_customer/oneService/cOrderManage',
+                  name: '未完成',
+                  icon: 'smile',
+                  component: './profile/cOrderManage',
+                },]
               },
               {
                 path: '/profile_customer/customer',
@@ -315,6 +323,7 @@ export default defineConfig({
                 hideInMenu: true,
                 component: './profile/customer',
               },
+              
             ],
             },
 

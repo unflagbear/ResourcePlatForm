@@ -1,4 +1,4 @@
-import { queryServer } from './service';
+import { queryService } from './service';
 
 const Model = {
     namespace: 'multiServer',
@@ -8,7 +8,7 @@ const Model = {
     effects: {
       *fetchAdvanced({payload:{values}}, { call, put }) {
         console.log(values);
-        const response = yield call(queryServer({values}));
+        const response = yield call(queryService({values}));
         console.log(response)
         yield put({
           type: 'show',
