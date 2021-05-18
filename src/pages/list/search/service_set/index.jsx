@@ -5,19 +5,17 @@ import moment from 'moment';
 
 import ChatforAccessService from '@/components/ChatForAccessService';
 import SubSelection from './components/SubSelection';
-import StandardFormRow from './components/StandardFormRow';
 import styles from './style.less';
 
-const { Option } = Select;
-const FormItem = Form.Item;
+
 const { Paragraph } = Typography;
 
 
-const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, loading }) => {
+const ServiceSet = ({ dispatch, listAndsearchAndserviceset: { list = [], total = 0 }, loading }) => {
   const [chatLog, setChatLog] = useState(false);
   const goToDetail = (productID) => {
     history.push({
-      pathname: '/details_service',
+      pathname: '/details_serviceSet',
       query: {
         productID,
       },
@@ -27,7 +25,7 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
   useEffect(() => {
     console.log("00000000");
     dispatch({
-      type: 'listAndsearchAndservice/list',
+      type: 'listAndsearchAndserviceset/list',
       payload: {
         current: 0,
         limit: 8,
@@ -53,7 +51,7 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
           // console.log(pageSize)
           setCurrentPageSize(pageSize);
           dispatch({
-            type: 'listAndsearchAndservice/list',
+            type: 'listAndsearchAndserviceset/list',
             payload: {
               current: page,
               limit: pageSize,
@@ -69,11 +67,7 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
           <Card
             className={styles.card}
             hoverable
-          
-            onClick={() => goToDetail(item.serviceId)}
-            title={
-              `服务来自：${item.serverOrigin}`
-            }
+            onClick={() => goToDetail(item.id)}
             cover={
               <Image
                 height={200}
@@ -84,25 +78,15 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
             }
           >
             <Card.Meta
-              title={
-                item.serviceName
-              }
+              title={item.serviceName}
               description={
-                <Paragraph
-                  className={styles.item}
-                  ellipsis={{
-                    rows: 2,
-                  }}
-                >
-                  
-                  {item.serviceDesc}
-                </Paragraph>
+                <div className={styles.cardItemContent}>
+                  <Tag color="blue">服务总量：{item.serviceTableList.length}</Tag>
+                  <Tag color="green">创建时间：{moment(item.createTime).format('LL')}{item.place}</Tag>
+                </div>
               }
             />
-            <div className={styles.cardItemContent}>
-              <Tag color="blue">服务周期：{item.servicePeriod}</Tag>
-              <Tag color="green">创建时间：{moment(item.createTime).format('LL')}{item.place}</Tag>
-            </div>
+            
           </Card>
         </List.Item>
       )}
@@ -132,7 +116,7 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
               category = data.category[0]+"/"+data.category[1]
             }
             dispatch({
-              type: 'listAndsearchAndservice/list',
+              type: 'listAndsearchAndserviceset/list',
               payload: {
                 current: 0,
                 limit: 8,
@@ -193,7 +177,7 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
   );
 };
 
-export default connect(({ listAndsearchAndservice, loading }) => ({
-  listAndsearchAndservice,
-  loading: loading.models.listAndsearchAndservice,
-}))(Service);
+export default connect(({ listAndsearchAndserviceset, loading }) => ({
+  listAndsearchAndserviceset,
+  loading: loading.models.listAndsearchAndserviceset,
+}))(ServiceSet);

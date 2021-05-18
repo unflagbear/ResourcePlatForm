@@ -173,6 +173,11 @@ export default defineConfig({
                   icon: 'smile',
                   path: '/list/service',
                   component: './list/search/service',
+                },{
+                  name: '集成服务包',
+                  icon: 'smile',
+                  path: '/list/serviceset',
+                  component: './list/search/service_set',
                 },
 
                 {
@@ -354,6 +359,12 @@ export default defineConfig({
               name: '服务详情页面',
               icon: 'CheckCircleOutlined',
               component: './details/service/index.jsx',
+            },{
+              hideInMenu:true,
+              path: '/details_serviceSet',
+              name: '服务详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/serviceset/index.jsx',
             },{
               hideInMenu:true,
               path: '/details_experts',
