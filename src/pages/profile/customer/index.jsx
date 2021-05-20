@@ -22,6 +22,7 @@ import {
     Upload,
     Spin,
     Progress,
+    Table,
     Alert
   } from 'antd';
   import { GridContent, PageContainer, RouteContext } from '@ant-design/pro-layout';
@@ -31,7 +32,7 @@ import {
   import styles from './style.less';
   import './advanced.css';
   import { FrownOutlined, MehOutlined, SmileOutlined, UploadOutlined } from '@ant-design/icons';
-  import { queryOrder, nextState, communiCommend, check, comment, getprotocal, getresult, getorder} from './service';
+  import { queryOrder, getOrder,nextState, communiCommend, check, comment, getprotocal, getresult, getorder} from './service';
   
   const { Step } = Steps;
   const { TextArea } = Input;
@@ -129,8 +130,8 @@ import {
           <Descriptions.Item label="服务商">{item.name}</Descriptions.Item>
           <Descriptions.Item label="订购产品">{item.service}</Descriptions.Item>
           <Descriptions.Item label="创建时间">{datetimeFormat(item.createTime)}</Descriptions.Item>
-          <Descriptions.Item label="联系电话">{item.phone}</Descriptions.Item>
-          <Descriptions.Item label="生效日期">{item.cycle}</Descriptions.Item>
+          <Descriptions.Item label="服务价格">{item.price}</Descriptions.Item>
+          <Descriptions.Item label="服务周期">{item.period}</Descriptions.Item>
           <Descriptions.Item label="备注">{item.note}</Descriptions.Item>
         </Descriptions>
       )}
@@ -306,18 +307,18 @@ function datetimeFormat(longTypeDate){
         <Card
             style={{
               width: '80%',
-              marginLeft: '8%',
+              marginLeft: '9%',
             }}
             headStyle={{textAlign: 'left'}}
             type="inner"
             bordered={true}
-            title={'服务实施任务'}
+            title={'服务实施详情'}
           >
           <Descriptions
             style={{
             marginBottom: 16,
             }}
-            title={'服务名称'+name}
+            title={'具体服务：'+item.name}
             column={2}
             >
             {/* <Descriptions.Item label="服务名称">服务提供商</Descriptions.Item> */}
@@ -413,6 +414,7 @@ function datetimeFormat(longTypeDate){
       tracefileInfo:[],
       resultfileInfo:[],
       id:0,
+      service_id:0,
       rate:0,
       comm_text:'',
       comment:0,
@@ -430,12 +432,23 @@ function datetimeFormat(longTypeDate){
   
     async componentDidMount() {
         const { dispatch,location} = this.props;
-        const { order_id, state, is_done } = location.query;
-        this.setState({id: order_id, current: state, isDone: is_done});
-        let values = order_id;
+        const { order_id, service_id, state, is_done } = location.query;
+        let value = order_id;
+        let serviceId = service_id;
+        if(service_id==0){//单个服务
+          await getOrder({value}).then((res)=>{
+            //console.log(res.data);
+            serviceId=res.data.serviceId;
+           // console.log(res.data);
+          });
+        }
+        this.setState({id: order_id, service_id: serviceId, isDone: is_done});
+        let values = {order_id:order_id, service_id: serviceId};
         try {
+          console.log(values);
           await queryOrder({values}).then((res)=>{
-              this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone});
+            console.log(res.data);
+              this.setState({order_data: res.data[0],current: res.data[0].processId, communiDone:res.data[0].communiDone});
           });
           await getprotocal({values}).then((res)=>{
             this.setState({protocalfileInfo:res.data});
@@ -449,10 +462,10 @@ function datetimeFormat(longTypeDate){
         //   await getresult({values}).then((res)=>{
         //     this.setState({resultfileInfo:res.data});
         //   });
-          await getorder(values).then((res)=>{
-            this.setState({task:{name:res.data.taskName, start:res.data.startDate, end:res.data.endDate, goal:res.data.taskGoal, result:res.data.taskResult}});
-            //console.log(this.state.task);
-        });
+        //   await getorder(values).then((res)=>{
+        //     this.setState({task:{name:res.data.taskName, start:res.data.startDate, end:res.data.endDate, goal:res.data.taskGoal, result:res.data.taskResult}});
+        //     //console.log(this.state.task);
+        // });
           return true;
         } catch (error) {
           //hide();
@@ -504,7 +517,7 @@ function datetimeFormat(longTypeDate){
       }
     
       communiSubmit = async()=>{
-        let values = {order_id: this.state.id, state:this.state.current,rate: this.state.rate, text: this.state.comm_text};
+        let values = {order_id: this.state.id, service_id:this.state.service_id, state:this.state.current,rate: this.state.rate, text: this.state.comm_text};
         //console.log(values);
         try {
           await communiCommend({values}).then((res)=>{  
@@ -520,7 +533,7 @@ function datetimeFormat(longTypeDate){
       }
 
       checkSubmit = async()=>{
-        let values = {order_id: this.state.id, state:this.state.current,comple: this.state.comple, punct: this.state.punct};
+        let values = {order_id: this.state.id, service_id:this.state.service_id, state:this.state.current,comple: this.state.comple, punct: this.state.punct};
         try {
           await check({values}).then((res)=>{  
             this.setState({
@@ -534,7 +547,7 @@ function datetimeFormat(longTypeDate){
       }
     
       commentSubmit = async()=>{
-        let values = {order_id: this.state.id, state:this.state.current,comment: this.state.comment, prof:this.state.prof, speed:this.state.speed, exper: this.state.exper, feel: this.state.feel, text: this.state.comm_text};
+        let values = {order_id: this.state.id, service_id:this.state.service_id, state:this.state.current,comment: this.state.comment, prof:this.state.prof, speed:this.state.speed, exper: this.state.exper, feel: this.state.feel, text: this.state.comm_text};
         try {
           await comment({values}).then((res)=>{  
             if(res.data==true){
@@ -589,7 +602,7 @@ function datetimeFormat(longTypeDate){
         this.setState({
           current: current + 1,
         });
-        let values={order_id: this.state.id, state: current+1};
+        let values={order_id: this.state.id, service_id:this.state.service_id, state: current+1};
       try {
         await nextState({values}).then((res)=>{     
         });
@@ -603,7 +616,7 @@ function datetimeFormat(longTypeDate){
         this.setState({
           current: current - 1,
         });
-        let values={order_id: this.state.id, state: current-1};
+        let values={order_id: this.state.id, service_id:this.state.service_id,state: current-1};
         try {
             await nextState({values}).then((res)=>{     
             });

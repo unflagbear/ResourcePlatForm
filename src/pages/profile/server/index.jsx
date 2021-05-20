@@ -36,6 +36,7 @@ import { history } from 'umi';
 import BasicForms from './components/BasicForm';
 import {
   queryOrder,
+  getOrder,
   nextState,
   communiCommend,
   comment,
@@ -46,6 +47,7 @@ import {
   getresult,
   cancleOrder,
   trace,
+
 } from './service';
 
 const { Step } = Steps;
@@ -70,64 +72,9 @@ const mobileMenu = (
   </Menu>
 );
 const param = {
-  // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
   defaultFileList: [
-    // {
-    //   uid: '1',
-    //   name: 'xxx.doc',
-    //   status: 'done',
-    //   response: 'Server Error 500', // custom error message to show
-    //   url: 'http://www.baidu.com/xxx.doc',
-    // },
-    // {
-    //   uid: '2',
-    //   name: 'yyy.doc',
-    //   status: 'done',
-    //   url: 'http://www.baidu.com/yyy.doc',
-    // },
-    // {
-    //   uid: '3',
-    //   name: 'zzz.png',
-    //   status: 'error',
-    //   response: 'Server Error 500', // custom error message to show
-    //   url: 'http://www.baidu.com/zzz.png',
-    // },
   ],
-}; // const ProcessShow=()=>{
-//   setHideProcess(true);
-// }
-// const action=(
-//   <RouteContext.Consumer>
-//     {({ isMobile }) => {
-//       if (isMobile) {
-//         return (
-//           <Dropdown.Button
-//             type="primary"
-//             icon={<DownOutlined />}
-//             overlay={mobileMenu}
-//             placement="bottomRight"
-//           >
-//             主操作
-//           </Dropdown.Button>
-//         );
-//       }
-//       return (
-//         <Fragment>
-//           <ButtonGroup>
-//             <Button onClick={next}>通过请求</Button>
-//             <Button onClick={cancle}>拒绝请求</Button>
-//             <Dropdown overlay={menu} placement="bottomRight">
-//               <Button>
-//                 <EllipsisOutlined />
-//               </Button>
-//             </Dropdown>
-//           </ButtonGroup>
-//           <Button type="primary">主操作</Button>
-//         </Fragment>
-//       );
-//     }}
-//   </RouteContext.Consumer>
-// );
+}; 
 
 const extra = (
   <div className={styles.moreInfo}>
@@ -183,20 +130,6 @@ const Description1 = (props) => {
   ) : null;
 };
 
-const desc1 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    <Fragment>XXX公司</Fragment>
-    <div>2016-12-12 12:32</div>
-  </div>
-);
-const desc2 = (
-  <div className={styles.stepDescription}>
-    <Fragment>XXX公司负责中</Fragment>
-    <div>
-      <a href="">催一下</a>
-    </div>
-  </div>
-);
 const popoverContent = (
   <div
     style={{
@@ -465,16 +398,17 @@ const Process = (props) => {
 };
 
 const Trace = (props) => {
-  const { order_id ,next} = props;
+  const { order_id ,service_id, next} = props;
   const [form] = Form.useForm();
 
   const onFinsh = async(value) => {
-    console.log(value);
-    const values={order_id:order_id, name:value.name, start:value.date[0]._d, end:value.date[1]._d, goal: value.goal, result: value.result };
+    //console.log(value);
+    const values={order_id:order_id, service_id: service_id, name:value.name, start:value.date[0]._d, end:value.date[1]._d, goal: value.goal, result: value.result };
+    console.log(values);
     await trace(values).then((res)=>{
       if(res.data=="success"){
         message.success("提交成功");
-        next();
+        //next();
       }
     });
   };
@@ -565,6 +499,7 @@ const Trace = (props) => {
                   type="primary"
                   onClick={() => {
                     form.submit();
+                    next();
                   }}
                 >
                   提交
@@ -698,7 +633,7 @@ const Comment = (props) => {
         </div>
         <Button
           type="primary"
-          onClick={onClick}
+          onClick={()=>this.communiSubmit}
           style={{
             float: 'right',
             marginTop: '30px',
@@ -712,7 +647,7 @@ const Comment = (props) => {
     </div>
   ) : (
     <div className="title-type">
-      {'评价已提交'}
+      评价已提交
       <div className="apply-type">
         {/* <Progress type="circle" percent={100} width={70} /> &nbsp;评价已提交，订单完成 */}
         <Spin /> &nbsp;客户提交评价中，请耐心等候
@@ -731,6 +666,7 @@ class Advanced extends Component {
     tracefileInfo: [],
     resultfileInfo: [],
     id: 0,
+    service_id: null,
     rate: 0,
     comm_text: '',
     comment: 0,
@@ -746,14 +682,14 @@ class Advanced extends Component {
 
   async componentDidMount() {
     const { dispatch, location, profileServer } = this.props;
-    const { order_id, state, is_done } = location.query; // console.log(is_done);
-
+    const { order_id, service_id, state, is_done } = location.query; // console.log(is_done);
+    console.log(service_id);
     this.setState({
       id: order_id,
+      service_id: service_id,
       current: state,
       isDone: is_done,
     });
-
     if (state != 0) {
       this.setState({
         hideProcess: true,
@@ -761,7 +697,7 @@ class Advanced extends Component {
       });
     }
 
-    const values = order_id;
+    let values = {order_id:order_id, service_id: service_id};
 
     try {
       await queryOrder({
@@ -835,6 +771,7 @@ class Advanced extends Component {
   communiSubmit = async () => {
     const values = {
       order_id: this.state.id,
+      service_id: this.state.service_id,
       state: this.state.current,
       rate: this.state.rate,
       text: this.state.comm_text,
@@ -872,6 +809,7 @@ class Advanced extends Component {
         });
         const values = {
           order_id: this.state.id,
+          service_id: this.state.service_id,  
           state: this.state.current + 1,
           type: 0,
           data: res.data,
@@ -885,6 +823,7 @@ class Advanced extends Component {
   commentSubmit = async () => {
     const values = {
       order_id: this.state.id,
+      service_id: this.state.service_id,
       state: this.state.current,
       comment: this.state.comment,
       feel: this.state.feel,
@@ -935,6 +874,7 @@ class Advanced extends Component {
     });
     const values = {
       order_id: this.state.id,
+      service_id: this.state.service_id,
       state: this.state.current + 1,
     };
     try {
@@ -947,7 +887,9 @@ class Advanced extends Component {
     }
   }; 
   render() {
+
     const { current, tabActiveKey } = this.state;
+
     const steps = [
       {
         title: '申请服务',
@@ -962,7 +904,7 @@ class Advanced extends Component {
             title={'沟通完成后，请进行评价'}
             setRate={this.setRate.bind(this)}
             setCommtext={this.setCommtext.bind(this)}
-            onClick={this.communiSubmit.bind(this)}
+            // onClick={this.communiSubmit.bind(this)}
             done={this.state.communiDone}
           ></Communi>
         ),
@@ -981,7 +923,7 @@ class Advanced extends Component {
       {
         title: '服务实施',
         content: '服务实施阶段',
-        component: <Trace title={'服务实施追踪中'} order_id={this.state.id} next={this.nextp.bind(this)}></Trace>,
+        component: <Trace title={'服务实施追踪中'} order_id={this.state.id} service_id = {this.state.service_id} next={this.nextp.bind(this)}></Trace>,
       },
       {
         title: '成果提交',
@@ -1016,8 +958,10 @@ class Advanced extends Component {
         hideProcess: true,
         isMobile: true,
       });
+
       const values = {
         order_id: this.state.id,
+        service_id: this.state.service_id,
         state: current + 1,
       };
 
@@ -1037,6 +981,7 @@ class Advanced extends Component {
       });
       const values = {
         order_id: this.state.id,
+        service_id: this.state.service_id,
         state: current - 1,
       };
 
@@ -1243,7 +1188,7 @@ class Advanced extends Component {
   }
 }
 
-export default connect(({ profileServer, loading }) => ({
+export default connect(({ profileServer }) => ({
   profileServer,
-  loading: loading.effects['profileServer/getOrderInfo'],
+
 }))(Advanced);

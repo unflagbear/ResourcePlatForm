@@ -21,7 +21,7 @@ import {
   import './advanced.css';
   import styles from './CardList.less';
   import { FrownOutlined, MehOutlined, SmileOutlined, PlusOutlined  } from '@ant-design/icons';
-  import { queryOrder, } from './service';
+  import { queryOrder,queryService } from './service';
 import {history} from 'umi';
 
   //import Ellipsis from '@/components/Ellipsis';
@@ -81,11 +81,11 @@ import {history} from 'umi';
     <RouteContext.Consumer>
       {({ isMobile }) => (
         <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
-          <Descriptions.Item label="服务商">{item.name}</Descriptions.Item>
-          <Descriptions.Item label="订购产品">{item.service}</Descriptions.Item>
+          {/* <Descriptions.Item label="服务商">{item.name}</Descriptions.Item> */}
+          <Descriptions.Item label="订购产品">{item.name}</Descriptions.Item>
           <Descriptions.Item label="创建时间">{datetimeFormat(item.createTime)}</Descriptions.Item>
-          <Descriptions.Item label="联系电话">{item.phone}</Descriptions.Item>
-          <Descriptions.Item label="生效日期">{item.cycle}</Descriptions.Item>
+          <Descriptions.Item label="服务类型">{item.category}</Descriptions.Item>
+          <Descriptions.Item label="服务流程">{item.process}</Descriptions.Item>
           <Descriptions.Item label="备注">{item.note}</Descriptions.Item>
         </Descriptions>
       )}
@@ -104,6 +104,7 @@ import {history} from 'umi';
       id:0,
       rate:0,
       allData:{},
+      list:[],
     };
 
     orderdata={
@@ -112,20 +113,39 @@ import {history} from 'umi';
 
     async componentDidMount() {
         const { dispatch,location} = this.props;
-        const { order_id, state, is_done } = location.query;
+        const { order_id,  state, is_done } = location.query;
         this.setState({id: order_id, current: state, isDone: is_done});
         let values = order_id;
-        dispatch({
-          type: 'multiServer/fetchAdvanced',
-          payload: {
-            count: 8,
-          },
-        });
+        console.log(values);
+        await queryService({values}).then((res)=>{
+          // if(res.data==1){
+          //     history.push(
+          //        {
+          //           pathname: '/profile_customer/customer/',
+          //           query: {
+          //           order_id: this.state.id,
+          //           state: this.state.current,
+          //           is_done: this.state.isDone,
+          //        }}
+          //     )
+          // }
+          // else{
+          console.log(res.data);
+          this.setState({list: res.data});
+          //}
+      });
+        // dispatch({
+        //   type: 'multiServer/fetchAdvanced',
+        //   payload: {
+        //     //count: 8,
+        //     values,
+        //   },
+        // });
+
         try {
 
           await queryOrder({values}).then((res)=>{
-              this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone});
-              console.log(res)
+              this.setState({order_data: res.data[0],allData:res.data});
           });
 
           return true;
@@ -141,13 +161,14 @@ import {history} from 'umi';
     };
 
     render() {
-      const {
-        multiServer: { list },
-        loading,
-      } = this.props;
+      // const {
+      //   multiServer: { list },
+      //   loading,
+      // } = this.props;
       const { current, tabActiveKey } = this.state;
+      const { allData } = this.state;
       const nullData = {};
-      console.log(this.state);
+      console.log(allData);
       return (
         <PageContainer
           title={"资源服务单号："+this.state.id}
@@ -183,14 +204,15 @@ import {history} from 'umi';
               xl: 4,
               xxl: 4,
             }}
-            dataSource={list}
+
+            dataSource={this.state.list}
             renderItem={(item) => {
-                if (item && item.id) {
+                if (item && item.serviceId) {
                   return (
-                    <List.Item key={item.id}>
+                    <List.Item key={item.serviceId}>
                       <Card
                         hoverable
-                        title={"服务方"}
+                        title={"子服务"}
                         className={styles.card}
                         actions={[ <a key="option2" onClick={()=>{
                           history.push(
@@ -198,6 +220,7 @@ import {history} from 'umi';
                                 pathname: '/profile_customer/customer/',
                                 query: {
                                 order_id: this.state.id,
+                                service_id: item.serviceId,
                                 state: this.state.current,
                                 is_done: this.state.isDone,
                              }}
@@ -206,7 +229,7 @@ import {history} from 'umi';
                       >
                         <Card.Meta
                           // avatar={<img alt="" className={styles.cardAvatar} src={item.avatar} />}
-                          title={item.institution}
+                          title={item.serviceName}
                           description={
                             <Paragraph
                               className={styles.item}
@@ -214,10 +237,11 @@ import {history} from 'umi';
                                 rows: 3,
                               }}
                             >
-                              联系人：{item.contact}<br/>
-                              联系方式：{item.phone}<br/>
-                              地址：{item.location}<br/>
-                              电子邮件:{item.email}
+                              服务提供商：{item.serviceProvider}<br/>
+                              联系人：王荣贵<br/>
+                              联系方式：143452335543<br/>
+
+                              电子邮件:13243345821@qq.com
 
                             </Paragraph>
                           }

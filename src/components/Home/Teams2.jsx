@@ -13,8 +13,8 @@ class Teams2 extends React.PureComponent {
       const { titleWrapper, image, ...$item } = item;
       const name = expertlist?expertlist[i].name:"加载中";
       const img = expertlist?expertlist[i].picpath:expert
-      const intro = expertlist?expertlist[i].expertIntroduce:"Loading"
-      const company = expertlist?expertlist[i].workUnit:"加载中"
+      const specialty = expertlist?expertlist[i].specialty:"Loading"
+      const workUnit = expertlist?expertlist[i].workunit:"加载中"
       const position = expertlist?expertlist[i].position:"加载中"
       return (
         <Col key={i.toString()} {...$item} onClick={()=>{history.push({
@@ -39,8 +39,8 @@ class Teams2 extends React.PureComponent {
               <QueueAnim {...titleWrapper} type="bottom">
                 <a {...titleWrapper.children}>
                   <h1 name="title" className="teams2-title" >{name}</h1>
-                  <div name="content" className="teams2-job" >公司：{(company==null||company=='')?"暂无信息":company}+{"  "} 职位：{(position==null||position=='')?"暂无信息":position}</div>
-                  <div name="content1" className="teams2-content" ><Paragraph ellipsis>{intro}</Paragraph></div>
+                  <div name="content" className="teams2-job" >公司：{workUnit||null}</div>
+                  <div name="content1" className="teams2-content" ><Paragraph ellipsis>{specialty || null}</Paragraph></div>
                 </a>
               </QueueAnim>
             </Col>
