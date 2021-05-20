@@ -5,9 +5,8 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
-import UpdateForm from './components/UpdateForm';
 
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import { queryRule, updateRule, trainModel, removeRule } from './service';
 
 /**
  * 添加节点
@@ -18,7 +17,7 @@ const handleAdd = async (fields) => {
   const hide = message.loading('正在添加');
 
   try {
-    await addRule({ domain:fields.domain,name: fields.name,data_path: fields.dataPath,category_num: fields.categoryNum });
+    await trainModel({ domain:fields.domain,name: fields.name,categories: fields.categories });
     hide();
     message.success('添加成功');
     return true;
@@ -58,6 +57,26 @@ const handleUpdate = async (fields) => {
 const mapRemove = (selectedRows)=>{
   selectedRows.map((row) =>removeRule({record_id:row.recordId}) )
 }
+const request = async () => [
+  { label: '询问专利类型相关', value: 1 },
+  { label: '询问专利关键词相关', value: 2 },
+  { label: '询问专利申请机构相关', value: 3 },
+  { label: '询问专利申请时间相关', value: 4 },
+  { label: '询问库中专利范围相关', value: 5 },
+  { label: '找不到合适的专利', value: 6 },
+  { label: '询问研究方向相关', value: 7 },
+  { label: '询问研究领域相关', value: 8 },
+  { label: '询问任职机构相关', value: 9 },
+  { label: '询问库中专家范围', value: 10 },
+  { label: '找不到合适的专家', value: 11 },
+  { label: '询问设备用途相关', value: 12 },
+  { label: '询问设备类型相关', value: 13 },
+  { label: '询问设备所属机构相关', value: 14 },
+  { label: '询问库中设备范围', value: 15 },
+  { label: '找不到合适的设备', value: 16 },
+  { label: '你是谁', value: 17 },
+  { label: '怎么操作', value: 18 }
+];
 const handleRemove = async (selectedRows) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
@@ -81,6 +100,36 @@ const Faqmanage = () => {
   const actionRef = useRef();
   const [row, setRow] = useState();
   const [selectedRowsState, setSelectedRows] = useState([]);
+  const creatcol = [
+    {
+      title: '模型名',
+      dataIndex: 'name',
+      valueType: 'textarea',
+    },
+    {
+      title: '领域',
+      dataIndex: 'domain',
+      valueEnum: {
+        'patent': {
+          text: '专家',
+        },
+        'expert': {
+          text: '专利',
+        },
+        'equipment': {
+          text: '仪器',
+        }
+      }
+    },
+    {
+      title: '问题类型（多选）',
+      dataIndex: 'categories',
+      // hideInForm: true,
+      valueType: 'checkbox',
+      request,
+      params:{},
+    }
+  ]
   const columns = [
     {
       title: '记录id',
@@ -269,7 +318,7 @@ const Faqmanage = () => {
             }}
             rowKey="recordId"
             type="form"
-            columns={columns.slice(1,7)}
+            columns={creatcol}
           />
         </CreateForm>
         {/* {stepFormValues && Object.keys(stepFormValues).length ? (

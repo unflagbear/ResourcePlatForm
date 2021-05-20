@@ -18,6 +18,12 @@ export async function addRule(data) {
     data,
   });
 }
+export async function trainModel(params) {
+  return request('http://10.112.205.250:9900/model/create/', {
+    method:'post',
+    data: { ...params },
+  });
+}
 export async function updateRule(params) {
   return request('http://10.112.205.250:9900/update', {
     method: 'POST',
