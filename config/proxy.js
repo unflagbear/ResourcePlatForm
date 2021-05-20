@@ -34,6 +34,13 @@ export default {
       pathRewrite:{
         '^/knowledge_graph': '',
       }
+    },
+    '/demand_api':{
+      target:'http://10.112.205.250:8821/',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/demand_api': '',
+      },
     }
   },
   test: {

@@ -189,7 +189,7 @@ export default defineConfig({
                   component: './platform_list/detail',
                   hideInMenu: hide,
                 },
-                
+
                 {
                   name: '发布服务',
                   icon: 'smile',
@@ -360,6 +360,13 @@ export default defineConfig({
               component: './details/platform/index.jsx',
             },
             {
+              hideInMenu:true,
+              path: '/details_demand',
+              name: '需求详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/demand/index.jsx',
+            },
+            {
               // hideInMenu:true,
 
               path: '/manage',
@@ -375,6 +382,15 @@ export default defineConfig({
                   authority: ['admin'],
                   icon: 'CheckCircleOutlined',
                   component: './recommend',
+                },
+                {
+                  // hideInMenu:true,
+
+                  path: '/manage/demand',
+                  name: '需求知识库管理',
+                  authority: ['admin'],
+                  icon: 'CheckCircleOutlined',
+                  component: './demand',
                 },
                 {
                   // hideInMenu:true,
@@ -454,7 +470,7 @@ export default defineConfig({
               ],
             },
             {
-              // hideInMenu:true,
+              // hideInMenu:true,+
 
               path: '/demand',
               name: '需求中心',
@@ -472,11 +488,17 @@ export default defineConfig({
                   component: './demandprogress/',
                 },
                 {
-                  authority:['admin'],
                   name: '需求展示',
                   icon: 'smile',
                   path: '/demand/index/list',
-                  component: './demand_list/',
+                  component: './list/search/demand/',
+                },
+                {
+                  authority:['admin'],
+                  name: '需求中心',
+                  icon: 'smile',
+                  path: '/demand/index/manage',
+                  component: './demand/',
                 },
                 {
                   authority:['server'],
@@ -564,7 +586,7 @@ export default defineConfig({
                 },
               ],
             },
-            
+
             {
               name:"资源构建",
               authority: ['admin'],

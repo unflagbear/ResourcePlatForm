@@ -124,7 +124,8 @@ import {history} from 'umi';
         try {
 
           await queryOrder({values}).then((res)=>{
-              this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone,allData:res.data});
+              this.setState({order_data: res.data[0],communiDone:res.data[0].communiDone});
+              console.log(res)
           });
 
           return true;
@@ -145,9 +146,8 @@ import {history} from 'umi';
         loading,
       } = this.props;
       const { current, tabActiveKey } = this.state;
-      const { allData } = this.state;
       const nullData = {};
-      console.log(allData);
+      console.log(this.state);
       return (
         <PageContainer
           title={"资源服务单号："+this.state.id}

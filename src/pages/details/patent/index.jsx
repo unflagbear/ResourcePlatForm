@@ -21,6 +21,7 @@ import { FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import defaultImg from '@/assets/defaultImg.svg';
 import 'antd/dist/antd.css';
 import moment from "moment";
+import ApplyModal from "@/pages/details/patent/components/ApplyModal";
 
 
 const { Title } = Typography;
@@ -32,16 +33,16 @@ function PatentDetails({ dispatch, patent: { patentDetail={} } }) {
   const [top,setTop] = useState(60);
   const [modalVisible,setModalVisible] = useState(false);
   const location = useLocation();
-  const { productID } = location.query;
+  const { id } = location.query;
   // const content =<Affix offsetTop={80}><div style={{width: 500,height:600}}> <ChatforAccessService /></div></Affix>
   const appendix = patentDetail ?(patentDetail.appendix? patentDetail.appendix.split('、') : []):[];
   useEffect(() => {
-    console.log(productID)
-    if (productID) {
+    console.log(id)
+    if (id) {
       dispatch({
         type: 'patent/detail',
         payload: {
-          productID,
+          id,
         },
       });
     }

@@ -135,12 +135,12 @@ const ChatForAccessService = () => {
   }
   function handlePush(item){
     console.log(item)
-    // history.push({
-    //   pathname: '/details_patent',
-    //   query: {
-    //     id:item,
-    //   },
-    // })
+    history.push({
+      pathname: '/details_patent',
+      query: {
+        id:item.id,
+      },
+    })
   }
   function renderMessageContent(msg) {
     const { content,type } = msg;

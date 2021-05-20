@@ -181,7 +181,7 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
     }
     //console.log(id);
     if(id>0){
-      const values = {example_id:record.example_id,content:value.content,intent:record.intent}; 
+      const values = {example_id:record.example_id,content:value.content,intent:record.intent};
       //console.log(values);
       const hide = message.loading('正在修改');
       try {
@@ -366,7 +366,7 @@ const DialogData = ({dialogdata, dispatch, userListLoading}) => {
           width={600}
           visible={!!row}
           onClose={() => {
-            setRow(undefined);
+            setRow(false);
           }}
           closable={false}
         >
