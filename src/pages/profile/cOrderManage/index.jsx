@@ -118,7 +118,7 @@ const COrderManage = () => {
           status: 'Processing',
         },
         '4':{
-            text: '成果提交',
+            text: '服务验收',
             status: 'Success',
         },
         '5':{

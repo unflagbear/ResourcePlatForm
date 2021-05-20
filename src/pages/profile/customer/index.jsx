@@ -32,7 +32,7 @@ import {
   import styles from './style.less';
   import './advanced.css';
   import { FrownOutlined, MehOutlined, SmileOutlined, UploadOutlined } from '@ant-design/icons';
-  import { queryOrder, getOrder,nextState, communiCommend, check, comment, getprotocal, getresult, getorder} from './service';
+  import { queryOrder, getOrder,nextState, communiCommend, check, comment, getprotocal, getTask,getresult, getorder} from './service';
   
   const { Step } = Steps;
   const { TextArea } = Input;
@@ -437,9 +437,7 @@ function datetimeFormat(longTypeDate){
         let serviceId = service_id;
         if(service_id==0){//单个服务
           await getOrder({value}).then((res)=>{
-            //console.log(res.data);
             serviceId=res.data.serviceId;
-           // console.log(res.data);
           });
         }
         this.setState({id: order_id, service_id: serviceId, isDone: is_done});
@@ -459,13 +457,14 @@ function datetimeFormat(longTypeDate){
         //     this.setState({tracefileInfo:res.data});
         //   });
         //   console.log('swef');
-        //   await getresult({values}).then((res)=>{
-        //     this.setState({resultfileInfo:res.data});
-        //   });
-        //   await getorder(values).then((res)=>{
-        //     this.setState({task:{name:res.data.taskName, start:res.data.startDate, end:res.data.endDate, goal:res.data.taskGoal, result:res.data.taskResult}});
-        //     //console.log(this.state.task);
-        // });
+          // await getTask({values}).then((res)=>{
+          //   this.setState({task:res.data});
+          // });
+          await getTask({values}).then((res)=>{
+            console.log(values);
+            this.setState({task:{name:res.data.taskName, start:res.data.startTime, end:res.data.endTime, goal:res.data.taskGoal, result:res.data.taskResult}});
+            console.log(this.state.task);
+        });
           return true;
         } catch (error) {
           //hide();

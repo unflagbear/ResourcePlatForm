@@ -18,6 +18,14 @@ export const getOrder=async({value})=>{
   })
 }
 
+export const getTask=async({values})=>{
+  console.log(values);
+  return request('/api/orderServices/gettask', {
+    method: 'post',
+    data: values,
+  })
+}
+
 export const nextState=async({values})=>{
   console.log(values);
   return request('/api/orderServices/updateState', {

@@ -683,7 +683,7 @@ class Advanced extends Component {
   async componentDidMount() {
     const { dispatch, location, profileServer } = this.props;
     const { order_id, service_id, state, is_done } = location.query; // console.log(is_done);
-    console.log(service_id);
+    //console.log(service_id);
     this.setState({
       id: order_id,
       service_id: service_id,
