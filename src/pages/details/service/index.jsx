@@ -64,7 +64,7 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
   const closeHandler = ()=>{
     setModalVisible(false);
   }
-
+  
   const onFinish= async(value) => {
     // console.log(value);
     
@@ -118,6 +118,11 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
         
         <Descriptions.Item label="服务价格">{serviceDetail.servicePrice}</Descriptions.Item>
         <Descriptions.Item label="付款方式">{serviceDetail.serviceMeansOfPayment}</Descriptions.Item>
+        <Descriptions.Item label="来源平台">
+          <Tag color="blue">
+            {serviceDetail.serverOrigin}
+          </Tag> 
+        </Descriptions.Item>
         <Descriptions.Item label="类别">
           {/* {resourceDetail.appendix.split("、").map((data,index)=>{
                         return (
@@ -134,7 +139,7 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
             );
           })}</Descriptions.Item>
         <Descriptions.Item label="交付周期">{serviceDetail.servicePeriod}</Descriptions.Item>
-        <Descriptions.Item label="服务描述">{serviceDetail.serviceDesc}</Descriptions.Item>
+        <Descriptions.Item label="服务描述" span={3}>{serviceDetail.serviceDesc}</Descriptions.Item>
       </Descriptions>
       <Progress 
         //style={{marginTop: '50px'}}

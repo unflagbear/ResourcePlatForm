@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect, useLocation } from 'umi';
+import { connect, useLocation,history } from 'umi';
 import ApplyModal from './components/ApplyModal';
 import {
   Typography,
@@ -46,7 +46,14 @@ function ServiceSetDetails({ dispatch, serviceSetDetails: { serviceDetail = {} }
   const closeHandler = ()=>{
     setModalVisible(false);
   }
-
+  const goToDetail = (productID) => {
+    history.push({
+      pathname: '/details_service',
+      query: {
+        productID,
+      },
+    });
+  };
   const onFinish= async(value) => {
     // console.log(value);
     
@@ -84,8 +91,10 @@ function ServiceSetDetails({ dispatch, serviceSetDetails: { serviceDetail = {} }
       key={num}
       style={{marginBottom:"20px"}}
       extra={
+        <>
         <Tag color="blue" key={index}>{index.serverOrigin}</Tag>
-        
+        <Button  onClick={() => goToDetail(index.serviceId)}>查看服务详情</Button>
+        </>
       }
     >
      
