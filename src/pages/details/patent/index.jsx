@@ -20,8 +20,6 @@ import {
 import { FundViewOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import defaultImg from '@/assets/defaultImg.svg';
 import 'antd/dist/antd.css';
-import moment from "moment";
-import ApplyModal from "@/pages/details/patent/components/ApplyModal";
 
 
 const { Title } = Typography;

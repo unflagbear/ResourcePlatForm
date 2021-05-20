@@ -491,13 +491,13 @@ export default defineConfig({
                   path: '/demand/index/progress',
                   component: './demandprogress/',
                 },
-                {
-                  authority:['admin'],
-                  name: '需求展示',
-                  icon: 'smile',
-                  path: '/demand/index/list',
-                  component: './demand_list/',
-                },
+                // {
+                //   authority:['admin'],
+                //   name: '需求展示',
+                //   icon: 'smile',
+                //   path: '/demand/index/list',
+                //   component: './demand_list/',
+                // },
                 {
                   authority:['server'],
                   name: '发布服务',
