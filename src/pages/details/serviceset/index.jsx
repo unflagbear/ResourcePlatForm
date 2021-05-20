@@ -50,7 +50,7 @@ function ServiceSetDetails({ dispatch, serviceSetDetails: { serviceDetail = {} }
   const onFinish= async(value) => {
     // console.log(value);
     
-     const values={serviceId: serviceDetail.serviceId, ...value.apply};
+     const values={serviceId: serviceDetail.id,type:1, ...value.apply};
      await apply(values).then((res)=>{  
       if(res.data==true){
         message.success("申请成功");
