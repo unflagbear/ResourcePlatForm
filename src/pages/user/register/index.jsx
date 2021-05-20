@@ -24,6 +24,7 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
   const [popover, setpopover] = useState(false);
   const [usertype, settype] = useState(undefined);
   const confirmDirty = false;
+  const [Authority, setAuthority] = useState("server")
   let interval;
   const [form] = Form.useForm();
   useEffect(() => {
@@ -31,34 +32,39 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
       return;
     }
 
-    const account = form.getFieldValue('mail');
+    const account = form.getFieldValue('account');
+    const email=form.getFieldInstance('email')
+    const phone=form.getFieldInstance('phone')
 
-    if (userAndregister.status === 'ok'&& userAndregister.type==='0') {
+    if (userAndregister.status === 'ok'&& usertype==='0') {
       message.success('注册成功！');
       history.push({
         pathname: '/user/register-result',
         state: {
-          account,
+          account,email
         },
       });
     }
-    if (userAndregister.status === 'ok'&& userAndregister.type=== '1') {
+    if (userAndregister.status === 'ok'&& usertype=== '1') {
       message.success('用户注册成功！请登录供应商信息！');
       history.push({
         pathname: '/user/company_register',
         state: {
-          account,
+          account,email,phone
         },
       });
     }
-    if (userAndregister.status === 'ok'&& userAndregister.type=== '2') {
+    if (userAndregister.status === 'ok'&& usertype=== '2') {
       message.success('用户注册成功！请登录平台信息！');
       history.push({
         pathname: '/user/platform_register',
         state: {
-          account,
+          account,email
         },
       });
+    }
+    if(userAndregister.status==='error' ){
+      message.error('用户账户名已被使用！');
     }
   }, [userAndregister]);
   useEffect(
@@ -95,11 +101,21 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
     return 'poor';
   };
 
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select style={{ width: 70 }}>
+        <Option value="86">+86</Option>
+        <Option value="87">+87</Option>
+      </Select>
+    </Form.Item>
+  );
+
   const onFinish = (values) => {
     console.log(values);
+    if(usertype==="0"){setAuthority("customer")}
     dispatch({
       type: 'userAndregister/submit',
-      payload: { ...values, phone:prefix+values.phone, userType:parseInt(usertype,3)},
+      payload: { ...values, phone:prefix+values.phone, userType:parseInt(usertype,3), currentAuthority:Authority},
     });
   };
 
@@ -165,9 +181,10 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
   return (
     <div className={styles.main}>
       <h3>注册</h3>
-      <Form form={form} name="UserRegister" onFinish={onFinish}>
+      <Form form={form} name="UserRegister" onFinish={onFinish} layout="vertical" initialValues={{prefix: '86',}}>
         <FormItem
-          name="mail"
+          label="邮箱:"
+          name="email"
           rules={[
             {
               required: true,
@@ -182,6 +199,7 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
           <Input size="large" placeholder="邮箱" />
         </FormItem>
         <FormItem
+          label="账号名称:"
           name="account"
           rules={[
             {
@@ -191,6 +209,18 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
           ]}
         >
           <Input size="large" placeholder="账号名称" />
+        </FormItem>
+        <FormItem
+          label="昵称:"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: '请输入昵称！',
+            },
+          ]}
+        >
+          <Input size="large" placeholder="昵称" />
         </FormItem>
         <Popover
           getPopupContainer={(node) => {
@@ -226,6 +256,7 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
           visible={visible}
         >
           <FormItem
+            label="密码:"
             name="password"
             className={
               form.getFieldValue('password') &&
@@ -234,6 +265,7 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
             }
             rules={[
               {
+                required: true,
                 validator: checkPassword,
               },
             ]}
@@ -242,6 +274,7 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
           </FormItem>
         </Popover>
         <FormItem
+          label="确认密码:"
           name="confirm"
           rules={[
             {
@@ -255,7 +288,15 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
         >
           <Input.Password size="large" placeholder="请确认密码"/>
         </FormItem>
-        <FormItem>
+        <FormItem label="用户类型:"
+                  name="usertype"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入用户类型！',
+                    },
+                  ]}
+        >
           <Select
             size="large"
             placeholder={"用户类型"}
@@ -264,28 +305,29 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
             style={{
               width: '100%',
             }}
-
           >
             <Option value="0">普通用户</Option>
             <Option value="1">供应商</Option>
             <Option value="2">第三方平台</Option>
           </Select>
         </FormItem>
-        <InputGroup compact>
-          <Select
-            size="large"
-            value={prefix}
-            onChange={changePrefix}
-            style={{
-              width: '20%',
-            }}
-          >
-            <Option value="86">+86</Option>
-            <Option value="87">+87</Option>
-          </Select>
+        <InputGroup compact >
+          {/*<Select*/}
+          {/*  label="账号名称"*/}
+          {/*  size="large"*/}
+          {/*  value={prefix}*/}
+          {/*  onChange={changePrefix}*/}
+          {/*  style={{*/}
+          {/*    width: '20%',*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <Option value="86">+86</Option>*/}
+          {/*  <Option value="87">+87</Option>*/}
+          {/*</Select>*/}
           <FormItem
+            label="手机号码:"
             style={{
-              width: '80%',
+              width: '100%',
             }}
             name="phone"
             rules={[
@@ -299,34 +341,62 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
               },
             ]}
           >
-            <Input size="large" placeholder="手机号" />
+            <Input size="large" placeholder="手机号" addonBefore={prefixSelector}/>
           </FormItem>
         </InputGroup>
-        <Row gutter={8}>
-          <Col span={16}>
-            <FormItem
-              name="captcha"
-              rules={[
-                {
-                  required: true,
-                  message: '请输入验证码！',
-                },
-              ]}
-            >
-              <Input size="large" placeholder="验证码" />
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <Button
-              size="large"
-              disabled={!!count}
-              className={styles.getCaptcha}
-              onClick={onGetCaptcha}
-            >
-              {count ? `${count} s` : '获取验证码'}
-            </Button>
-          </Col>
-        </Row>
+        <Form.Item label="验证码:" >
+          <Row gutter={8}>
+            <Col span={12}>
+              <Form.Item
+                name="captcha"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入验证码！',
+                  },
+                ]}
+              >
+                <Input size="large" placeholder="验证码" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Button
+                size="large"
+                disabled={!!count}
+                className={styles.getCaptcha}
+                onClick={onGetCaptcha}
+              >
+                {count ? `${count} s` : '获取验证码'}
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
+        {/*<Row gutter={8}>*/}
+        {/*  <Col span={16}>*/}
+        {/*    <FormItem*/}
+        {/*      label="验证码"*/}
+        {/*      name="captcha"*/}
+        {/*      rules={[*/}
+        {/*        {*/}
+        {/*          required: true,*/}
+        {/*          message: '请输入验证码！',*/}
+        {/*        },*/}
+        {/*      ]}*/}
+        {/*    >*/}
+        {/*      <Input size="large" placeholder="验证码" />*/}
+        {/*    </FormItem>*/}
+        {/*  </Col>*/}
+        {/*  <Col span={8}>*/}
+        {/*    <Button*/}
+        {/*      size="large"*/}
+        {/*      disabled={!!count}*/}
+        {/*      className={styles.getCaptcha}*/}
+        {/*      onClick={onGetCaptcha}*/}
+        {/*    >*/}
+        {/*      {count ? `${count} s` : '获取验证码'}*/}
+        {/*    </Button>*/}
+        {/*  </Col>*/}
+        {/*</Row>*/}
         <FormItem>
           <Button
             size="large"

@@ -380,6 +380,13 @@ export default defineConfig({
               component: './details/platform/index.jsx',
             },
             {
+              hideInMenu:true,
+              path: '/details_demand',
+              name: '需求详情页面',
+              icon: 'CheckCircleOutlined',
+              component: './details/demand/index.jsx',
+            },
+            {
               // hideInMenu:true,
 
               path: '/manage',
@@ -395,6 +402,15 @@ export default defineConfig({
                   authority: ['admin'],
                   icon: 'CheckCircleOutlined',
                   component: './recommend',
+                },
+                {
+                  // hideInMenu:true,
+
+                  path: '/manage/demand',
+                  name: '需求知识库管理',
+                  authority: ['admin'],
+                  icon: 'CheckCircleOutlined',
+                  component: './demand',
                 },
                 {
                   // hideInMenu:true,
@@ -491,13 +507,13 @@ export default defineConfig({
                   path: '/demand/index/progress',
                   component: './demandprogress/',
                 },
-                // {
-                //   authority:['admin'],
-                //   name: '需求展示',
-                //   icon: 'smile',
-                //   path: '/demand/index/list',
-                //   component: './demand_list/',
-                // },
+                {
+                  authority:['admin'],
+                  name: '需求展示',
+                  icon: 'smile',
+                  path: '/demand/index/list',
+                  component: './list/search/demand/',
+                },
                 {
                   authority:['server'],
                   name: '发布服务',
