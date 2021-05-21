@@ -141,7 +141,7 @@ import {history} from 'umi';
         //     values,
         //   },
         // });
-        
+
         try {
 
           await queryOrder({values}).then((res)=>{
@@ -204,7 +204,7 @@ import {history} from 'umi';
               xl: 4,
               xxl: 4,
             }}
-            
+
             dataSource={this.state.list}
             renderItem={(item) => {
                 if (item && item.serviceId) {
@@ -240,7 +240,7 @@ import {history} from 'umi';
                               服务提供商：{item.serviceProvider}<br/>
                               联系人：王荣贵<br/>
                               联系方式：143452335543<br/>
-                             
+
                               电子邮件:13243345821@qq.com
 
                             </Paragraph>

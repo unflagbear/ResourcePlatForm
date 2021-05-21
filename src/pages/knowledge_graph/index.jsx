@@ -9,7 +9,7 @@ const KnowledgeGrapg=({dispatch,KnowledgeGraph: { infor = {},result={} }})=>{
           dispatch({
             type: 'KnowledgeGraph/getKnowledgeGraph',
             payload: {
-              db: 'exp',
+              db: 'pat',
               data: {
 
               },
@@ -21,7 +21,7 @@ const KnowledgeGrapg=({dispatch,KnowledgeGraph: { infor = {},result={} }})=>{
         dispatch({
           type: 'KnowledgeGraph/searchKnowledge',
           payload: {
-            db: 'exp',
+            db: 'pat',
             data: value,
           },
         });

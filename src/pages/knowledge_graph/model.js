@@ -10,6 +10,7 @@ const KnowledgeGraph = {
     effects: {
         *getKnowledgeGraph({payload},{call,put}){
             const response = yield call(queryKnowledgeGraph,payload);
+            console.log(response)
             yield put ({
                 type:'getByDB',
                 payload: response
@@ -17,6 +18,7 @@ const KnowledgeGraph = {
         },
         *searchKnowledge({payload},{call,put}){
             const response = yield call(searchBy,payload);
+            console.log(response)
             yield put ({
                 type:'result',
                 payload: response

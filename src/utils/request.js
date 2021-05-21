@@ -66,16 +66,21 @@ request.interceptors.request.use(async (url, options) => {
   ) {
     let headers={}
     //console.log(options.requestType)
-
+    
+    // options.method = 'post'
     if(options.requestType=='form'){
-      console.log(options.headers['Content-Type'])
+      //options.mode = 'no-cors'
+      // console.log(options.headers['Content-Type'])
        headers = {
+        //'Access-Control-Allow-Origin': '*',
         'Context-Type': "multipart/form-data",
+        // 'Content-Type': 'multipart/form-data',
         // Accept: 'application/json',
         access_token: localStorage.getItem('token'),
       };
     }else{
       headers = {
+        // 'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
         Accept: 'application/json',
         access_token: localStorage.getItem('token'),

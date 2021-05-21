@@ -1,5 +1,5 @@
 import { Button, Result } from 'antd';
-import { FormattedMessage, formatMessage, Link } from 'umi';
+import {FormattedMessage, formatMessage, Link, useLocation} from 'umi';
 import React from 'react';
 import styles from './style.less';
 
@@ -17,6 +17,7 @@ const actions = (
 );
 
 const RegisterResult = ({ location }) => (
+
   <Result
     className={styles.registerResult}
     status="success"
@@ -25,5 +26,6 @@ const RegisterResult = ({ location }) => (
     extra={actions}
   />
 );
+
 
 export default RegisterResult;

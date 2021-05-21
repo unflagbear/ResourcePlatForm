@@ -1,8 +1,10 @@
-import {Form, Button, Col, Input, Popover, Progress, Row, Select, message, InputNumber} from 'antd';
+import {Form, Button, Col, Input, Popover, Progress, Row, Select, message, InputNumber, Cascader} from 'antd';
 import React, { useState, useEffect } from 'react';
-import { Link, connect, history } from 'umi';
+import {Link, connect, history, useLocation} from 'umi';
 import styles from './style.less';
+import data from '@/utils/classify/classifyNew.json'
 import {CURRENT} from "@/components/Authorized/renderAuthorize";
+import {modify} from "@/utils/classify/modify";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -24,16 +26,37 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
   const [prefix, setprefix] = useState('86');
   const [popover, setpopover] = useState(false);
   const confirmDirty = false;
+  const location = useLocation();
+  const options =[];
+  const classifyData = modify(data.科技服务资源);
+  const { TextArea } = Input;
+  const [account, setaccount]=useState(location.state.account)
+  let optionS="";
+
   let interval;
   const [form] = Form.useForm();
   useEffect(() => {
     if (!platformAndregister) {
       return;
     }
+    Object.keys(classifyData).forEach(key => {
+      const befor = []
+      Object.keys(classifyData[key]).forEach((num,item)=>{
 
-    console.log(platformAndregister.status);
-    const account = form.getFieldValue('mail');
+        const child=[]
+        if(typeof classifyData[key][num] === "object"){
+          Object.keys(classifyData[key][num]).forEach(subitem=>{
+            child.push({value:subitem,label:subitem})
+          })
+        }
+        befor.push({value:num,label:num,children:child})
+        // console.log(classifyData[key][num])
+      })
+      options.push({value:key,label:key,children:befor})
+      // console.log(items)
+    })
 
+    console.log(account);
     if (platformAndregister.status === 'ok') {
       message.success('注册成功！');
       history.push({
@@ -50,6 +73,12 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
     },
     [],
   );
+
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  }
+
 
   const onGetCaptcha = () => {
     let counts = 59;
@@ -79,9 +108,11 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
   };
 
   const onFinish = (values) => {
+    console.log(values)
+    optionS=values.serviceType[0]+"/"+values.serviceType[1];
     dispatch({
       type: 'platformAndregister/submit',
-      payload: { ...values ,},
+      payload: { ...values ,userAccount:account, serviceType:optionS},
     });
   };
 
@@ -112,8 +143,9 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
     <>
       <div className={styles.main}>
         <h3>平台注册</h3>
-        <Form form={form} name="UserRegister" onFinish={onFinish}>
+        <Form  form={form} name="UserRegister" onFinish={onFinish} layout="vertical">
           <FormItem
+            label="邮箱"
             name="mail"
             rules={[
               {
@@ -126,9 +158,10 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               },
             ]}
           >
-            <Input size="large" placeholder="邮箱" />
+            <Input size="large" />
           </FormItem>
           <FormItem
+            label="平台名称"
             name="name"
             rules={[
               {
@@ -141,9 +174,10 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               },
             ]}
           >
-            <Input size="large" placeholder="平台名称" />
+            <Input size="large" />
           </FormItem>
           <FormItem
+            label="平台URL"
             name="url"
             rules={[
               {
@@ -156,9 +190,10 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               },
             ]}
           >
-            <Input size="large" placeholder="平台URL" />
+            <Input size="large"  />
           </FormItem>
           <FormItem
+            label="平台联系地址"
             name="address"
             rules={[
               {
@@ -167,20 +202,36 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               },
             ]}
           >
-            <Input size="large" placeholder="平台联系地址" />
+            <Input size="large"  />
           </FormItem>
           <FormItem
+            label="平台服务类型"
             name="serviceType"
+
             rules={[
               {
-                type: 'string',
-                message: '请输入服务类型！',
+                required: true,
+                message: '请选择平台服务类型！',
               },
             ]}
           >
-            <Input size="large" placeholder="平台服务类型" />
+            <Cascader options={options}    size="large"/>
           </FormItem>
           <FormItem
+            label="服务描述"
+            name="serviceDesc"
+            rules={[
+              {
+                required:true,
+                type: 'string',
+                message: '请输入服务描述！',
+              },
+            ]}
+          >
+            <TextArea rows={4}  />
+          </FormItem>
+          <FormItem
+            label="平台注册地址"
             name="registrationAddress"
             rules={[
               {
@@ -189,9 +240,10 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               },
             ]}
           >
-            <Input size="large" placeholder="平台注册地址" />
+            <Input size="large"  />
           </FormItem>
           <FormItem
+            label="人员规模"
             name="staffSize"
             rules={[
               {
@@ -206,11 +258,12 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               }}
               min={1}
               max={10000}
-              placeholder="人员规模，请输入数值"
+              placeholder="请输入数值"
               size="large"
             />
           </FormItem>
           <FormItem
+            label="平台法人代表"
             name="legalRepresentative"
             rules={[
               {
@@ -219,45 +272,35 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
               },
             ]}
           >
-            <Input size="large" placeholder="平台法人代表" />
+            <Input size="large"  />
           </FormItem>
-          <FormItem
-            name="professionDomain"
-            rules={[
-              {
-                type: 'string',
-                message: '请输入平台专业领域！',
-              },
-            ]}
-          >
-            <Input size="large" placeholder="专业领域" />
-          </FormItem>
-
-          <Row gutter={8}>
-            <Col span={16}>
-              <FormItem
-                name="captcha"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入验证码！',
-                  },
-                ]}
-              >
-                <Input size="large" placeholder="验证码" />
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <Button
-                size="large"
-                disabled={!!count}
-                className={styles.getCaptcha}
-                onClick={onGetCaptcha}
-              >
-                {count ? `${count} s` : '获取验证码'}
-              </Button>
-            </Col>
-          </Row>
+          <Form.Item label="验证码:" >
+            <Row gutter={8}>
+              <Col span={12}>
+                <Form.Item
+                  name="captcha"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入验证码！',
+                    },
+                  ]}
+                >
+                  <Input size="large" placeholder="验证码" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Button
+                  size="large"
+                  disabled={!!count}
+                  className={styles.getCaptcha}
+                  onClick={onGetCaptcha}
+                >
+                  {count ? `${count} s` : '获取验证码'}
+                </Button>
+              </Col>
+            </Row>
+          </Form.Item>
           <FormItem>
             <Button
               size="large"

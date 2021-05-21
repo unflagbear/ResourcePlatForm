@@ -15,11 +15,11 @@ const ServiceProgress = ({submitting,dispatch}) =>{
   const [select,setSelect] = React.useState(["科学研究与试验发展服务", "自然科学、工程、农业和医学研究"]);
   const [result,setResult] = React.useState();
   const next = () => {
-    if (select != null){
-      setCurrent(current + 1);
+    if (current===1){
+      message.error("请选择")
     }
     else{
-      message.error("请选择")
+      setCurrent(current + 1);
     }
   };
   const steps = [

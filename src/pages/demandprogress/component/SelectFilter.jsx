@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import data from '@/utils/classify/classify.json'
+import data from '@/utils/classify/classifyNew.json'
 import {modify} from '@/utils/classify/modify'
 import {Menu,Button,Layout,Card,Tag,Divider} from 'antd'
 import {
