@@ -69,10 +69,10 @@ request.interceptors.request.use(async (url, options) => {
     
     // options.method = 'post'
     if(options.requestType=='form'){
-      // options.mode = 'no-cors'
+      //options.mode = 'no-cors'
       // console.log(options.headers['Content-Type'])
        headers = {
-        // 'Access-Control-Allow-Origin': '*',
+        //'Access-Control-Allow-Origin': '*',
         'Context-Type': "multipart/form-data",
         // 'Content-Type': 'multipart/form-data',
         // Accept: 'application/json',
