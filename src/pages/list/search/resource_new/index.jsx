@@ -17,6 +17,7 @@ const { TabPane } = Tabs;
 const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total = 0,data={} }, loading }) => {
   const [chatLog, setChatLog] = useState(false);
   const [keys, setKeys] = useState("equipment");
+  const [queryState, setQueryState] = useState(false);
   const goToDetail = (productID,type) => {
     
     history.push({
@@ -30,12 +31,27 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
   
   const [currentPageSize, setCurrentPageSize] = useState(10);
   const [currentGlue, setCurrentGlue] = useState(4);
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 75) {
+      console.log("按下了K键")
+      console.log((localStorage.getItem("queryItem")==="true"))
+      if(localStorage.getItem("queryItem")==="true"){
+        localStorage.setItem("queryItem",false)
+      }else{
+        localStorage.setItem("queryItem",true)
+      }
+      console.log((localStorage.getItem("queryItem")==="true"))
+    }
+  }
   const expert_render= (item) => (
     <List.Item>
       <Card
         className={styles.card}
         hoverable
         onClick={() => goToDetail(item.id,"experts")}
+        title={
+          `资源来自：${item.originPlatform}`
+        }
         cover={
           <Image
             height={150}
@@ -66,6 +82,9 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
         className={styles.card}
         hoverable
         onClick={() => goToDetail(item.id,"company")}
+        title={
+          `资源来自：${item.originPlatform}`
+        }
         cover={
           <Image
             height={100}
@@ -101,6 +120,9 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
       <Card
         className={styles.card}
         hoverable
+        title={
+          `资源来自：${item.originPlatform}`
+        }
         onClick={() => goToDetail(item.id,'resource')}
         cover={
           <Image
@@ -135,16 +157,20 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
   )
   const render_fun = {'equipment': render_list,'expert':expert_render,'company':company_list}
   useEffect(() => {
-    
-    dispatch({
-      type: 'listAndsearchAndResourceNew/'+keys,
-      payload: {
-        current: 0,
-        limit: currentPageSize,
-      },
-    });
+    console.log((localStorage.getItem("queryItem")==="true"))
+    if((localStorage.getItem("queryItem")==="true") || keys==='company' ){
+      dispatch({
+            type: 'listAndsearchAndResourceNew/'+keys,
+            payload: {
+              current: 0,
+              limit: currentPageSize,
+            },
+          });
+    }
   }, [keys]);
-  
+  useEffect(()=>{
+    document.addEventListener('keydown',handleKeyDown);
+  },[])
   
   return (
     <div className={styles.coverCardList}>
@@ -217,6 +243,7 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
         xl: 5,
         xxl: 5,
       }}
+      
       pagination={{
         onChange: (page, pageSize) => {
           // console.log(pageSize)
