@@ -23,18 +23,39 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
       },
     });
   };
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 75) {
+      console.log("按下了K键")
+      console.log((localStorage.getItem("queryItem")==="true"))
+      if(localStorage.getItem("queryItem")==="true"){
+        localStorage.setItem("queryItem",false)
+      }else{
+        localStorage.setItem("queryItem",true)
+      }
+      console.log((localStorage.getItem("queryItem")==="true"))
+    }
+  }
   const [currentPageSize, setCurrentPageSize] = useState(8);
   useEffect(() => {
-    console.log("00000000");
-    dispatch({
-      type: 'listAndsearchAndservice/list',
-      payload: {
-        current: 0,
-        limit: 8,
-      },
-    });
-  }, []);
+    if(localStorage.getItem("queryItem")==="true"){
+      dispatch({
+        type: 'listAndsearchAndservice/list',
+        payload: {
+          current: 0,
+          limit: 8,
+        },
+      }); 
+    }
 
+    
+  }, []);
+  useEffect(()=>{
+    document.addEventListener('keydown',handleKeyDown);
+    return () => {
+      // 相当于 componentWillUnmount
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  },[])
   const cardList = list && (
     <List
       rowKey="id"

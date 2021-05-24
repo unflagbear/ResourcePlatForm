@@ -1,16 +1,17 @@
 import request from 'umi-request';
 
 export async function queryRule({values}) {
-  console.log(values);
+  //console.log(values);
   return request('/api/serviceOrder/showOrders', {
     method:'post',
     data: values,
   });
 }
-export async function removeRule(params) {
-  return request('/faq_api/delete', {
+export async function removeRule({order_id}) {
+  console.log(order_id);
+  return request('/api/serviceOrder/deleteOrder', {
     method: 'POST',
-    data: { ...params },
+    data: order_id,
   });
 }
 export async function addRule(data) {
