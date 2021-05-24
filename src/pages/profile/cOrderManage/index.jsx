@@ -17,7 +17,7 @@ import { queryRule, updateRule, addRule, removeRule } from './service';
  * @param selectedRows
  */
 const mapRemove = (selectedRows)=>{
-  selectedRows.map((row) =>removeRule({record_id:row.recordId}) )
+  selectedRows.map((row) =>removeRule({order_id:row.orderId}) )
 }
 const handleRemove = async (selectedRows) => {
   const hide = message.loading('正在删除');
