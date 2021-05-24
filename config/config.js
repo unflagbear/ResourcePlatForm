@@ -577,7 +577,7 @@ export default defineConfig({
             //   ],
             // },
             {
-              name: 'account',
+              name: '用户',
               icon: 'user',
               path: '/account',
               hideInMenu: hide,
@@ -587,13 +587,13 @@ export default defineConfig({
                   redirect: '/account/center',
                 },
                 {
-                  name: 'center',
+                  name: '个人中心',
                   icon: 'smile',
                   path: '/account/center',
                   component: './account/center',
                 },
                 {
-                  name: 'settings',
+                  name: '个人设置',
                   icon: 'smile',
                   path: '/account/settings',
                   component: './account/settings',
