@@ -46,10 +46,15 @@ const Service = ({ dispatch, listAndsearchAndservice: { list = [], total = 0 }, 
         },
       }); 
     }
+
     
   }, []);
   useEffect(()=>{
     document.addEventListener('keydown',handleKeyDown);
+    return () => {
+      // 相当于 componentWillUnmount
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   },[])
   const cardList = list && (
     <List

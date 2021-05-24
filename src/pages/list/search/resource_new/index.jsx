@@ -157,6 +157,8 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
   )
   const render_fun = {'equipment': render_list,'expert':expert_render,'company':company_list}
   useEffect(() => {
+    console.log("切标签")
+
     console.log((localStorage.getItem("queryItem")==="true"))
     if((localStorage.getItem("queryItem")==="true") || keys==='company' ){
       dispatch({
@@ -170,6 +172,10 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
   }, [keys]);
   useEffect(()=>{
     document.addEventListener('keydown',handleKeyDown);
+    return () => {
+      // 相当于 componentWillUnmount
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   },[])
   
   return (
@@ -181,6 +187,7 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
             // console.log(value)
             // 表单项变化时请求数据
             // 模拟查询表单生效
+            
             if(category!=null&&category.length>0){
               category.map((item)=>{
               switch(item){
@@ -214,15 +221,6 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
               }
            })
             }
-          
-            dispatch({
-              type: 'listAndsearchAndResourceNew/'+keys,
-              payload: {
-                current: 0,
-                limit: currentPageSize,
-                category
-              },
-            });
           }}
         >
           <SubSelection  /> 
@@ -248,6 +246,8 @@ const ResourceNew = ({ dispatch, listAndsearchAndResourceNew: { list = [], total
         onChange: (page, pageSize) => {
           // console.log(pageSize)
           setCurrentPageSize(pageSize);
+          console.log("换页")
+
           dispatch({
             type: 'listAndsearchAndResourceNew/'+keys,
             payload: {

@@ -9,7 +9,17 @@ const Model = {
     data:{}
   },
   effects: {
+    // *clear({payload},{call,put}){
+    //   console.log("clearing")
+    //   yield put ({
+    //     type:'clear'
+    // })
+    // },
     *equipment({payload},{call,put}){
+      console.log("clearing")
+        yield put ({
+          type:'clear'
+      })
       const response = yield call(queryResouce,payload);
       yield put ({
           type:'getResourceList',
@@ -17,6 +27,10 @@ const Model = {
       })
   },
   *expert({payload},{call,put}){
+    console.log("clearing")
+        yield put ({
+          type:'clear'
+      })
     const response = yield call(queryExpert,payload);
     yield put ({
         type:'getExpertList',
@@ -24,6 +38,10 @@ const Model = {
     })
 },
 *company({payload},{call,put}){
+  console.log("clearing")
+        yield put ({
+          type:'clear'
+      })
   const response = yield call(queryCompany,payload);
   yield put ({
       type:'getCompanyList',
@@ -31,6 +49,10 @@ const Model = {
   })
 },
 *patent({payload},{call,put}){
+  console.log("clearing")
+        yield put ({
+          type:'clear'
+      })
   const response = yield call(queryPatent,payload);
   yield put ({
       type:'getPatnetInforList',
@@ -53,6 +75,9 @@ const Model = {
     },
   },
   reducers: {
+    clear(state, action){
+      return { ...state,list:[]}
+    },
     queryList(state, action) {
       return { ...state, list: action.payload };
     },
