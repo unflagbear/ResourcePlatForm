@@ -68,7 +68,7 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
   const onFinish= async(value) => {
     // console.log(value);
     
-     const values={serviceId: serviceDetail.id,type:0, ...value.apply};
+     const values={serviceId: serviceDetail.serviceId,type:0, ...value.apply};
      //const values={id:num++,create_time:time,demand:value.apply.demand,intro:value.intro,institution:value.institution,budget:value.budget,contact_name:value.contact_name,contact_phone:value.contact_name,contact_email:value.contact_email};
      console.log(values);
     //  dispatch({
@@ -78,7 +78,7 @@ function ServiceDetails({ dispatch, serviceDetails: { serviceDetail = {} } }) {
     //    },
     //  });
      await apply(values).then((res)=>{  
-      if(res.data==true){
+      if(res.data=="success"){
         message.success("申请成功");
       }
     }); 

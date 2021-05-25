@@ -229,7 +229,7 @@ import {
         <div className='apply-type'>
           <Spin /> &nbsp;服务提供商处理申请中，请耐心等候
           <br/><br/>
-          <Button type='primary'>提醒处理</Button>
+          <Button type='primary' onClick={()=>{message.success("提醒发送成功")}}>提醒处理</Button>
         </div>
       </div>
     )

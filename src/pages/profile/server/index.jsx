@@ -218,7 +218,8 @@ const Communi = (props) => {
     4: <SmileOutlined />,
     5: <SmileOutlined />,
   };
-  const { setRate, setCommtext, onClick, done } = props; // console.log(done);
+  const { setRate, setCommtext, onClick, done } = props; 
+  console.log(done);
 
   return done == null ? (
     <div className="title-type">
@@ -633,7 +634,7 @@ const Comment = (props) => {
         </div>
         <Button
           type="primary"
-          onClick={()=>this.communiSubmit}
+          onClick={onClick}
           style={{
             float: 'right',
             marginTop: '30px',
@@ -857,6 +858,7 @@ class Advanced extends Component {
         });
         const values = {
           order_id: this.state.id,
+          service_id: this.state.service_id,  
           state: this.state.current + 1,
           type: 2,
           data: res.data,
@@ -904,7 +906,7 @@ class Advanced extends Component {
             title={'沟通完成后，请进行评价'}
             setRate={this.setRate.bind(this)}
             setCommtext={this.setCommtext.bind(this)}
-            // onClick={this.communiSubmit.bind(this)}
+            onClick={this.communiSubmit.bind(this)}
             done={this.state.communiDone}
           ></Communi>
         ),

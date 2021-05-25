@@ -69,6 +69,9 @@ const ApplyModal = props =>{
           <Form.Item name={['apply', 'contactEmail']} label="邮箱" rules={[{ type: 'email' }]}>
             <Input/>
           </Form.Item>
+          <Form.Item name={['apply', 'note']} label="备注" >
+            <Input/>
+          </Form.Item>
         </Form>
       </Modal>
     </div>

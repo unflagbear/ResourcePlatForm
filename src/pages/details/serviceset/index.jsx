@@ -59,7 +59,7 @@ function ServiceSetDetails({ dispatch, serviceSetDetails: { serviceDetail = {} }
     
      const values={serviceId: serviceDetail.id,type:1, ...value.apply};
      await apply(values).then((res)=>{  
-      if(res.data==true){
+      if(res.data=="success"){
         message.success("申请成功");
       }
     }); 
