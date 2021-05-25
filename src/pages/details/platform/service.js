@@ -8,6 +8,12 @@ export async function queryDetail(params) {
   return request('api/platformInformation/detail', { params });
 }
 
+export async function updatePlatform(params) {
+  return request('api/platformInformation/update', {
+    method:'post',
+    data:params });
+}
+
 
 export const apply=async(values)=>{
   console.log(values);

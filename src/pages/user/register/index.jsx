@@ -41,7 +41,7 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
       history.push({
         pathname: '/user/register-result',
         state: {
-          account,email
+          account
         },
       });
     }
@@ -50,7 +50,7 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
       history.push({
         pathname: '/user/company_register',
         state: {
-          account,email,phone
+          account
         },
       });
     }
@@ -59,7 +59,7 @@ const Register = ({ submitting, dispatch, userAndregister ,}) => {
       history.push({
         pathname: '/user/platform_register',
         state: {
-          account,email
+          account
         },
       });
     }

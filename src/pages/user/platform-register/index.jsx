@@ -1,4 +1,18 @@
-import {Form, Button, Col, Input, Popover, Progress, Row, Select, message, InputNumber, Cascader} from 'antd';
+import {
+  Form,
+  Button,
+  Col,
+  Input,
+  Popover,
+  Progress,
+  Row,
+  Select,
+  message,
+  InputNumber,
+  Cascader,
+  Tabs,
+  Typography, Card
+} from 'antd';
 import React, { useState, useEffect } from 'react';
 import {Link, connect, history, useLocation} from 'umi';
 import styles from './style.less';
@@ -9,6 +23,8 @@ import {modify} from "@/utils/classify/modify";
 const FormItem = Form.Item;
 const { Option } = Select;
 const InputGroup = Input.Group;
+const { TabPane } = Tabs;
+const { Title } = Typography;
 const passwordStatusMap = {
   ok: <div className={styles.success}>强度：强</div>,
   pass: <div className={styles.warning}>强度：中</div>,
@@ -31,6 +47,7 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
   const classifyData = modify(data.科技服务资源);
   const { TextArea } = Input;
   const [account, setaccount]=useState(location.state.account)
+
   let optionS="";
 
   let interval;
@@ -106,6 +123,14 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
 
     return 'poor';
   };
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select style={{ width: 70 }}>
+        <Option value="86">+86</Option>
+        <Option value="87">+87</Option>
+      </Select>
+    </Form.Item>
+  );
 
   const onFinish = (values) => {
     console.log(values)
@@ -142,180 +167,222 @@ const PlatformRegister = ({ submitting, dispatch, platformAndregister }) => {
   return (
     <>
       <div className={styles.main}>
-        <h3>平台注册</h3>
-        <Form  form={form} name="UserRegister" onFinish={onFinish} layout="vertical">
-          <FormItem
-            label="邮箱"
-            name="mail"
-            rules={[
-              {
-                required: true,
-                message: '请输入邮箱地址！',
-              },
-              {
-                type: 'email',
-                message: '邮箱地址格式错误！',
-              },
-            ]}
-          >
-            <Input size="large" />
-          </FormItem>
-          <FormItem
-            label="平台名称"
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: '请输入平台名称！',
-              },
-              {
-                type: 'string',
-                message: '请输入平台名称！！',
-              },
-            ]}
-          >
-            <Input size="large" />
-          </FormItem>
-          <FormItem
-            label="平台URL"
-            name="url"
-            rules={[
-              {
-                required: true,
-                message: '请输入平台URL！',
-              },
-              {
-                type: 'url',
-                message: 'URL格式错误！',
-              },
-            ]}
-          >
-            <Input size="large"  />
-          </FormItem>
-          <FormItem
-            label="平台联系地址"
-            name="address"
-            rules={[
-              {
-                type: 'string',
-                message: '请输入合法地址！',
-              },
-            ]}
-          >
-            <Input size="large"  />
-          </FormItem>
-          <FormItem
-            label="平台服务类型"
-            name="serviceType"
+        <Card
+          hoverable
+          title={"平台注册"}
+        >
 
-            rules={[
-              {
-                required: true,
-                message: '请选择平台服务类型！',
-              },
-            ]}
-          >
-            <Cascader options={options}    size="large"/>
-          </FormItem>
-          <FormItem
-            label="服务描述"
-            name="serviceDesc"
-            rules={[
-              {
-                required:true,
-                type: 'string',
-                message: '请输入服务描述！',
-              },
-            ]}
-          >
-            <TextArea rows={4}  />
-          </FormItem>
-          <FormItem
-            label="平台注册地址"
-            name="registrationAddress"
-            rules={[
-              {
-                type: 'string',
-                message: '请输入平台注册地址！',
-              },
-            ]}
-          >
-            <Input size="large"  />
-          </FormItem>
-          <FormItem
-            label="人员规模"
-            name="staffSize"
-            rules={[
-              {
-                type: 'integer',
-                message: '请输入数值！',
-              },
-            ]}
-          >
-            <InputNumber
-              style={{
-                width: '100%',
-              }}
-              min={1}
-              max={10000}
-              placeholder="请输入数值"
-              size="large"
-            />
-          </FormItem>
-          <FormItem
-            label="平台法人代表"
-            name="legalRepresentative"
-            rules={[
-              {
-                type: 'string',
-                message: '请输入平台法人代表！',
-              },
-            ]}
-          >
-            <Input size="large"  />
-          </FormItem>
-          <Form.Item label="验证码:" >
-            <Row gutter={8}>
-              <Col span={12}>
-                <Form.Item
-                  name="captcha"
+          <Form  form={form} name="UserRegister" onFinish={onFinish} layout="vertical" initialValues={{prefix: '86',}}>
+            <Tabs defaultActiveKey="1" type="card">
+              <TabPane tab="基本信息" key="1">
+                <FormItem
+                  label="平台名称"
+                  name="name"
                   rules={[
                     {
                       required: true,
-                      message: '请输入验证码！',
+                      message: '请输入平台名称！',
+                    },
+                    {
+                      type: 'string',
+                      message: '请输入平台名称！！',
                     },
                   ]}
                 >
-                  <Input size="large" placeholder="验证码" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Button
-                  size="large"
-                  disabled={!!count}
-                  className={styles.getCaptcha}
-                  onClick={onGetCaptcha}
+                  <Input size="large" />
+                </FormItem>
+                <FormItem
+                  label="平台URL"
+                  name="url"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入平台URL！',
+                    },
+                    {
+                      type: 'url',
+                      message: 'URL格式错误！',
+                    },
+                  ]}
                 >
-                  {count ? `${count} s` : '获取验证码'}
-                </Button>
-              </Col>
-            </Row>
-          </Form.Item>
-          <FormItem>
-            <Button
-              size="large"
-              loading={submitting}
-              className={styles.submit}
-              type="primary"
-              htmlType="submit"
-            >
-              注册
-            </Button>
-            <Link className={styles.login} to="/user/login">
-              使用已有账户登录
-            </Link>
-          </FormItem>
-        </Form>
+                  <Input size="large"  />
+                </FormItem>
+                <FormItem
+                  label="平台服务类型"
+                  name="serviceType"
+
+                  rules={[
+                    {
+                      required: true,
+                      message: '请选择平台服务类型！',
+                    },
+                  ]}
+                >
+                  <Cascader options={options}    size="large"/>
+                </FormItem>
+                <FormItem
+                  label="服务描述"
+                  name="serviceDesc"
+                  rules={[
+                    {
+                      required:true,
+                      type: 'string',
+                      message: '请输入服务描述！',
+                    },
+                  ]}
+                >
+                  <TextArea rows={4}  />
+                </FormItem>
+                <FormItem
+                  label="人员规模"
+                  name="staffSize"
+                  rules={[
+                    {
+                      type: 'integer',
+                      message: '请输入数值！',
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    style={{
+                      width: '100%',
+                    }}
+                    min={1}
+                    max={10000}
+                    placeholder="请输入数值"
+                    size="large"
+                  />
+                </FormItem>
+              </TabPane>
+              <TabPane tab="联系信息" key="2">
+                <FormItem
+                  label="邮箱"
+                  name="mail"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入邮箱地址！',
+                    },
+                    {
+                      type: 'email',
+                      message: '邮箱地址格式错误！',
+                    },
+                  ]}
+                >
+                  <Input size="large" />
+                </FormItem>
+                <FormItem
+                  label="手机号码:"
+                  style={{
+                    width: '100%',
+                  }}
+                  name="phone"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入手机号！',
+                    },
+                    {
+                      pattern: /^\d{11}$/,
+                      message: '手机号格式错误！',
+                    },
+                  ]}
+                >
+                  <Input size="large" placeholder="手机号" addonBefore={prefixSelector}/>
+                </FormItem>
+                <FormItem
+                  label="平台联系地址"
+                  name="address"
+                  rules={[
+                    {
+                      type: 'string',
+                      message: '请输入合法地址！',
+                    },
+                  ]}
+                >
+                  <Input size="large"  />
+                </FormItem>
+                <FormItem
+                  label="平台注册地址"
+                  name="registrationAddress"
+                  rules={[
+                    {
+                      type: 'string',
+                      message: '请输入平台注册地址！',
+                    },
+                  ]}
+                >
+                  <Input size="large"  />
+                </FormItem>
+                <FormItem
+                  label="平台法人代表"
+                  name="legalRepresentative"
+                  rules={[
+                    {
+                      type: 'string',
+                      message: '请输入平台法人代表！',
+                    },
+                  ]}
+                >
+                  <Input size="large"  />
+                </FormItem>
+              </TabPane>
+            </Tabs>
+
+
+
+
+
+
+
+
+
+            <Form.Item label="验证码:" >
+              <Row gutter={8}>
+                <Col span={12}>
+                  <Form.Item
+                    name="captcha"
+                    rules={[
+                      {
+                        required: true,
+                        message: '请输入验证码！',
+                      },
+                    ]}
+                  >
+                    <Input size="large" placeholder="验证码" />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Button
+                    size="large"
+                    disabled={!!count}
+                    className={styles.getCaptcha}
+                    onClick={onGetCaptcha}
+                  >
+                    {count ? `${count} s` : '获取验证码'}
+                  </Button>
+                </Col>
+              </Row>
+            </Form.Item>
+            <FormItem>
+              <Button
+                size="large"
+                loading={submitting}
+                className={styles.submit}
+                type="primary"
+                htmlType="submit"
+              >
+                注册
+              </Button>
+              <Link className={styles.login} to="/user/login">
+                使用已有账户登录
+              </Link>
+            </FormItem>
+          </Form>
+
+        </Card>
+
+
       </div>
     </>
   );

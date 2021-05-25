@@ -31,7 +31,7 @@ const EditModal = props =>{
   }
 
   const onFinishFailed=()=>{
-    console.log('Failed',errorInfo);
+    console.log('Failed');
   }
 
   const formItemLayout = {
@@ -47,10 +47,32 @@ const EditModal = props =>{
           <Form.Item {...formItemLayout} style={{marginTop:'20px'}} label='需求名称' name='demandName' >
             <input />
           </Form.Item>
-          <Form.Item {...formItemLayout} style={{marginTop:'20px'}} label='联系方式' name='phoneNumber' >
+          <Form.Item {...formItemLayout} style={{marginTop:'20px'}} label='联系电话' name='phoneNumber'
+                     rules={[
+                       {
+                         required: true,
+                         message: '请输入手机号！',
+                       },
+                       {
+                         pattern: /^\d{11}$/,
+                         message: '手机号格式错误！',
+                       },
+                     ]}
+          >
             <input />
           </Form.Item>
-          <Form.Item {...formItemLayout} style={{marginTop:'20px'}} label='电子邮箱' name='email' >
+          <Form.Item {...formItemLayout} style={{marginTop:'20px'}} label='电子邮箱' name='email'
+                                         rules={[
+                                           {
+                                             required: true,
+                                             message: '请输入邮箱地址！',
+                                           },
+                                           {
+                                             type: 'email',
+                                             message: '邮箱地址格式错误！',
+                                           }]
+                                         }
+          >
             <input />
           </Form.Item>
           <Form.Item {...formItemLayout} label='需求描述' name='demandDesc' >

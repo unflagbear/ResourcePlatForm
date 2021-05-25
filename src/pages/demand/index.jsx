@@ -20,7 +20,6 @@ const DemandManage=({Demand, dispatch, userListLoading})=>{
   const [modalVisible,setModalVisible] = useState(false);
   const [name,setName] = useState(undefined);
   const [ID,setID] = useState(0);
-  const [values,setValues] = useState({tgt_example:[],tgt_intent:[]});
 
   const columns = [
     {
@@ -141,7 +140,7 @@ const DemandManage=({Demand, dispatch, userListLoading})=>{
     }
     //console.log(id);
     if(id>0){
-      const values = {demandId:record.demandId,demandName:value.demandName,demandDesc:value.demandDesc,phoneNumber:value.phoneNumber};
+      const values = {demandId:record.demandId,demandName:value.demandName,demandDesc:value.demandDesc,phoneNumber:value.phoneNumber,email:value.email};
       //console.log(values);
       const hide = message.loading('正在修改');
       try {
