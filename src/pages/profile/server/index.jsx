@@ -33,7 +33,6 @@ import { FrownOutlined, MehOutlined, SmileOutlined, UploadOutlined } from '@ant-
 import Layout from 'antd/lib/layout/layout';
 import Sider from 'antd/lib/layout/Sider';
 import { history } from 'umi';
-import BasicForms from './components/BasicForm';
 import {
   queryOrder,
   getOrder,
@@ -403,7 +402,7 @@ const Trace = (props) => {
   const [form] = Form.useForm();
 
   const onFinsh = async(value) => {
-    //console.log(value);
+    console.log(value);
     const values={order_id:order_id, service_id: service_id, name:value.name, start:value.date[0]._d, end:value.date[1]._d, goal: value.goal, result: value.result };
     console.log(values);
     await trace(values).then((res)=>{
@@ -505,23 +504,7 @@ const Trace = (props) => {
                 >
                   提交
                 </Button>
-              {/* <FormItem
-                {...submitFormLayout}
-                style={{
-                  marginTop: 22,
-                  float: 'right',
-                  marginRight: '10%',
-                }}
-              >
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    form.submit();
-                  }}
-                >
-                  提交
-                </Button>
-              </FormItem> */}
+              
             </Form>
           </Card>
         </div>

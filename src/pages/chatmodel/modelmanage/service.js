@@ -7,7 +7,7 @@ export const getRemoteList=async()=>{
 }
 
 export async function queryRule(params) {
-  console.log(params);
+  //console.log(params);
   return request('http://10.112.205.250:8453/nlu_api/query_model/', {
     params,
   });

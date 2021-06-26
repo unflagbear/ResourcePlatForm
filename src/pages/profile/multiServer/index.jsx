@@ -238,10 +238,10 @@ import {history} from 'umi';
                               }}
                             >
                               服务提供商：{item.serviceProvider}<br/>
-                              联系人：王荣贵<br/>
-                              联系方式：143452335543<br/>
+                              
+                              服务价格：{item.servicePrice}<br/>
 
-                              电子邮件:13243345821@qq.com
+                              服务周期：{item.servicePeriod}<br/>
 
                             </Paragraph>
                           }

@@ -26,11 +26,11 @@ const ResourceModel = {
   },
   reducers: {
     getServiceList(state, { payload }) {
-      console.log(payload.data);
+      //console.log(payload.data);
       return { ...state, serviceData: payload.data };
     },
     getServiceDetail(state, { payload }) {
-      console.log(payload.data);
+     // console.log(payload.data);
       return { ...state, serviceDetail: payload.data };
     },
   },
