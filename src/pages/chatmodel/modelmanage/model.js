@@ -14,6 +14,7 @@ export default{
     effects: {
         *getRemote({ payload }, { call, put }) {
             const result= yield call(getRemoteList);
+            //console.log(result)
             if(result){
                 yield put({
                 type:"getList",
@@ -89,7 +90,7 @@ export default{
             )
             resdata=resData;
             modelname=current_model;
-           // console.log(current_model);
+            //console.log(current_model);
             return {resData,current_model};
         },
         getData(state,{payload}){
@@ -102,10 +103,11 @@ export default{
     subscriptions: {
         setup({ dispatch, history }) {
         return history.listen(({ pathname }) => {
-            if (pathname === '/chatmodel/modelmanage') {
-            dispatch({
-                type: 'getRemote',
-            })
+            if (pathname === '/manage/chatmodel/modelmanage') {
+                //console.log("ddd")
+                dispatch({
+                    type: 'getRemote',
+                })
             }
         });
         }
