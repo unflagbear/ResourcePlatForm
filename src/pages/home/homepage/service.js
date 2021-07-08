@@ -8,5 +8,12 @@ export async function getCommend(value) {
   });
 }
 
+export async function getUser() {
+  return request('/api/user/currentUser', {
+    method:'get',
+  });
+}
+
+
 
 

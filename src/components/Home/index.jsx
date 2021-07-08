@@ -60,8 +60,11 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const {homeData}=this.props
+    const {homeData, equipmentData, expertData}=this.props
+    console.log(equipmentData)
+    console.log(expertData)
     const {companyNum,equipmentNum,expertNum,equipmentList,companies,experts}=homeData
+    console.log(equipmentList)
     const children = [
       // <Nav2
       //   id="Nav2_1"
@@ -86,7 +89,7 @@ export default class Home extends React.Component {
       <Content5
         id="Content5_0"
         key="Content5_0"
-        expertlist={equipmentList}
+        expertlist={equipmentData}
         dataSource={Content50DataSource}
         isMobile={this.state.isMobile}
       />,
@@ -100,7 +103,7 @@ export default class Home extends React.Component {
       <Teams2
         id="Teams2_0"
         key="Teams2_0"
-        expertlist = {experts}
+        expertlist = {expertData}
         dataSource={Teams20DataSource}
         isMobile={this.state.isMobile}
       />,<Feature8

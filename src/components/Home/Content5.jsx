@@ -6,6 +6,7 @@ import defaultImg from '@/assets/defaultImg.svg'
 
 import { getChildrenToRender } from './utils';
 import {history} from'umi'
+import {UpdateLog} from './service'
 
 class Content5 extends React.PureComponent {
 
@@ -17,24 +18,49 @@ class Content5 extends React.PureComponent {
         return null;
       }
       return (
-        <Col key={item.name} {...item}>
+        <Col key={item.name} {...item} 
+          onClick={async()=>{history.push({
+            pathname: '/details_resource',
+            query: {
+              productID:expertlist[index].id,
+            },
+          })
+          let value={domain:1,uid:2,iid: expertlist[index].id,cpy:0}
+          await UpdateLog(
+            value,
+          ).then((res) => {
+            //console.log(res)
+          });
+          }}>
           <a {...item.children.wrapper}>
-            <span {...item.children.img}>
+            {/* <span {...item.children.img}>
             <Image
             height="100%"
             alt={expertlist[index].title}
             src={expertlist[index].imgLink}
             fallback={defaultImg}
-           
           />
-            </span>
-            <p {...item.children.content}  
-            onClick={()=>{history.push({
+            </span> */}
+            {/* <span>{expertlist[index].title}<br></br><br></br>位于：{expertlist[index].place}</span> */}
+            
+            <p style={{fontSize:'18px'}}><b>{expertlist[index].name}</b></p>
+            <p>设备型号：{expertlist[index].model}</p>
+            <p>位置：{expertlist[index].place}</p>
+            <p>产自：{expertlist[index].makein}</p>
+            {/* <p {...item.children.content}  
+            onClick={async()=>{history.push({
               pathname: '/details_resource',
               query: {
                 productID:expertlist[index].id,
               },
-            })}}>{expertlist[index].name}</p>
+            })
+            let value={domain:1,uid:2,iid: expertlist[index].id,cpy:0}
+            await UpdateLog(
+              value,
+            ).then((res) => {
+              //console.log(res)
+            });
+            }}>{expertlist[index].name}</p> */}
           </a>
         </Col>
       );

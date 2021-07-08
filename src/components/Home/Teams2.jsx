@@ -5,6 +5,7 @@ import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import expert from '@/assets/expert.svg'
 import { getChildrenToRender } from './utils';
 import {history} from 'umi'
+import {UpdateLog} from './service'
 const { Paragraph } = Typography;
 
 class Teams2 extends React.PureComponent {
@@ -12,17 +13,25 @@ class Teams2 extends React.PureComponent {
     data.map((item, i) => {
       const { titleWrapper, image, ...$item } = item;
       const name = expertlist?expertlist[i].name:"加载中";
-      const img = expertlist?expertlist[i].picpath:expert
+      // const img = expertlist?expertlist[i].picpath:expert
+      const img = expert
       const specialty = expertlist?expertlist[i].specialty:"Loading"
-      const workUnit = expertlist?expertlist[i].workunit:"加载中"
+      const workUnit = expertlist?expertlist[i].workUnit:"加载中"
       const position = expertlist?expertlist[i].position:"加载中"
       return (
-        <Col key={i.toString()} {...$item} onClick={()=>{history.push({
+        <Col key={i.toString()} {...$item} onClick={async()=>{history.push({
           pathname: '/details_experts',
           query: {
             productID:expertlist[i].id,
           },
-        });}}>
+        });
+        let value={domain:0,uid:2,iid: expertlist[i].id,cpy:0}
+            await UpdateLog(
+              value,
+            ).then((res) => {
+              //console.log(res)
+            });
+        }}>
           <Row>
             <Col span={7} 
             >
@@ -39,7 +48,7 @@ class Teams2 extends React.PureComponent {
               <QueueAnim {...titleWrapper} type="bottom">
                 <a {...titleWrapper.children}>
                   <h1 name="title" className="teams2-title" >{name}</h1>
-                  <div name="content" className="teams2-job" >公司：{workUnit||null}</div>
+                  <div name="content" className="teams2-job" >单位：{workUnit||null}</div>
                   <div name="content1" className="teams2-content" ><Paragraph ellipsis>{specialty || null}</Paragraph></div>
                 </a>
               </QueueAnim>
